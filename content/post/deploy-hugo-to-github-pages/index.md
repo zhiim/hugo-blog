@@ -2,11 +2,11 @@
 
 title = "将Hugo博客部署到Github Pages"
 date = 2022-02-12T19:34:01+08:00
-slug= "使用 Github Pages 部署 Hugo 博客"
+slug= "hugo_blog"
 description = "利用Github Pages部署Hugo生成的静态博客页面"
 tags = [ "Hugo" ]
 categories = [ "Tech" ]
-image = "https://cdn.jsdelivr.net/gh/fmpic/imghost/pawel-czerwinski-Y52vAByM-Sw-unsplash.jpg"
+image = "https://cdn.jsdelivr.net/gh/fmpic/imghost/pawel.webp"
 
 +++
 
