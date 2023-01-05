@@ -6,7 +6,7 @@ slug = "uninstall_vmware"
 description = "VMware Workstation如果卸载不彻底，会导致无法再次安装，此时可以手动清理卸载残留"
 tags = [ "VMware" ]
 categories = [ "Tech" ]
-image = "https://cdn.jsdelivr.net/gh/fmpic/imghost/susan.webp"
+image = ''
 
 +++
 

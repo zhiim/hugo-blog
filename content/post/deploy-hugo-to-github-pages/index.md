@@ -6,7 +6,7 @@ slug= "hugo_blog"
 description = "利用Github Pages部署Hugo生成的静态博客页面"
 tags = [ "Hugo" ]
 categories = [ "Tech" ]
-image = "https://cdn.jsdelivr.net/gh/fmpic/imghost/pawel.webp"
+image = ""
 
 +++
 
