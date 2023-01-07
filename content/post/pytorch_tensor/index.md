@@ -1,8 +1,8 @@
 +++
 
-title = "Pytorch基础（一）：张量 Tensors"
+title = "Pytorch基础 Tensors"
 date = 2023-01-06T17:12:03+08:00
-slug = "pytorch_tensor"
+slug = "pytorch-tensor"
 description = "Pytorch学习笔记，Tensor的创建、Tensor的属性和Tensor的数学运算"
 tags = ["Pytorch"]
 categories = ["Tech"]
