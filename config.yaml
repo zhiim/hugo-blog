@@ -42,11 +42,11 @@ params:
     sidebar:
         compact: false
         emoji: 🍥
-        subtitle: “迷途的羔羊”||“时间，记忆与自我欺骗”
+        subtitle: 总有想不明白的事
         avatar:
             enabled: true
             local: true
-            src: img/avatar.png
+            src: img/avatar.webp
 
     article:
         math: true
@@ -162,9 +162,9 @@ params:
 
     defaultImage:
         opengraph:
-            enabled: false
-            local: false
-            src:
+            enabled: true
+            local: true
+            src: img/default.webp
 
     colorScheme:
         # Display toggle
@@ -196,7 +196,7 @@ menu:
         - identifier: about
           name: 关于
           url: /about
-          weight: 100
+          weight: 200
           params:
               newTab: false
               icon: user
@@ -204,7 +204,7 @@ menu:
         - identifier: archives
           name: 归档
           url: /archives/
-          weight: 200
+          weight: 100
           params:
               newTab: false
               icon: archives
@@ -261,10 +261,10 @@ related:
     toLower: false
     indices:
         - name: tags
-          weight: 100
+          weight: 200
 
         - name: categories
-          weight: 200
+          weight: 100
 
 markup:
     goldmark:

@@ -93,13 +93,17 @@
    */
 
   em {
-    background-color: #eee574;
+    background-color: #eee574;  //changed
   }
   
   b,
   strong {
     font-weight: bolder;
     color: #ff2b41;    // changed
+  }
+
+  mark {
+    background-color: #eee574;  // changed
   }
   
   /**
@@ -352,3 +356,4 @@
   [hidden] {
     display: none;
   }
+
