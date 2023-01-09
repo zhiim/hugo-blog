@@ -1,17 +1,19 @@
 +++
 
-title = "Pytorch基础 Tensors"
+title = "PyTorch基础 Tensors"
 date = 2023-01-06T17:12:03+08:00
 slug = "pytorch-tensor"
-description = "Pytorch学习笔记，Tensor的创建、Tensor的属性和Tensor的数学运算"
-tags = ["Pytorch"]
+description = "PyTorch学习笔记，Tensor的创建、Tensor的属性和Tensor的数学运算"
+tags = ["PyTorch"]
 categories = ["Tech"]
 image = ""
 
 +++
 
-张量（tensor）是一种类似于数组和矩阵的特殊数据结构。tensor类似于NumPy中的ndarray，两者也可以使用相同的内存地址。   
+张量（tensor）是一种类似于数组和矩阵的特殊数据结构。tensor类似于NumPy中的ndarray，两者也可以使用相同的内存地址。
+
 ![Tensor](tensor.webp)
+
 ## 创建Tensor
 ### 直接使用数据创建
 ```python

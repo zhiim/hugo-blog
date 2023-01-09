@@ -1,10 +1,10 @@
 +++
 
-title = "Pytorch基础 Dataset和DataLoader"
+title = "PyTorch基础 Dataset和DataLoader"
 date = 2023-01-07T11:13:45+08:00
 slug = "pytorch-dataset"
-description = "Pytorch基础，Dataset和DataLoader"
-tags = ["Pytorch"]
+description = "PyTorch基础，Dataset和DataLoader"
+tags = ["PyTorch"]
 categories = ["Tech"]
 image = ""
 
