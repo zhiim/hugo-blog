@@ -1,12 +1,12 @@
 +++
 
-title = "PyTorch基础 网络模型"
+title = "PyTorch基础 （三）网络模型"
 date = 2023-01-09T15:14:55+08:00
 slug = "pytorch-model"
 description = "在PyTorch中建立神经网络模型，初始化和查看模型参数"
 tags = ["PyTorch"]
 categories = ["Tech"]
-image = ""
+image = "/p/pytorch-tensor/pytorch.webp"
 
 +++
 

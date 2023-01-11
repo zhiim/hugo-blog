@@ -21,7 +21,7 @@ links:
 名称: Zhiim's Blog
 简介: 总有想不明白的事
 博客地址: https://xland.cyou
-头像: https://xland.cyou/img/avatar.webp
+头像: https://xland.cyou/img/avatar.png
 ```
 
 

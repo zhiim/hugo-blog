@@ -2,11 +2,11 @@
 
 title = "Telegram Bot （一）基础"
 date = 2023-01-10T19:39:43+08:00
-slug = "telegram_bot"
+slug = "telegram-bot"
 description = "Telegram Bot的基本原理和Python库pyTelegramBotAPI的使用"
 tags = ["Telegram Bot","pyTelegramBotAPI"]
 categories = ["Tech"]
-image = ""
+image = "caleb-jack-QcH_2Q3fyec-unsplash.webp"
 
 +++
 

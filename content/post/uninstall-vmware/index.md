@@ -2,7 +2,7 @@
 
 title = "完全卸载VMware Workstation"
 date = 2022-03-19T12:05:03+08:00
-slug = "uninstall_vmware"
+slug = "uninstall-vmware"
 description = "VMware Workstation如果卸载不彻底，会导致无法再次安装，此时可以手动清理卸载残留"
 tags = [ "VMware" ]
 categories = [ "Tech" ]
