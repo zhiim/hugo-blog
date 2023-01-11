@@ -36,7 +36,7 @@ Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将m
 
 创建仓库时需要注意，免费用户创建的页面仓库必须设置为Public
 
-![](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214110340.png)
+![新建仓库](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214110340.png)
 
 选择 **Initialize this repository with a README** ，完成仓库创建
 
@@ -45,7 +45,7 @@ Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将m
 
 在创建的仓库中复制远程仓库地址
 
-![](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214111325.png)
+![仓库地址](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214111325.png)
 
 在Hugo生成的文件夹中，在终端中输入
 
@@ -63,6 +63,6 @@ git push -u origin master  #将更改推送到远程仓库
 
 GitHub Pages的个人页面默认从main分支提取网页源文件，所以还需要在仓库的`settings-pages-source`中将分支改为master分支
 
-![](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214111729.png)
+![设置页面分支](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214111729.png)
 
 之后即可通过`<username>.github.io`访问博客页面
