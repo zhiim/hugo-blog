@@ -10,12 +10,15 @@
         article {
             background: var(--card-background);
             border: none;
-            box-shadow: var(--shadow-l2);
+            //box-shadow: var(--shadow-l2);
             // margin-right: 8px;
             margin-bottom: 8px;
             border-radius: var(--card-border-radius);
             &:nth-child(odd) {
                 margin-right: 8px;
+            }
+            &:hover {
+                box-shadow: var(--shadow-l3);
             }
             .article-image img{
                 border-radius: var(--card-border-radius);
@@ -27,4 +30,3 @@
 .article-list--compact article .article-image img {
     border-radius: var(--card-border-radius);
 }
-
