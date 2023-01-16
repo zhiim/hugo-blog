@@ -6,7 +6,7 @@ slug = "telegram-bot"
 description = "Telegram Bot的基本原理和Python库pyTelegramBotAPI的使用"
 tags = ["Telegram Bot","pyTelegramBotAPI"]
 categories = ["Tech"]
-image = "caleb-jack-QcH_2Q3fyec-unsplash.webp"
+image = ""
 
 +++
 
