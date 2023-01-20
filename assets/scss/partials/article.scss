@@ -36,7 +36,6 @@
         
                 &:hover {
                     color: var(--accent-color);
-                    text-decoration-line: underline;
                 }
             }
         }
@@ -57,7 +56,6 @@
     flex-direction: column;
     justify-content: center;
     padding: var(--card-padding);
-    padding-left: 10px;  // changed
     gap: 15px;
 }
 
