@@ -1,5 +1,5 @@
 /* Place your custom SCSS in HUGO_SITE_FOLDER/assets/scss/custom.scss */
-//友情链接双栏
+//friends links responsable between two and one columns
 @media (min-width: 1024px) {
     .article-list--compact.links {
         display: grid;
@@ -26,7 +26,44 @@
         }
     }
 }
-// 友链单栏时，图片圆角
+// set friend link radius when one column
 .article-list--compact article .article-image img {
     border-radius: var(--card-border-radius);
+}
+
+// set the font of left bar menu
+.menu li span {
+    font-weight: 500;
+    font-size: 1.65rem;
+}
+
+// set search bar hint to bold
+.search-form label {
+    font-weight: bold;
+}
+
+// set categories widget's color when hovering
+#categories .tagCloud-tags a {
+    &:hover {
+        //box-shadow: var(--shadow-l2);
+        background-color: #eee574;
+    }
+}
+
+// set tag widget's color when hovering
+#tag .tagCloud-tags a {
+    &:hover {
+        //box-shadow: var(--shadow-l2);
+        color: #fff;
+        background-color: #ff2b41;
+    }
+}
+
+// set toc font color
+.widget--toc a {
+    color: var(--card-text-color-main);
+    font-weight: bold;
+    &:hover {
+        color: #ff2b41;
+    }
 }

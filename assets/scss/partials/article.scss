@@ -2,7 +2,7 @@
 .article-list {
     display: flex;
     flex-direction: column;
-    gap: var(--section-separation);
+    gap: 30px;//var(--section-separation);
 
     article {
         display: flex;
@@ -13,10 +13,6 @@
         overflow: hidden;
 
         transition: box-shadow 0.3s ease;
-
-        &:hover {
-            box-shadow: var(--shadow-l2);
-        }
 
         .article-image {
             img {
@@ -30,6 +26,17 @@
 
                 @include respond(xl) {
                     height: 250px;
+                }
+            }
+        }
+
+        .article-title {  // added, for set color and underline when hover
+            a {
+                color: var(--card-text-color-main);
+        
+                &:hover {
+                    color: var(--accent-color);
+                    text-decoration-line: underline;
                 }
             }
         }

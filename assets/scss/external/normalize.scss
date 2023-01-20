@@ -99,7 +99,7 @@
   b,
   strong {
     font-weight: bolder;
-    color: #ff2b41;    // changed
+    color: var(--accent-color);    // changed
   }
 
   mark {

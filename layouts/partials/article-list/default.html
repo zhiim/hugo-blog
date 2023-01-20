@@ -1,0 +1,4 @@
+{{ $image := partialCached "helper/image" (dict "Context" . "Type" "articleList") .RelPermalink "articleList" }}
+<article class="list-title">  <!--changed, for article-list have no image-->
+    {{ partial "article/components/header-no-image" . }}
+</article>
