@@ -10,7 +10,7 @@ image = ""
 
 +++
 
-ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目[brunch](https://github.com/sebanc/brunch/blob/main/README.md#supported-hardware)。
+ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目[brunch](https://github.com/sebanc/brunch)。
 
 brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件，从而在非Chromebook上安装原生ChromeOS。
 
@@ -33,6 +33,10 @@ brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件�
     我选择的是Lenovo Yoga C630 Chromebook，codename为pantheon，下载发行版本为109的recovery文件。
     
     如果不知道应该下载哪个recovery，brunch的项目文档里也给了[推荐的recovery](https://github.com/sebanc/brunch/blob/main/install-with-windows.md#recoveries)。
+    * Intel  
+        * 1代-9代：选择codename为rammus的设备对应的recovery
+        * 10代和11代：选择codename为volteer的设备对应的recovery
+    * AMD Ryzen：选择codename为zork的设备对应的recovery
     
 2. 下载brunch的release文件
     
@@ -85,4 +89,5 @@ sudo bash chromeos-install.sh -src chromeos_filename.bin -dst /mnt/d/brunch/chro
 
 等待脚本执行完成后输入`dualboot`然后键入ENTER。
 
-下一步可以安装[Grub2Win](https://sourceforge.net/projects/grub2win/)，配置开机时选择进入的系统。本人未作尝试，具体步骤可以参考[brunch的官方安装教程](https://github.com/sebanc/brunch/blob/main/install-with-windows.md)。
+下一步可以安装[Grub2Win](https://sourceforge.net/projects/grub2win/)，实现在开机时选择想要进入的系统。本人未作尝试，具体步骤可以参考[brunch的官方安装教程](https://github.com/sebanc/brunch/blob/main/install-with-windows.md)。  
+安装Grub2Win后，依次点击`Manage Boot Menu-Add A New Entry-Type`，选择“Create user section”。此时为自动用记事本新建一个文本文件，在之前设置的`/mnt/d/brunch`文件夹中打开“chromeos.grub.txt”，将该文件中的内容复制到新建的空文本中。保存Grub2Win的更改，重启电脑，选择ChromeOS进入系统。
