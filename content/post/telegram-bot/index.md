@@ -1,9 +1,9 @@
 +++
 
-title = "Telegram Bot （一）基础"
+title = "Telegram Bot（一）Python库pyTelegramBotAPI的使用"
 date = 2023-01-10T19:39:43+08:00
 slug = "telegram-bot"
-description = "Telegram Bot的基本原理和Python库pyTelegramBotAPI的使用"
+description = "通过Telegram提供的Bot API可以实现Bot和用户的交互，Python库pyTelegramBotAPI对Bot API进行了封装，使得我们可以通过调用Python函数的形式对API进行调用"
 tags = ["Telegram Bot","pyTelegramBotAPI"]
 categories = ["Tech"]
 image = ""

@@ -1,9 +1,9 @@
 +++
 
-title = "安装ChromeOS的U盘启动盘"
+title = "Windows下安装ChromeOS"
 date = 2023-02-05T11:02:40+08:00
-slug = "chromeos-usb-boot"
-description = "借助brunch项目，将ChromeOS安装到非Chromebook设备"
+slug = "windows-install-chromeos"
+description = "ChromeOS是Google推出的桌面操作系统，只能搭载在Google认证的Chromebook上，但是我们可以借助开源项目brunch，在自己的电脑上安装ChromeOS"
 tags = ["ChromeOS"]
 categories = ["Tech"]
 image = ""
