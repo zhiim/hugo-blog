@@ -13,6 +13,10 @@ links:
     description: FGHRSH 的博客
     website: https://www.fghrsh.net
     image: https://fp1.fghrsh.net/2017/10/11/d383a9ad4318c5b4332fe02845f5323a.jpg
+  - title: 清絮的博客
+    description: 人生如逆旅，我亦是行人
+    website: https://blog.linioi.com/
+    image: https://blog.linioi.com/hotlink-ok/images/avatar.jpg
 ---
 
 交换友链请留言或者[Telegram](https://t.me/zhiim_0)联系，友链格式请参考本站信息：
