@@ -1,6 +1,6 @@
 +++
 
-title = "Windows下安装ChromeOS"
+title = "Windows下制作ChromeOS Live USB"
 date = 2023-02-05T11:02:40+08:00
 slug = "windows-install-chromeos"
 description = "ChromeOS是Google推出的桌面操作系统，只能搭载在Google认证的Chromebook上，但是我们可以借助开源项目brunch，在自己的电脑上安装ChromeOS"
