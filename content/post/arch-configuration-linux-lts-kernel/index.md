@@ -26,7 +26,7 @@ sudo pacman linux-lts linux-lts-headers
 
 为了更加方便地在Boot Loader界面选择想要加载的内核，我们可以分别对GRUB和rEFInd进行一些配置。
 
-### GRUB
+## 配置GRUB
 
 我们想要的是在进入GRUB界面后，直接列出了加载不同内核的选项，而不需要先进入子选单再选择内核。编辑`/etc/default/grub`，取消注释
 
@@ -41,7 +41,7 @@ GRUB_DEFAULT=saved
 GRUB_SAVEDEFAULT=true
 ```
 
-### rEFInd
+## 配置rEFInd
 
 rEFInd每次会默认加载最后安装的内核，所以如果不按F2进入子选单选择linux内核就会自动加载linux-lts内核。
 
