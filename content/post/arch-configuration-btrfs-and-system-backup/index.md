@@ -19,11 +19,11 @@ image = "/p/arch-linux-configuration-driver-and-software/arch.webp"
 
 Btrfs拥有较多传统文件系统如Ext3/4不具有的高级功能，为我们日常文件系统使用和备份带来了便利。
 
-### **写时复制（Copy-on-Write，CoW）**
+### 写时复制（Copy-on-Write，CoW）
 
 Btrfs默认采用[CoW](https://en.wikipedia.org/wiki/copy-on-write)机制，将文件指针存放在metadata文件中。在对文件进行更改时，Btrfs会将新的数据写在新的空闲数据块中，数据写入完成后，更新metadata增加将文件指向新的内存块的指针。
 
-### **子卷（subvolume）**
+### 子卷（subvolume）
 
 一个子卷可以看作是Btrfs中的一个文件夹，但是子卷也可以像分区一样被挂载。例如在`subvolume-test`中创建一个子卷`subvolume`，就相当于创建了一个对应的文件夹。
 
