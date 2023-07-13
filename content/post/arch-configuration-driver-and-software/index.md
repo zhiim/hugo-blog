@@ -167,7 +167,12 @@ Key=4BA30A70E71C729CC23D12EF29B8C889  # 和Windows中LTK相同
 Authenticated=0
 EncSize=16
 EDiv=11107  # 和Windows中EDIV相同
-Rand=12409689061704920446  # 和Windows中Rand相同
+Rand=12409689061704920446  # 和Windows中ERand相同
+```
+
+重启蓝牙，蓝牙设备就会自动连接
+```bash
+sudo systemctl restart bluetooth
 ```
 
 ## 使用rEFInd引导系统
