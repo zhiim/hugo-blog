@@ -4,7 +4,7 @@ title = "PyTorch基础 （一）Tensors"
 date = 2023-01-06T17:12:03+08:00
 slug = "pytorch-tensor"
 description = "PyTorch学习笔记，Tensor的创建、Tensor的属性和Tensor的数学运算"
-tags = ["PyTorch"]
+tags = ["PyTorch", "深度学习"]
 categories = ["Tech"]
 image = "pytorch.webp"
 

@@ -4,7 +4,7 @@ title = "PyTorch基础 （二）Dataset和DataLoader"
 date = 2023-01-07T11:13:45+08:00
 slug = "pytorch-dataset"
 description = "PyTorch基础，Dataset和DataLoader"
-tags = ["PyTorch"]
+tags = ["PyTorch", "深度学习"]
 categories = ["Tech"]
 image = "/p/pytorch-tensor/pytorch.webp"
 
