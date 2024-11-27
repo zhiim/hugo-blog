@@ -1,9 +1,9 @@
 +++
 
-title = "用于 DOA 估计的 Python 包 classical_doa"
+title = "用于 DOA 估计的 Python 包 DOA_py"
 date = 2024-07-07T10:59:51+08:00
 slug = "python_package_doa_estimation"
-description = "为了方便 DOA 估计的研究，我开发了一个 Python 包 classical_doa，部署了一些经典的DOA估计算法，支持均匀线阵、均匀圆阵和宽带DOA估计。"
+description = "为了方便 DOA 估计的研究，我开发了一个 Python 包 DOA_py，实现了一些经典的DOA估计算法，支持均匀线阵、均匀圆阵和宽带DOA估计。"
 tags = ["Python", "DOA 估计"]
 categories = ["Tech"]
 image = ""
@@ -12,7 +12,7 @@ image = ""
 
 ## 项目地址
 
-[classical_doa](https://github.com/zhiim/classical_doa)
+[DOA_py: DOA etimation algorithms implemented in Python for ULA, UCA and broadband/wideband DOA estimation](https://github.com/zhiim/doa_py)
 
 ## 安装
 
@@ -20,10 +20,10 @@ image = ""
 
 ```bash
 # pip 安装
-pip install classical_doa
+pip install doa_py
 # 从源码安装
-git clone https://github.com/zhiim/classical_doa.git
-cd classical_doa
+git clone https://github.com/zhiim/doa_py.git
+cd doa_py
 pip install .
 ```
 
@@ -58,8 +58,8 @@ s_1(t) & s_2(t) & \dots & s_N(t)
 \end{bmatrix}^T$ 是一个$N\times 1$维的向量，表示入射的信号
 
 ```python
-from classical_doa.arrays import UniformLinearArray
-from classical_doa.signals import ComplexStochasticSignal
+from doa_py.arrays import UniformLinearArray
+from doa_py.signals import ComplexStochasticSignal
 ```
 
 ### 设定仿真参数
@@ -70,7 +70,7 @@ from classical_doa.signals import ComplexStochasticSignal
 # 信号参数
 num_snapshots = 300
 signal_fre = 2e7
-fs = 5e7
+fc = 5e7
 snr = 0
 
 # 阵列参数
@@ -88,14 +88,14 @@ num_signal = len(angle_incidence)
 
 ```python
 # 创建信号实例
-signal = ComplexStochasticSignal(nsamples=num_snapshots, fre=signal_fre, fs=fs)
+signal = ComplexStochasticSignal(fc=fc)
 
 # 创建阵列实例
 array = UniformLinearArray(m=num_antennas, dd=antenna_spacing)
 
 # 使用信号和阵列生成仿真数据
 received_data = array.received_signal(
-    signal=signal, snr=snr, angle_incidence=angle_incidence, unit="deg"
+    signal=signal, snr=snr, nsamples=1000, angle_incidence=angle_incidence, unit="deg"
 )
 ```
 
@@ -105,7 +105,7 @@ received_data = array.received_signal(
 首先 import 两个和绘图函数，分别用于展示这两种算法的估计结果
 
 ```python
-from classical_doa.plot import plot_estimated_value, plot_spatial_spectrum
+from doa_py.plot import plot_estimated_value, plot_spatial_spectrum
 ```
 
 #### MUSIC 算法
@@ -113,7 +113,7 @@ from classical_doa.plot import plot_estimated_value, plot_spatial_spectrum
 ```python
 search_grids = np.arange(-90, 90, 1)
 
-from classical_doa.algorithm.music import music
+from doa_py.algorithm.music import music
 
 music_spectrum = music(
     received_data=received_data,
@@ -138,7 +138,7 @@ plot_spatial_spectrum(
 #### Root-MUSIC 算法
 
 ```python
-from classical_doa.algorithm.music import root_music
+from doa_py.algorithm.music import root_music
 
 rmusic_estimates = root_music(
     received_data=received_data,
@@ -155,7 +155,7 @@ plot_estimated_value(estimates=rmusic_estimates, ground_truth=angle_incidence)
 #### ESPRIT 算法
 
 ```python
-from classical_doa.algorithm.esprit import esprit
+from doa_py.algorithm.esprit import esprit
 
 esprit_estimates = esprit(
     received_data=received_data,
@@ -172,7 +172,7 @@ plot_estimated_value(estimates=esprit_estimates, ground_truth=angle_incidence)
 #### OMP 算法
 
 ```python
-from classical_doa.algorithm.sparse import omp
+from doa_py.algorithm.sparse import omp
 
 omp_estimates = omp(
     received_data=received_data,
@@ -190,4 +190,4 @@ plot_estimated_value(estimates=omp_estimates, ground_truth=angle_incidence)
 
 ## 更多
 
-查看项目主页和仓库，了解更多的功能和使用方法
+查看[项目仓库](https://github.com/zhiim/doa_py/tree/master/examples)，了解更多的功能和使用方法
