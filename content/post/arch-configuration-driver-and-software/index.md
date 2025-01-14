@@ -10,7 +10,7 @@ image = "arch.webp"
 
 +++
 
-最近趁着假期把Manjaro换成了Arch Linux，本文记录了我安装Arch Linux中的一些配置。 
+最近趁着假期把Manjaro换成了Arch Linux，本文记录了我安装Arch Linux中的一些配置。
 
 ## Arch Linux安装
 
@@ -46,11 +46,11 @@ sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel
 
 ### Nvidia 驱动
 
-建议对照[ArchWiki-NVIDIA](https://wiki.archlinux.org/title/NVIDIA#Installation)安装，官方教程更加准确并且可能有更新。 
+建议对照[ArchWiki-NVIDIA](https://wiki.archlinux.org/title/NVIDIA#Installation)安装，官方教程更加准确并且可能有更新。
 
-- 对于新于 [Turing (NV160/TU_XXX_)](https://nouveau.freedesktop.org/CodeNames.html#NV160)系列的显卡，如果系统使用l`inux`内核则安装`nvidia-open`，如果使用其他内核则安装`nvidia-open-dkms`。
-- 对于较旧且新于 [Maxwell (NV110/GM_XXX_)](https://nouveau.freedesktop.org/CodeNames.html#NV110)系列的显卡，如果使用`linux`内核则安装`nvidia`，如果使用`linux-lts`内核则安装`nvidia-lts`，其他内核则安装`nvidia-dkms`。
-- [Kepler (NVE0/GK_XXX_)](https://nouveau.freedesktop.org/CodeNames.html#NVE0)系列显卡，安装`nvidia-470xx-dkms`。
+- 对于新于 [Turing (NV160/TU*XXX*)](https://nouveau.freedesktop.org/CodeNames.html#NV160)系列的显卡，如果系统使用l`inux`内核则安装`nvidia-open`，如果使用其他内核则安装`nvidia-open-dkms`。
+- 对于较旧且新于 [Maxwell (NV110/GM*XXX*)](https://nouveau.freedesktop.org/CodeNames.html#NV110)系列的显卡，如果使用`linux`内核则安装`nvidia`，如果使用`linux-lts`内核则安装`nvidia-lts`，其他内核则安装`nvidia-dkms`。
+- [Kepler (NVE0/GK*XXX*)](https://nouveau.freedesktop.org/CodeNames.html#NVE0)系列显卡，安装`nvidia-470xx-dkms`。
 - 更旧的显卡安装开源驱动`nouveau`。
 
 如果需要32位应用支持，还需安装`lib32-nvidia-utils`。同时可以安装`nvidia-settings`用来对nvidia驱动进行一些配置。
@@ -171,6 +171,7 @@ Rand=12409689061704920446  # 和Windows中ERand相同
 ```
 
 重启蓝牙，蓝牙设备就会自动连接
+
 ```bash
 sudo systemctl restart bluetooth
 ```
@@ -251,4 +252,4 @@ export LD_PRELOAD=/lib64/libfreetype.so
 
 这时MATLAB安装界面可以正常运行，正常安装即可。
 
-如果在MATLAB运行时碰到问题，可以参考我之前写的[Manjaro Linux 安装 MATLAB](https://xland.cyou/p/manjaro-linux-matlab/)，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。
+如果在MATLAB运行时碰到问题，可以参考我之前写的[Manjaro Linux 安装 MATLAB](https://zhiim.zhiim.io/p/manjaro-linux-matlab/)，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。

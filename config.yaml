@@ -1,8 +1,8 @@
-baseurl: https://xland.cyou
+baseurl: https://zhiim.github.io
 languageCode: zh-cn
 theme: hugo-theme-stack
 pagination:
-    pagerSize: 5
+  pagerSize: 5
 title: Zhiim's Blog
 
 disableHugoGeneratorInject: true
@@ -22,265 +22,262 @@ DefaultContentLanguage: zh-cn
 hasCJKLanguage: true
 
 permalinks:
-    post: /p/:slug/
-    page: /:slug/
+  post: /p/:slug/
+  page: /:slug/
 
 params:
-    mainSections:
-        - post
-    featuredImageField: image
-    rssFullContent: true
-    favicon: /img/favicon.png
+  mainSections:
+    - post
+  featuredImageField: image
+  rssFullContent: true
+  favicon: /img/favicon.png
 
-    footer:
-        since: 2021
-        customText:
+  footer:
+    since: 2021
+    customText:
 
-    dateFormat:
-        published: Jan 02, 2006
-        lastUpdated: Jan 02, 2006 15:04 MST
+  dateFormat:
+    published: Jan 02, 2006
+    lastUpdated: Jan 02, 2006 15:04 MST
 
-    sidebar:
-        compact: false
-        emoji: 🍥
-        subtitle: 总有想不明白的事
-        avatar:
-            enabled: true
-            local: true
-            src: img/avatar.webp
+  sidebar:
+    compact: false
+    emoji: 🍥
+    subtitle: 总有想不明白的事
+    avatar:
+      enabled: true
+      local: true
+      src: img/avatar.webp
 
-    article:
-        math: true
-        toc: true
-        readingTime: true
-        license:
-            enabled: true
-            default: Licensed under CC BY-NC-SA 4.0
+  article:
+    math: true
+    toc: true
+    readingTime: true
+    license:
+      enabled: true
+      default: Licensed under CC BY-NC-SA 4.0
 
-    comments:
-        enabled: true
-        provider: disqusjs
+  comments:
+    enabled: true
+    provider: disqusjs
 
-        disqusjs:
-            shortname: zhiim
-            apiUrl: https://disqus.xland.cyou/
-            apiKey: zISoMc3WnXMqUN9voGP2jQHZTwaUqeSTS6RBa7Zw0jX4MgGGRu5zwWjhMNoEnWdi
-            admin:
-            adminLabel:
+    disqusjs:
+      shortname: zhiim
+      apiUrl: https://disqusjs-proxy-example-blush.vercel.app/
+      apiKey: zISoMc3WnXMqUN9voGP2jQHZTwaUqeSTS6RBa7Zw0jX4MgGGRu5zwWjhMNoEnWdi
+      admin:
+      adminLabel:
 
-        utterances:
-            repo:
-            issueTerm: pathname
-            label:
+    utterances:
+      repo:
+      issueTerm: pathname
+      label:
 
-        remark42:
-            host:
-            site:
-            locale:
+    remark42:
+      host:
+      site:
+      locale:
 
-        vssue:
-            platform:
-            owner:
-            repo:
-            clientId:
-            clientSecret:
-            autoCreateIssue: false
+    vssue:
+      platform:
+      owner:
+      repo:
+      clientId:
+      clientSecret:
+      autoCreateIssue: false
 
-        # Waline client configuration see: https://waline.js.org/en/reference/client.html
-        waline:
-            el: '#waline'
-            serverURL: 
-            lang: 'zh-CN'
-            visitor:
-            avatar:
-            emoji:
-                - https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-emoji
-            requiredMeta:
-                - name
-                - email
-                - url
-            placeholder:
-            locale:
-                admin: Admin
+    # Waline client configuration see: https://waline.js.org/en/reference/client.html
+    waline:
+      el: "#waline"
+      serverURL:
+      lang: "zh-CN"
+      visitor:
+      avatar:
+      emoji:
+        - https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-emoji
+      requiredMeta:
+        - name
+        - email
+        - url
+      placeholder:
+      locale:
+        admin: Admin
 
-        twikoo:
-            envId:
-            region:
-            path:
-            lang:
+    twikoo:
+      envId:
+      region:
+      path:
+      lang:
 
-        # See https://cactus.chat/docs/reference/web-client/#configuration for description of the various options
-        cactus:
-            defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
-            serverName: "cactus.chat"
-            siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
+    # See https://cactus.chat/docs/reference/web-client/#configuration for description of the various options
+    cactus:
+      defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
+      serverName: "cactus.chat"
+      siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
-        giscus:
-            repo:
-            repoID:
-            category:
-            categoryID:
-            mapping:
-            lightTheme:
-            darkTheme:
-            reactionsEnabled: 1
-            emitMetadata: 0
+    giscus:
+      repo:
+      repoID:
+      category:
+      categoryID:
+      mapping:
+      lightTheme:
+      darkTheme:
+      reactionsEnabled: 1
+      emitMetadata: 0
 
-        gitalk:
-            owner:
-            admin:
-            repo:
-            clientID:
-            clientSecret:
+    gitalk:
+      owner:
+      admin:
+      repo:
+      clientID:
+      clientSecret:
 
-        cusdis:
-            host:
-            id:
-    widgets:
-        homepage: 
-            - type: search
-            - type: archives
-              params:
-                  limit: 5
-            - type: categories
-              params:
-                  limit: 10
-            - type: tag-cloud
-              params:
-                  limit: 10
-        page:
-            - type: toc
-        
-        
+    cusdis:
+      host:
+      id:
+  widgets:
+    homepage:
+      - type: search
+      - type: archives
+        params:
+          limit: 5
+      - type: categories
+        params:
+          limit: 10
+      - type: tag-cloud
+        params:
+          limit: 10
+    page:
+      - type: toc
 
+  opengraph:
+    twitter:
+      # Your Twitter username
+      site: zhiim_0
+
+      # Available values: summary, summary_large_image
+      card: summary_large_image
+
+  defaultImage:
     opengraph:
-        twitter:
-            # Your Twitter username
-            site: zhiim_0
+      enabled: true
+      local: true
+      src: img/default.webp
 
-            # Available values: summary, summary_large_image
-            card: summary_large_image
+  colorScheme:
+    # Display toggle
+    toggle: true
 
-    defaultImage:
-        opengraph:
-            enabled: true
-            local: true
-            src: img/default.webp
+    # Available values: auto, light, dark
+    default: auto
 
-    colorScheme:
-        # Display toggle
-        toggle: true
-
-        # Available values: auto, light, dark
-        default: auto
-
-    imageProcessing:
-        cover:
-            enabled: false
-        content:
-            enabled: false
+  imageProcessing:
+    cover:
+      enabled: false
+    content:
+      enabled: false
 
 ### Custom menu
 ### See https://docs.stack.jimmycai.com/configuration/custom-menu.html
 ### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
 menu:
-    main:
-        - identifier: home
-          name: 首页
-          url: /
-          weight: -100
-          params:
-              ### For demonstration purpose, the home link will be open in a new tab
-              newTab: false
-              icon: home
+  main:
+    - identifier: home
+      name: 首页
+      url: /
+      weight: -100
+      params:
+        ### For demonstration purpose, the home link will be open in a new tab
+        newTab: false
+        icon: home
 
-        - identifier: about
-          name: 关于
-          url: /about
-          weight: 200
-          params:
-              newTab: false
-              icon: user
+    - identifier: about
+      name: 关于
+      url: /about
+      weight: 200
+      params:
+        newTab: false
+        icon: user
 
-        - identifier: archives
-          name: 归档
-          url: /archives/
-          weight: 100
-          params:
-              newTab: false
-              icon: archives
+    - identifier: archives
+      name: 归档
+      url: /archives/
+      weight: 100
+      params:
+        newTab: false
+        icon: archives
 
-        - identifier: links
-          name: 友链
-          url: /links/
-          weight: 300
-          params:
-              newTab: false
-              icon: link
+    - identifier: links
+      name: 友链
+      url: /links/
+      weight: 300
+      params:
+        newTab: false
+        icon: link
 
-        - identifier: search
-          name: 搜索
-          url: /search/
-          weight: 400
-          params:
-              newTab: false
-              icon: search
+    - identifier: search
+      name: 搜索
+      url: /search/
+      weight: 400
+      params:
+        newTab: false
+        icon: search
 
-    social:
-        - identifier: douban
-          name: Douban
-          url: https://www.douban.com/people/zhiim
-          weight: 200
-          params:
-              icon: brand-douban
+  social:
+    - identifier: douban
+      name: Douban
+      url: https://www.douban.com/people/zhiim
+      weight: 200
+      params:
+        icon: brand-douban
 
-        - identifier: telegram
-          name: Telegram
-          url: https://t.me/zhiim_0
-          weight: -100
-          params:
-              icon: brand-telegram
+    - identifier: telegram
+      name: Telegram
+      url: https://t.me/zhiim_0
+      weight: -100
+      params:
+        icon: brand-telegram
 
-        - identifier: github
-          name: Github
-          url: https://github.com/zhiim
-          weight: 100
-          params:
-              icon: brand-github
-        
-        - identifier: rss
-          name: Rss
-          url: https://xland.cyou/index.xml
-          weight: 300
-          params:
-              icon: rss
+    - identifier: github
+      name: Github
+      url: https://github.com/zhiim
+      weight: 100
+      params:
+        icon: brand-github
 
+    - identifier: rss
+      name: Rss
+      url: https://zhiim.github.io/index.xml
+      weight: 300
+      params:
+        icon: rss
 
 related:
-    includeNewer: true
-    threshold: 60
-    toLower: false
-    indices:
-        - name: tags
-          weight: 200
+  includeNewer: true
+  threshold: 60
+  toLower: false
+  indices:
+    - name: tags
+      weight: 200
 
-        - name: categories
-          weight: 100
+    - name: categories
+      weight: 100
 
 markup:
-    goldmark:
-        renderer:
-            ## Set to true if you have HTML content inside Markdown
-            unsafe: false
-    tableOfContents:
-        endLevel: 4
-        ordered: true
-        startLevel: 2
-    highlight:
-        noClasses: false
-        codeFences: true
-        guessSyntax: true
-        lineNoStart: 1
-        lineNos: true
-        lineNumbersInTable: true
-        tabWidth: 4
+  goldmark:
+    renderer:
+      ## Set to true if you have HTML content inside Markdown
+      unsafe: false
+  tableOfContents:
+    endLevel: 4
+    ordered: true
+    startLevel: 2
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNoStart: 1
+    lineNos: true
+    lineNumbersInTable: true
+    tabWidth: 4
