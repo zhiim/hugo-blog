@@ -252,4 +252,4 @@ export LD_PRELOAD=/lib64/libfreetype.so
 
 这时MATLAB安装界面可以正常运行，正常安装即可。
 
-如果在MATLAB运行时碰到问题，可以参考我之前写的[Manjaro Linux 安装 MATLAB](https://zhiim.zhiim.io/p/manjaro-linux-matlab/)，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。
+如果在MATLAB运行时碰到问题，可以参考我之前写的[Manjaro Linux 安装 MATLAB](https://zhiim.github.io/p/manjaro-linux-matlab/)，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。
