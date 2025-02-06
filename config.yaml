@@ -63,7 +63,7 @@ params:
 
     disqusjs:
       shortname: zhiim
-      apiUrl: https://disqusjs-proxy-example-blush.vercel.app/
+      apiUrl: https://disqus.zhiim.eu.org/
       apiKey: zISoMc3WnXMqUN9voGP2jQHZTwaUqeSTS6RBa7Zw0jX4MgGGRu5zwWjhMNoEnWdi
       admin:
       adminLabel:
