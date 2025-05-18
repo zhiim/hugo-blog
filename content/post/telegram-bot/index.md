@@ -4,8 +4,8 @@ title = "Telegram Bot（一）Python库pyTelegramBotAPI的使用"
 date = 2023-01-10T19:39:43+08:00
 slug = "telegram-bot"
 description = "通过Telegram提供的Bot API可以实现Bot和用户的交互，Python库pyTelegramBotAPI对Bot API进行了封装，使得我们可以通过调用Python函数的形式对API进行调用"
-tags = ["Telegram Bot","pyTelegramBotAPI"]
-categories = ["Tech"]
+tags = ["Python"]
+categories = ["Notes"]
 image = ""
 
 +++
@@ -20,7 +20,7 @@ image = ""
 
 ![新建Bot](newBot.webp)
 
-等到BotFather回复后输入想要创建的Bot名称，BotFather再次回复后输入Bot的username，注意username必须以_bot结尾。
+等到BotFather回复后输入想要创建的Bot名称，BotFather再次回复后输入Bot的username，注意username必须以\_bot结尾。
 
 创建完Bot后就可以获取到Bot的token，Telegram Bot API的调用必须提供token。
 
@@ -84,13 +84,13 @@ def function_name(message):
 
 官方给出的filters支持的类型如下：
 
-| name | argument | Condition |
-| --- | --- | --- |
-| content_types | list of strings (default ['text']) | True if message.content_type is in the list of strings. |
-| regexp | a regular expression as a string | True if re.search(regexp_arg) returns True and message.content_type == 'text' (See https://docs.python.org/2/library/re.html) |
-| commands | list of strings | True if message.content_type == 'text' and message.text starts with a command that is in the list of strings. |
-| chat_types | list of chat types | True if message.chat.type in your filter |
-| func | a function (lambda or function reference) | True if the lambda or function reference returns True |
+| name          | argument                                  | Condition                                                                                                                     |
+| ------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| content_types | list of strings (default ['text'])        | True if message.content_type is in the list of strings.                                                                       |
+| regexp        | a regular expression as a string          | True if re.search(regexp_arg) returns True and message.content_type == 'text' (See https://docs.python.org/2/library/re.html) |
+| commands      | list of strings                           | True if message.content_type == 'text' and message.text starts with a command that is in the list of strings.                 |
+| chat_types    | list of chat types                        | True if message.chat.type in your filter                                                                                      |
+| func          | a function (lambda or function reference) | True if the lambda or function reference returns True                                                                         |
 
 ```python
 import telebot

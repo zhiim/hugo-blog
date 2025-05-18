@@ -5,7 +5,7 @@ date = 2023-07-09T14:10:06+08:00
 slug = "arch-linux-configuration-linux-lts-kernel"
 description = "Arch Linux 滚动更新的特性，让我们总能够体验最新的内核和软件，但有时候也会由于更新导致系统出现故障。本文记录了如何安装linux-lts备用内核，并配置GRUB和rEFInd从而方便地选择不同内核"
 tags = ["Linux"]
-categories = ["Tech"]
+categories = ["Notes"]
 image = "/p/arch-linux-configuration-driver-and-software/arch.webp"
 
 +++

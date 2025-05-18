@@ -5,7 +5,7 @@ date = 2023-02-25T15:54:25+08:00
 slug = "uca-doa-ambiguity"
 description = "在使用MUSIC算法进行DOA估计时，必须保证流型矩阵中各个导向矢量线性无关，否则可能出现虚假谱峰值。本文讨论了均匀线阵和均匀线阵的DOA估计中，出现峰值模糊的条件。"
 tags = ["DOA 估计"]
-categories = ["Tech"]
+categories = ["Notes"]
 image = ""
 
 +++

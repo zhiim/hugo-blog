@@ -4,8 +4,8 @@ title = "PyTorch基础 （三）网络模型"
 date = 2023-01-09T15:14:55+08:00
 slug = "pytorch-model"
 description = "在PyTorch中建立神经网络模型，初始化和查看模型参数"
-tags = ["PyTorch", "深度学习"]
-categories = ["Tech"]
+tags = ["Python", "深度学习"]
+categories = ["Notes"]
 image = "/p/pytorch-tensor/pytorch.webp"
 
 +++
@@ -19,37 +19,25 @@ image = "/p/pytorch-tensor/pytorch.webp"
 ### 神经网络的组成
 
 - **激活函数 Activatioin Functioin**
-    
-    神经元的输入经过激活函数得到输出，激活函数的输出值定义了神经元是否被激活。激活函数有几种不同的形式，它的选取取决于期望的神经元输出。
-    
-    - *Binary* 输入为正数时神经元输出1，输入为负数时神经元输出0
-        
-        $$
-        f(x)= \small\begin{cases} 0, & \text{if } x < 0 \newline 1, & \text{if } x\geq 0 \end{cases}
-        $$
-        
-    - *Sigmod* 由输入值得到0和1之间的连续输出值
-        
-        $$
-        f(x) = {\large \frac{1}{1+e^{-x}}}
-        $$
-        
-    - *Tanh* 由输入值得到-1和1之间的连续输出值
-        
-        $$
-        f(x) = {\large \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}}
-        $$
-        
-    - *ReLU* 当输入为负数时输出为0，输入为正数时保持输入值
-        
-        $$
-        f(x)= \small \begin{cases} 0, & \text{if } x < 0\newline x, & \text{if } x\geq 0 \end{cases}
-        $$
-        
+  神经元的输入经过激活函数得到输出，激活函数的输出值定义了神经元是否被激活。激活函数有几种不同的形式，它的选取取决于期望的神经元输出。
+  - _Binary_ 输入为正数时神经元输出1，输入为负数时神经元输出0
+    $$
+    f(x)= \small\begin{cases} 0, & \text{if } x < 0 \newline 1, & \text{if } x\geq 0 \end{cases}
+    $$
+  - _Sigmod_ 由输入值得到0和1之间的连续输出值
+    $$
+    f(x) = {\large \frac{1}{1+e^{-x}}}
+    $$
+  - _Tanh_ 由输入值得到-1和1之间的连续输出值
+    $$
+    f(x) = {\large \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}}
+    $$
+  - _ReLU_ 当输入为负数时输出为0，输入为正数时保持输入值
+    $$
+    f(x)= \small \begin{cases} 0, & \text{if } x < 0\newline x, & \text{if } x\geq 0 \end{cases}
+    $$
 - **权重 Weights**
-    
-    由前一神经元输出到下一神经元输入的加权
-    
+  由前一神经元输出到下一神经元输入的加权
 - **偏置 Bias**
 
 ![神经元模型](neuron.webp)

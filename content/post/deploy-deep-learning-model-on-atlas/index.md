@@ -4,8 +4,8 @@ title = "在Atlas 200 DK中部署深度学习模型"
 date = 2023-09-26T12:08:08+08:00
 slug = "deploy-deep-learning-model-on-atlas"
 description = "本文记录了将Tensorflow模型部署到Atlas 200 DK的过程，首先将SavedModel转换成ONNX模型，然后将ONNX模型转换为om格式，以及模型转换中遇到的一些问题"
-tags = ["Atlas", "深度学习"]
-categories = ["Tech"]
+tags = ["深度学习"]
+categories = ["Notes"]
 image = ""
 
 +++
@@ -53,6 +53,7 @@ Atlas 200 DK的环境部署采用“开发环境与运行环境分设”的方�
 ## cann-toolkit 配置
 
 在Ubuntu中安装完Ascend-cann-toolkit后，运行模型转换工具`atc`时可能会出现报错
+
 ```bash
 error while loading shared libraries: libascend_hal.so: cannot open shared object file: No such file or directory
 ```
@@ -68,11 +69,14 @@ xu@DESKTOP-9B4N33I:~/Ascend/ascend-toolkit/latest$ find . -name libascend_hal.so
 将`libascend_hal.so`复制到任意路径，并将该路径添加到Ascend-cann-toolkit环境变量中的`LD_LIBRARY_PATH`。
 
 例如将`libascend_hal.so`复制到`~/Ascend/missing_lib`
+
 ```bash
 xu@DESKTOP-9B4N33I:~$ mkdir ~/Ascend/missing_lib
 xu@DESKTOP-9B4N33I:~$ cp ~/Ascend/ascend-toolkit/latestx86_64-linux/devlib/libascend_hal.so ~/Ascend/missing_lib
 ```
+
 在`~/.bashrc`中更改环境变量
+
 ```shell
 export LD_LIBRARY_PATH=${ASCEND_TOOLKIT_HOME}/lib64:${ASCEND_TOOLKIT_HOME}/lib64/plugin/opskernel:${ASCEND_TOOLKIT_HOME}/lib64/plugin/nnengine:/home/xu/Ascend/missing_lib:$LD_LIBRARY_PATH
 ```
@@ -102,13 +106,15 @@ model.load_weights(model_path)
 mobilenet_save_path = os.path.join("./model")
 tf.saved_model.save(model, mobilenet_save_path)
 ```
+
 ### 将SavedModel转换为ONNX模型
 
 使用[tf2onnx](https://github.com/onnx/tensorflow-onnx)将SavedModel转换为.onnx格式的模型。
 
 ```bash
 python -m tf2onnx.convert --saved-model tensorflow-model-path --output model.onnx
-```  
+```
+
 由于`atc`不支持ONNX的高版本算子，转换时`tf2onnx`的--opset 参数值需使用默认值15。
 
 导出的ONNX模型可以使用[Netron](https://netron.app)查看网络结构。使用ONNX模型完成推理以验证模型
@@ -157,6 +163,7 @@ atc --model=resnet.onnx --framework=5 --output=resnet --soc_version=Ascend310
 ```bash
 E16005: The model has [2] [--domain_version] fields, but only one is allowed.
 ```
+
 这是由于在将模型转换为ONNX是产生了两个`(domain, version)`（domain_version的概念参考[ONNX Concepts](https://onnx.ai/onnx/intro/concepts.html)）。
 
 获取ONNX模型中的`(domain,version)`
@@ -167,7 +174,9 @@ import onnx
 model = onnx.load("resnet.onnx")
 print(model.opset_import)
 ```
+
 得到输出
+
 ```bash
 [domain: ""
 version: 15
@@ -175,7 +184,9 @@ version: 15
 version: 2
 ]
 ```
+
 此时只需去除多余的`(domain,version)`，保留一个即可
+
 ```python
 import onnx
 
@@ -197,6 +208,7 @@ onnx.save(model, "./resnet.onnx")
 ```bash
 E10001: Value [-1] for parameter [input_2] is invalid. Reason: maybe you should set input_shape to specify its shape.
 ```
+
 使用Netron查看网络结构，发现`input_2`是输入节点，Netron中显示的该节点信息为
 
 ```toml

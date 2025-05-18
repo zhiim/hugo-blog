@@ -5,7 +5,7 @@ date = 2023-03-19T18:40:57+08:00
 slug = "manjaro-linux-matlab"
 description = "Manjaro Linux安装MATLAB时遇到的各种问题，包括无法启动安装程序、无法显示中文、无法保存设置、无法打开文本编辑器、界面过小、无法使用硬件加速"
 tags = ["Linux"]
-categories = ["Tech"]
+categories = ["Notes"]
 image = ""
 
 +++

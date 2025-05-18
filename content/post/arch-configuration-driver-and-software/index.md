@@ -5,7 +5,7 @@ date = 2023-07-08T17:40:07+08:00
 slug = "arch-linux-configuration-driver-and-software"
 description = "本文记录了Arch Linux安装后，安装显卡驱动、启用视频编解码加速、统一双系统蓝牙等系统配置的过程"
 tags = ["Linux"]
-categories = ["Tech"]
+categories = ["Notes"]
 image = "arch.webp"
 
 +++

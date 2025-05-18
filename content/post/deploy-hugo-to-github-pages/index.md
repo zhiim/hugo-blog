@@ -4,8 +4,8 @@ title = "将Hugo博客部署到Github Pages"
 date = 2022-02-12T19:34:01+08:00
 slug= "hugo_blog"
 description = "利用Github Pages部署Hugo生成的静态博客页面"
-tags = [ "Hugo" ]
-categories = [ "Tech" ]
+tags = [ "工具" ]
+categories = [ "Notes" ]
 image = ""
 
 +++
@@ -19,6 +19,7 @@ Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将m
 ## 关于Github Pages
 
 官方文档定义：
+
 > GitHub Pages is a static site hosting service that takes HTML, CSS, and JavaScript files straight from a repository on GitHub, optionally runs the files through a build process, and publishes a website.
 
 [Github Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages) 有两种形式，个人/组织页面和项目页面，两者访问时的url不同，为了能够使用`https://<USERNAME|ORGANIZATION>.github.io/`访问个人博客，应当设置成个人页面。
@@ -39,7 +40,6 @@ Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将m
 ![新建仓库](https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214110340.png)
 
 选择 **Initialize this repository with a README** ，完成仓库创建
-
 
 ## 将源文件推送到仓库
 

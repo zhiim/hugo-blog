@@ -5,7 +5,7 @@ date = 2024-07-07T10:59:51+08:00
 slug = "python_package_doa_estimation"
 description = "为了方便 DOA 估计的研究，我开发了一个 Python 包 DOA_py，实现了一些经典的DOA估计算法，支持均匀线阵、均匀圆阵和宽带DOA估计。"
 tags = ["Python", "DOA 估计"]
-categories = ["Tech"]
+categories = ["Notes"]
 image = ""
 
 +++

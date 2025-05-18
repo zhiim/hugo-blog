@@ -4,8 +4,8 @@ title = "Windows下制作ChromeOS Live USB"
 date = 2023-02-05T11:02:40+08:00
 slug = "windows-install-chromeos"
 description = "ChromeOS是Google推出的桌面操作系统，只能搭载在Google认证的Chromebook上，但是我们可以借助开源项目brunch，在自己的电脑上安装ChromeOS"
-tags = ["ChromeOS"]
-categories = ["Tech"]
+tags = ["工具"]
+categories = ["Notes"]
 image = ""
 
 +++
@@ -25,55 +25,55 @@ brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件�
 ## 安装ChromeOS到U盘
 
 1. 下载ChromeOS recovery文件。
-    
-    参考自己的CPU型号，选择一个和自己电脑配置接近的chrome设备，在[Chromium Dash](https://chromiumdash.appspot.com/serving-builds?deviceCategory=Chrome%20OS)下载该设备的recovery文件，一般选择最新的发行版本即可。
-    
-    ![ChromeOS recovery](recovery.webp)
-    
-    我选择的是Lenovo Yoga C630 Chromebook，codename为pantheon，下载发行版本为109的recovery文件。
-    
-    如果不知道应该下载哪个recovery，brunch的项目文档里也给了[推荐的recovery](https://github.com/sebanc/brunch/blob/main/install-with-windows.md#recoveries)。
-    * Intel  
-        * 1代-9代：选择codename为rammus的设备对应的recovery
-        * 10代和11代：选择codename为volteer的设备对应的recovery
-    * AMD Ryzen：选择codename为zork的设备对应的recovery
-    
+
+   参考自己的CPU型号，选择一个和自己电脑配置接近的chrome设备，在[Chromium Dash](https://chromiumdash.appspot.com/serving-builds?deviceCategory=Chrome%20OS)下载该设备的recovery文件，一般选择最新的发行版本即可。
+
+   ![ChromeOS recovery](recovery.webp)
+
+   我选择的是Lenovo Yoga C630 Chromebook，codename为pantheon，下载发行版本为109的recovery文件。
+
+   如果不知道应该下载哪个recovery，brunch的项目文档里也给了[推荐的recovery](https://github.com/sebanc/brunch/blob/main/install-with-windows.md#recoveries)。
+
+   - Intel
+     - 1代-9代：选择codename为rammus的设备对应的recovery
+     - 10代和11代：选择codename为volteer的设备对应的recovery
+   - AMD Ryzen：选择codename为zork的设备对应的recovery
+
 2. 下载brunch的release文件
-    
-    在brunch的[release](https://github.com/sebanc/brunch/releases)页面下载和recovery版本号对应的文件，例如下载的recovery为109，则下载Brunch r109。
-    
-    ![brunch release](release.webp)
-    
+
+   在brunch的[release](https://github.com/sebanc/brunch/releases)页面下载和recovery版本号对应的文件，例如下载的recovery为109，则下载Brunch r109。
+
+   ![brunch release](release.webp)
+
 3. 制作ChromeOS镜像文件
-    
-    将下载好的Brunch和ChromeOS recovery放在一个文件夹，分别解压。
-    
-    打开WSL终端，安装必要软件。
-    
-    ```bash
-    sudo apt update && sudo apt -y install pv cgpt tar unzip
-    ```
-    
-    在终端中运行命令，制作ChromeOS镜像。把`chromeos_filename.bin`用从recovery中解压得到的文件名替代，脚本运行完成后回到的名为`chromeos.img`的系统镜像。
-    
-    ```bash
-    sudo bash chromeos-install.sh -src chromeos_filename.bin -dst chromeos.img
-    ```
-    
-    命令运行完成后直接键入ENTER结束。
-    
+
+   将下载好的Brunch和ChromeOS recovery放在一个文件夹，分别解压。
+
+   打开WSL终端，安装必要软件。
+
+   ```bash
+   sudo apt update && sudo apt -y install pv cgpt tar unzip
+   ```
+
+   在终端中运行命令，制作ChromeOS镜像。把`chromeos_filename.bin`用从recovery中解压得到的文件名替代，脚本运行完成后回到的名为`chromeos.img`的系统镜像。
+
+   ```bash
+   sudo bash chromeos-install.sh -src chromeos_filename.bin -dst chromeos.img
+   ```
+
+   命令运行完成后直接键入ENTER结束。
+
 4. 将镜像文件写入U盘
-    
-    下载[Rufus](https://rufus.ie/)，选中要使用的U盘和镜像文件，将镜像写入U盘。
-    
+
+   下载[Rufus](https://rufus.ie/)，选中要使用的U盘和镜像文件，将镜像写入U盘。
+
 5. 进入ChromeOS
-    
-    重启电脑，进入BIOS设置界面，关闭secure boot，设置优先从USB启动。
-    
-    保存并退出BIOS设置，电脑会自动重启并从U盘启动系统，第一次进入系统时需要等待较长时间。
-    
-    ![ChromeOS](chromeos.webp)
-    
+
+   重启电脑，进入BIOS设置界面，关闭secure boot，设置优先从USB启动。
+
+   保存并退出BIOS设置，电脑会自动重启并从U盘启动系统，第一次进入系统时需要等待较长时间。
+
+   ![ChromeOS](chromeos.webp)
 
 ## 安装ChromeOS和Windows双系统
 

@@ -1,8 +1,8 @@
 ---
-title: "Tech"
-description: ”备忘和参考“
+title: "Notes"
+description: "备忘和参考"
 slug: "technology"
-image: "Tech.webp"
+image: "notes.webp"
 style:
   background: "#e66351"
   color: "#fff"

@@ -5,7 +5,7 @@ date = 2024-02-12T15:19:19+08:00
 slug = "get-access-to-gpt4-with-github-copilot"
 description = "Github Copilot底层调用了GPT，本文介绍了如何通过Copilot获得GPT API，并搭配GPT前端使用GPT-4"
 tags = ["工具"]
-categories = ["Tech"]
+categories = ["Notes"]
 image = ""
 
 +++
@@ -118,4 +118,3 @@ python main.py
 ```
 
 ![GPT Academic](gpt_academic.webp)
-
