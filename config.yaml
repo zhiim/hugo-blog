@@ -59,7 +59,7 @@ params:
 
   comments:
     enabled: true
-    provider: disqusjs
+    provider: twikoo
 
     disqusjs:
       shortname: zhiim
@@ -104,7 +104,7 @@ params:
         admin: Admin
 
     twikoo:
-      envId:
+      envId: "https://twikoo.zhiim.eu.org"
       region:
       path:
       lang:
