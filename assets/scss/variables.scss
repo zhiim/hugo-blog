@@ -165,3 +165,14 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
     --container-padding: 15px;
     --widget-separation: var(--section-separation);
 }
+
+// twikoo css
+:root {
+    --twikoo-body-text-color: var(--body-text-color);
+    --twikoo-input-background: var(--body-background);
+    
+  &[data-scheme="dark"] {
+    --twikoo-body-text-color-main: rgba(255, 255, 255, 0.9);
+    --twikoo-body-text-color: rgba(255, 255, 255, 0.7);
+  }
+}

@@ -7,10 +7,6 @@
     box-shadow: var(--shadow-l1);
     padding: var(--card-padding);
   }
-  :root[data-scheme="dark"] {
-    --twikoo-body-text-color-main: rgba(255, 255, 255, 0.9);
-    --twikoo-body-text-color: rgba(255, 255, 255, 0.7);
-  }
   .twikoo .el-input-group__prepend,
   .twikoo .tk-action-icon,
   .twikoo .tk-submit-action-icon,
@@ -35,7 +31,86 @@
   }
   .OwO .OwO-body {
     background-color: var(--body-background) !important;
+    border: none;
     color: var(--body-text-color) !important;
+    border-radius: 10px;
+  }
+
+  .twikoo .tk-row .tk-avatar {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 40%;
+  }
+  .twikoo .tk-row .tk-avatar .tk-avatar-img {
+    height: 5rem;
+    width: 5rem;
+  }
+  .twikoo .tk-avatar {
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 40%;
+  }
+  .twikoo .tk-avatar .tk-avatar-img {
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+
+  // input box (name, email, website)
+  .twikoo .el-input-group__prepend {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-weight: bold;
+    color: var(--twikoo-body-text-color);
+    background-color: var(--card-background) !important;
+  }
+  .twikoo .el-input__inner {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: var(--twikoo-input-background);
+  }
+
+  // icon color
+  .twikoo svg {
+    fill: var(--accent-color);
+  }
+
+  // input area
+  .twikoo .tk-input.el-textarea {
+    border-radius: 15px;
+    background-color: var(--twikoo-input-background);
+    border: none;
+  }
+  .twikoo .el-textarea__inner {
+    border-radius: 15px;
+    border-color: var(--twikoo-input-background);
+  }
+  .twikoo .tk-preview-container {
+    border-radius: 15px;
+  }
+
+  // send button
+  .twikoo .el-button {
+    border-radius: 10px;
+    border: none;
+  }
+  .twikoo .el-button.tk-preview {
+    font-weight: bold;
+    background-color: var(--twikoo-input-background);
+  }
+  .twikoo .el-button.tk-send {
+    font-weight: bold;
+    color: #fff !important;
+    background-color: #1f466d;
+  }
+
+  .twikoo .tk-comments-title {
+    font-size: 1.5rem;
+  }
+
+  .twikoo .tk-meta {
+    padding: 5px 10px;
+    background-color: var(--body-background);
+    border-radius: 10px;
   }
 </style>
 
