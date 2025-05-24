@@ -68,6 +68,10 @@
     border-bottom-right-radius: 10px;
     background-color: var(--twikoo-input-background);
   }
+  .twikoo input:focus {
+    background-color: #fff !important;
+    border: 2px solid var(--accent-color) !important;
+  }
 
   // icon color
   .twikoo svg {
@@ -82,10 +86,14 @@
   }
   .twikoo .el-textarea__inner {
     border-radius: 15px;
-    border-color: var(--twikoo-input-background);
   }
   .twikoo .tk-preview-container {
     border-radius: 15px;
+    border: 1px solid var(--accent-color) !important;
+  }
+  .twikoo textarea:focus {
+    background-color: #fff !important;
+    border: 2px solid var(--accent-color) !important;
   }
 
   // send button
@@ -95,12 +103,13 @@
   }
   .twikoo .el-button.tk-preview {
     font-weight: bold;
-    background-color: var(--twikoo-input-background);
+    color: #fff !important;
+    background-color: #e66351 !important;
   }
   .twikoo .el-button.tk-send {
     font-weight: bold;
     color: #fff !important;
-    background-color: #1f466d;
+    background-color: var(--accent-color) !important;
   }
 
   .twikoo .tk-comments-title {

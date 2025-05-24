@@ -11,7 +11,7 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
         --main-top-padding: 50px;
     }
 
-    --body-background: #f2f2f2;  // changed
+    --body-background: #f4f4f4;  // changed
 
     --accent-color: #1f466d;  // changed
     --accent-color-darker: #2c3e50;
@@ -51,9 +51,9 @@ $defaultTagColors: #fff, #fff, #fff, #fff, #fff;
 *   Card style
 */
 :root {
-    --card-background: #f9f9f9;    // changed
+    --card-background: #ffffff;   // changed
     --card-background-selected: #eaeaea;
-    --search-bar-color: #fefefe;  // added
+    --search-bar-color: #ffffff;  // added
 
     --card-text-color-main: #000;
     --card-text-color-secondary: #000000;  // changed
