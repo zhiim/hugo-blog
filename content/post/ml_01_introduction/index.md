@@ -10,7 +10,7 @@ image = "ml_header.webp"
 
 +++
 
-本人 [CS 189/289A Introduction to Machine Learning](https://people.eecs.berkeley.edu/~jrs/189/) Spring 2025 的学习笔记，仅供参考。
+机器学习系列是我学习 [CS 189/289A Introduction to Machine Learning](https://people.eecs.berkeley.edu/~jrs/189/) Spring 2025 时记录的学习笔记，也可以当作是对课程笔记的翻译，经供参考。
 
 ## 分类问题
 
