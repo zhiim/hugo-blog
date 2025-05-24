@@ -36,6 +36,7 @@
     border-radius: 10px;
   }
 
+  // 增大头像
   .twikoo .tk-row .tk-avatar {
     height: 5rem;
     width: 5rem;
@@ -68,7 +69,7 @@
     border-bottom-right-radius: 10px;
     background-color: var(--twikoo-input-background);
   }
-  .twikoo input:focus {
+  .twikoo .tk-meta-input input.el-input__inner:focus {
     background-color: #fff !important;
     border: 2px solid var(--accent-color) !important;
   }
@@ -91,7 +92,7 @@
     border-radius: 15px;
     border: 1px solid var(--accent-color) !important;
   }
-  .twikoo textarea:focus {
+  .twikoo textarea.el-textarea__inner:focus {
     background-color: #fff !important;
     border: 2px solid var(--accent-color) !important;
   }
@@ -123,6 +124,10 @@
     padding: 5px 10px;
     background-color: var(--body-background);
     border-radius: 10px;
+  }
+
+  .twikoo .tk-admin-container input.el-input__inner:focus {
+    background-color: var(--accent-color) !important;
   }
 </style>
 
