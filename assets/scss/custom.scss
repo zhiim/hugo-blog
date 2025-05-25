@@ -1,71 +1,82 @@
 /* Place your custom SCSS in HUGO_SITE_FOLDER/assets/scss/custom.scss */
 //friends links responsable between two and one columns
 @media (min-width: 1024px) {
-    .article-list--compact.links {
-        display: grid;
-        grid-template-columns: 1fr 1fr ;
-        background: none;
-        box-shadow: none;
-        
-        article {
-            background: var(--card-background);
-            border: none;
-            //box-shadow: var(--shadow-l2);
-            // margin-right: 8px;
-            margin-bottom: 8px;
-            border-radius: var(--card-border-radius);
-            &:nth-child(odd) {
-                margin-right: 8px;
-            }
-            &:hover {
-                box-shadow: var(--shadow-l3);
-            }
-            .article-image img{
-                border-radius: var(--card-border-radius);
-            }
-        }
+  .article-list--compact.links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: none;
+    box-shadow: none;
+
+    article {
+      background: var(--card-background);
+      border: none;
+      //box-shadow: var(--shadow-l2);
+      // margin-right: 8px;
+      margin-bottom: 8px;
+      border-radius: var(--card-border-radius);
+      &:nth-child(odd) {
+        margin-right: 8px;
+      }
+      &:hover {
+        box-shadow: var(--shadow-l3);
+      }
+      .article-image img {
+        border-radius: var(--card-border-radius);
+      }
     }
+  }
 }
 // set friend link radius when one column
 .article-list--compact article .article-image img {
-    border-radius: var(--card-border-radius);
+  border-radius: var(--card-border-radius);
 }
 
 // set the font of left bar menu
 .menu li span {
-    font-weight: 500;
-    font-size: 1.6rem;
+  font-weight: 500;
+  font-size: 1.6rem;
 }
 
 // set search bar hint to bold
 .search-form label {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 // set categories widget's color when hovering
 #categories .tagCloud-tags a {
-    &:hover {
-        //box-shadow: var(--shadow-l2);
-        color: #fff;
-        background-color: #e66351;
-    }
+  &:hover {
+    //box-shadow: var(--shadow-l2);
+    color: #fff;
+    background-color: #e66351;
+  }
 }
 
 // set tag widget's color when hovering
 #tag .tagCloud-tags a {
-    &:hover {
-        //box-shadow: var(--shadow-l2);
-        color: #fff;
-        background-color: #1f466d;
-    }
+  &:hover {
+    //box-shadow: var(--shadow-l2);
+    color: #fff;
+    background-color: #1f466d;
+  }
 }
 
 // set toc font color
 .widget--toc a {
-    color: var(--card-text-color-main);
-    font-weight: bold;
-    &:hover {
-        color: #fff;
-        background-color: #1f466d;
-    }
+  color: var(--card-text-color-main);
+  font-weight: bold;
+  &:hover {
+    color: var(--accent-color);
+  }
+}
+
+// 代码块
+.article-content .highlight {
+  padding: 0px var(--card-padding);
+}
+.article-content .highlight .chroma .lntable {
+  padding: 10px 10px;
+}
+.article-content .copyCodeButton {
+  top: 5px;
+  right: 35px; // card-padding + 5
 }
