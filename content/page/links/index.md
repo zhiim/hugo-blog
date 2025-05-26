@@ -19,7 +19,7 @@ links:
     image: https://blog.linioi.com/hotlink-ok/images/avatar.jpg
 ---
 
-交换友链请留言或者[Telegram](https://t.me/zhiim_0)联系，友链格式请参考本站信息：
+如果想交换友链的话请在下方留言，友链的格式可以参考本站信息：
 
 ```
 名称: Zhiim's Blog
