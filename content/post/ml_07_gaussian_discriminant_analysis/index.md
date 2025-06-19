@@ -26,7 +26,7 @@ $$X \sim \mathcal{N}(\mu, \sigma^2): f(x) = \frac{1}{(\sqrt{2 \pi} \sigma)^d}\ex
 
 等价于最大化
 
-$$Q_C(x) = \ln\left( (\sqrt{2\pi})^d f_{X|Y=C}(x) \right)=-\frac{\|\|x - \mu_C\|\|^2}{2\sigma_C^2}-d\ln\sigma_C + \ln\pi_C$$
+$$Q_C(x) = \ln\left( (\sqrt{2\pi})^d f_{X|Y=C}(x) \pi_C \right)=-\frac{\|\|x - \mu_C\|\|^2}{2\sigma_C^2}-d\ln\sigma_C + \ln\pi_C$$
 
 $Q_C(x)$ 是一个关于 $x$ 的二次函数
 
@@ -119,4 +119,3 @@ $$\hat{\sigma}^2 = \frac{1}{dn} \sum_C \sum_{\\{i:y_i = c\\}} \|\|X_i - \hat{\mu
 
 $$
 $$
-
