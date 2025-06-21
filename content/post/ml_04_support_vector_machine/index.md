@@ -27,13 +27,13 @@ $$y_i (X_i \cdot w + \alpha) \ge 1 - \xi_i$$
 
 {{<figure src="f3ea99726ceb561f856e542debef3c17.png" title="松弛变量存在的情况" width=400 >}}
 
-此时，仍然定义间隔为 $1 / \|\|w\|\|$，为了防止松弛变量的滥用，我们在目标函数中添加一个损失项对其进行约束
+此时，仍然定义间隔为 $1 / \|w\|$，为了防止松弛变量的滥用，我们在目标函数中添加一个损失项对其进行约束
 
 $$
 \begin{align*}
-& \text{Find } w, \alpha, \xi_i \text{ that minimize } \|\|w\|\|^2 + C\sum_{i = 1}^n\xi_i \\\\
+& \text{Find } w, \alpha, \xi_i \text{ that minimize } \|w\|^2 + C\sum_{i = 1}^n\xi_i \\
 & \begin{aligned}
-\text{subject to } & \quad  y_i(X_i \cdot w + \alpha) \ge 1 - \xi_i & \text{for all } i \in [1, n] \\\\
+\text{subject to } & \quad  y_i(X_i \cdot w + \alpha) \ge 1 - \xi_i & \text{for all } i \in [1, n] \\
 & \quad \xi_i \ge 0 & \text{for all } i \in [1, n]
 \end{aligned}
 \end{align*}
@@ -41,12 +41,12 @@ $$
 
 这是一个 $d + n + 1$ 维空间的、具有 $2n$ 个约束项的二次规划问题。其中 $C > 0$ 是一个*正则化超参数*（regularization hyperparameter）。
 
-|                      | 较小C                         | 较大C                            |
-| -------------------- | ----------------------------- | -------------------------------- |
-| **目标**             | 最大化间隔 ${} 1 / \|\|w\|\|$ | 保持大多数松弛变量为零或很小     |
-| **风险**             | 欠拟合（误分类许多训练数据）  | 过拟合（训练效果好，测试效果差） |
-| **异常值**           | 不太敏感                      | 非常敏感                         |
-| **边界（非线性时）** | 更“平坦”                      | 更曲折                           |
+|                      | 较小C                        | 较大C                            |
+| -------------------- | ---------------------------- | -------------------------------- |
+| **目标**             | 最大化间隔 ${} 1 / \|w\|$    | 保持大多数松弛变量为零或很小     |
+| **风险**             | 欠拟合（误分类许多训练数据） | 过拟合（训练效果好，测试效果差） |
+| **异常值**           | 不太敏感                     | 非常敏感                         |
+| **边界（非线性时）** | 更“平坦”                     | 更曲折                           |
 
 {{<figure src="8d7ca67f5ea4176993da2f0615155dae.png" title="不同C值的决策边界，右下方C更大" width=600 >}}
 
@@ -60,9 +60,9 @@ $$
 
 $$
 \begin{align*}
-& \Phi: \mathbb{R}^d \rightarrow \mathbb{R}^{d + 1} \\\\
+& \Phi: \mathbb{R}^d \rightarrow \mathbb{R}^{d + 1} \\
 & \Phi(x) = \begin{bmatrix}
-x \\\\ \|\|x\|\|^2
+x \\ \|x\|^2
 \end{bmatrix}
 \end{align*}
 $$
@@ -77,13 +77,13 @@ $$
 
 $$
 \begin{align*}
-& \|\|x-c\|\|^2 < \rho^2 \\\\
-& \|\|x\|\|^2 - 2c \cdot x + \|\|c\|\|^2 < \rho^2 \\\\
+& \|x-c\|^2 < \rho^2 \\
+& \|x\|^2 - 2c \cdot x + \|c\|^2 < \rho^2 \\
 & \begin{bmatrix}
 -2c^T & 1
 \end{bmatrix} \begin{bmatrix}
-x \\\\ \|\|x\|\|^2
-\end{bmatrix} < \rho^2 - \|\|c\|\|^2
+x \\ \|x\|^2
+\end{bmatrix} < \rho^2 - \|c\|^2
 \end{align*}
 $$
 
@@ -103,7 +103,7 @@ $$
 \begin{align*}
 & \Phi(x) = \begin{bmatrix}
 x_1^2 & x_2^2 & x_3^2 & x_1x_2 & x_2x_3 & x_3x_1 & x_1 & x_2 & x_3
-\end{bmatrix}^T \\\\
+\end{bmatrix}^T \\
 & \begin{bmatrix}
 A & B & C & D & E & F & G & H & I
 \end{bmatrix} \cdot \Phi(x) + \alpha
@@ -133,27 +133,27 @@ $$
 
 $$
 \begin{align*}
-& \min_{\alpha} \frac{1}{2} \sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_j y_i y_j (x_i \cdot x_j) - \sum_{i = 1}^n \alpha_i \\\\
+& \min_{\alpha} \frac{1}{2} \sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_j y_i y_j (x_i \cdot x_j) - \sum_{i = 1}^n \alpha_i \\
 &\begin{aligned} \text{s.t. }
-& \sum_{i = 1}^n \alpha_i y_i = 0 \\\\
+& \sum_{i = 1}^n \alpha_i y_i = 0 \\
 & 0 \le \alpha_i \le C, \quad i = 1,2,\dots,n
 \end{aligned}
 \end{align*}
 $$
 
-求解最优解 $\alpha^\* = (\alpha_1^\*, \alpha_2^\*, \dots, \alpha_n^\*)$  
-（2）计算 $w^\* = \sum_{i = 1}^n \alpha_i^\* y_i x_i$  
-选择一个下标 $j$，满足 $0< \alpha_j^\* < C$，计算
+求解最优解 $\alpha^* = (\alpha_1^*, \alpha_2^*, \dots, \alpha_n^*)$  
+（2）计算 $w^* = \sum_{i = 1}^n \alpha_i^* y_i x_i$  
+选择一个下标 $j$，满足 $0< \alpha_j^* < C$，计算
 
-$$b^\* = y_j - \sum_{i = 1}^n y_i \alpha_i^\*(x_i \cdot x_j)$$
+$$b^* = y_j - \sum_{i = 1}^n y_i \alpha_i^*(x_i \cdot x_j)$$
 
 （3）求得决策超球面
-$$w^\* \cdot x + b^\* = 0$$
+$$w^* \cdot x + b^* = 0$$
 以及决策函数
 
-$$f(x) = w^\* \cdot x + b^\* = \sum_{i = 1}^n \alpha_i^\* y_i(x \cdot  x_i) + b^\*$$
+$$f(x) = w^* \cdot x + b^* = \sum_{i = 1}^n \alpha_i^* y_i(x \cdot  x_i) + b^*$$
 
-在上述算法中，$w^\*$ 和 $b^\*$ 只依赖于 $\alpha_i^\* > 0$ 的样本点 $x_i$，称这些样本点为*支持向量*。
+在上述算法中，$w^*$ 和 $b^*$ 只依赖于 $\alpha_i^* > 0$ 的样本点 $x_i$，称这些样本点为*支持向量*。
 
 可以看出在支持向量机学习算法中，无论优化的目标函数还是决策函数都只涉及两个向量之间的点积，例如 $x_i \cdot x_j$ 和 $x \cdot x_i$。
 
@@ -175,9 +175,9 @@ $$K(x, z) = \Phi(x) \cdot \Phi(z)$$
 
 $$
 \begin{align*}
-& \min_{\alpha} \frac{1}{2} \sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_j y_i y_j K(x_i, x_j) - \sum_{i = 1}^n \alpha_i \\\\
+& \min_{\alpha} \frac{1}{2} \sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_j y_i y_j K(x_i, x_j) - \sum_{i = 1}^n \alpha_i \\
 &\begin{aligned} \text{s.t. }
-& \sum_{i = 1}^n \alpha_i y_i = 0 \\\\
+& \sum_{i = 1}^n \alpha_i y_i = 0 \\
 & 0 \le \alpha_i \le C, \quad i = 1,2,\dots,n
 \end{aligned}
 \end{align*}

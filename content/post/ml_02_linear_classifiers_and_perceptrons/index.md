@@ -26,12 +26,12 @@ _决策函数_：将一个点映射到一个值，例如
 
 $$
 \begin{matrix}
-f(x) > 0 & & \text{if } x \in \text{class } C; \\\\
+f(x) > 0 & & \text{if } x \in \text{class } C; \\
 f(x) \le 0 & & \text{if } x \notin \text{class } C;
 \end{matrix}
 $$
 
-则分类边界为 $\\{x\in \mathbb{R}^{d}: f(x)=0\\}$
+则分类边界为 $\{x\in \mathbb{R}^{d}: f(x)=0\}$
 
 {{<figure src="dc_2.webp" title="分类边界" width=400 >}}
 
@@ -39,11 +39,11 @@ $$
 
 _内积_：$x\cdot y = x_1y_1+x_2y_2+\dots + x_dy_d$，也可以写成 $x^Ty$
 
-_欧拉范数_：$\|\|x\|\|=\sqrt{x\cdot x}=\sqrt{x_1^2 + x_2^2 + \dots + x_d^2}$。可以表示向量 $x$ 的欧拉长度 (Euclidean length)。
+_欧拉范数_：$\|x\|=\sqrt{x\cdot x}=\sqrt{x_1^2 + x_2^2 + \dots + x_d^2}$。可以表示向量 $x$ 的欧拉长度 (Euclidean length)。
 
-归一化向量 $x$： ${x}/{\|\|x\|\|}$
+归一化向量 $x$： ${x}/{\|x\|}$
 
-给定一个线性决策函数 $f(x) = w \cdot x + \alpha$，决策边界为 $H = \\{x: w \cdot x = -\alpha\\}$。集合 $H$ 被称为*超平面*（hyperplane）。
+给定一个线性决策函数 $f(x) = w \cdot x + \alpha$，决策边界为 $H = \{x: w \cdot x = -\alpha\}$。集合 $H$ 被称为*超平面*（hyperplane）。
 
 - 超平面是 $d-1$ 维，并且分割了一个 $d$ 维空间
 - 它是无限且平展的
@@ -70,7 +70,7 @@ $$f(x) = (\mu_C - \mu_X) \cdot x - (\mu_C - \mu_X) \cdot \frac{\mu_C + \mu_X}{2}
 $$
 y_i = \begin{cases}
 \begin{matrix}
-1 & \text{if } X_i \in \text{class C} \\\\
+1 & \text{if } X_i \in \text{class C} \\
 -1 & \text{if } X_i \notin \text{class C}
 \end{matrix}
 \end{cases}
@@ -80,7 +80,7 @@ $$
 
 $$
 \begin{matrix}
-X_i \cdot w \ge 0 & & \text{if } y_i = 1 \\\\
+X_i \cdot w \ge 0 & & \text{if } y_i = 1 \\
 X_i \cdot w \le 0 & & \text{if } y_i = -1
 \end{matrix}
 $$
@@ -96,7 +96,7 @@ $$y_iX_i\cdot w \ge 0$$
 $$
 L(\hat{y}, y_i) = \begin{cases}
 \begin{matrix}
-0 & & \text{if } y_i\hat{y} \ge 0 \\\\
+0 & & \text{if } y_i\hat{y} \ge 0 \\
 -y_i \hat{y} & & \text{otherwise}
 \end{matrix}
 \end{cases}

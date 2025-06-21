@@ -1,6 +1,6 @@
 +++
 
-title = "机器学习 07 高斯判别分析"
+title = "机器学习 07 高斯判别分析（各向同性）"
 date = 2025-05-23T23:21:38+08:00
 slug = "ml_07_gaussian_discriminant_analysis"
 description = "高斯判别分析，包括二次判别分析（QDA）和线性判别分析（LDA）；统计模型参数的最大似然估计"
@@ -14,7 +14,7 @@ image = "/p/ml_01_introduction/ml_header.webp"
 
 **基本假设**：每个类别服从高斯分布
 
-$$X \sim \mathcal{N}(\mu, \sigma^2): f(x) = \frac{1}{(\sqrt{2 \pi} \sigma)^d}\exp{\left( -\frac{\|\|x - \mu\|\|^2}{2\sigma^2} \right)}$$
+$$X \sim \mathcal{N}(\mu, \sigma^2): f(x) = \frac{1}{(\sqrt{2 \pi} \sigma)^d}\exp{\left( -\frac{\|x - \mu\|^2}{2\sigma^2} \right)}$$
 
 其中 $x,\mu$ 是向量，$\sigma$ 是标量，$d$ 表示维度。（注：这里使用的正态分布公式是一个简化版本，它假设数据在所有的特征维度上的方差相同，并且不考虑不同特征之间的相关性）
 
@@ -26,7 +26,7 @@ $$X \sim \mathcal{N}(\mu, \sigma^2): f(x) = \frac{1}{(\sqrt{2 \pi} \sigma)^d}\ex
 
 等价于最大化
 
-$$Q_C(x) = \ln\left( (\sqrt{2\pi})^d f_{X|Y=C}(x) \pi_C \right)=-\frac{\|\|x - \mu_C\|\|^2}{2\sigma_C^2}-d\ln\sigma_C + \ln\pi_C$$
+$$Q_C(x) = \ln\left( (\sqrt{2\pi})^d f_{X|Y=C}(x) \pi_C \right)=-\frac{\|x - \mu_C\|^2}{2\sigma_C^2}-d\ln\sigma_C + \ln\pi_C$$
 
 $Q_C(x)$ 是一个关于 $x$ 的二次函数
 
@@ -36,12 +36,12 @@ $Q_C(x)$ 是一个关于 $x$ 的二次函数
 
 $$
 r^*(x) = \begin{cases}
-C & \text{if } Q_C(x) - Q_D(x) > 0 \\\\
+C & \text{if } Q_C(x) - Q_D(x) > 0 \\
 D & otherwise
 \end{cases}
 $$
 
-决策函数为 $Q_C(x) - Q_D(x)$，贝叶斯决策边界为 $\\{ x: Q_C(x) - Q_D(x) = 0 \\}$。如果样本点是 $1$ 维的，那么贝叶斯决策边界可能有 $1$ 个或者 $2$ 个点（二次方程的解）；如果样本点是 $d$ 维的，那么贝叶斯决策边界是一个二次曲面。
+决策函数为 $Q_C(x) - Q_D(x)$，贝叶斯决策边界为 $\{ x: Q_C(x) - Q_D(x) = 0 \}$。如果样本点是 $1$ 维的，那么贝叶斯决策边界可能有 $1$ 个或者 $2$ 个点（二次方程的解）；如果样本点是 $d$ 维的，那么贝叶斯决策边界是一个二次曲面。
 
 除了根据贝叶斯规则判别样本点的类别外，也可以得到判别正确的概率，即
 $$P(Y = C | X = x) = \frac{f_{X | Y = C}\pi_C}{f_{X | Y = C}\pi_C + f_{X | Y = D}\pi_D}$$
@@ -65,14 +65,14 @@ LDA 时 QDA 的一个变种，它有线性的决策边界，相较于 QDA 不容
 
 此时贝叶斯分类器是一个线性分类器
 
-$$Q_C(x) - Q_D(x) = \underbrace{\frac{(\mu_C - \mu_D) \cdot x}{\sigma^2}}_{w \cdot x} \underbrace{- \frac{\|\|\mu_C\|\|^2 - \|\|\mu_D\|\|^2}{2\sigma^2} + \ln\pi_C - \ln\pi_D} _{+ \alpha}$$
+$$Q_C(x) - Q_D(x) = \underbrace{\frac{(\mu_C - \mu_D) \cdot x}{\sigma^2}}_{w \cdot x} \underbrace{- \frac{\|\mu_C\|^2 - \|\mu_D\|^2}{2\sigma^2} + \ln\pi_C - \ln\pi_D} _{+ \alpha}$$
 
 - 决策边界为 $w \cdot x + \alpha = 0$
 - 前验概率为 $P(Y=C | X= x) = s(w \cdot x + \alpha)$
 
 特殊情况：如果 $\pi_C = \pi_D = 0.5$，那么决策边界变为 $(\mu_C - \mu_D) \cdot x - (\mu_C - \mu_D) \cdot \left( \frac{\mu_C + \mu_D}{2} \right) = 0$，此时变成了质心法
 
-多类别 LDA：选择类别 C，最大化线性决策函数 $\frac{\mu_C \cdot x}{\sigma^2} - \frac{\|\|\mu_C\|\|^2}{2\sigma^2} + \ln\pi_C$
+多类别 LDA：选择类别 C，最大化线性决策函数 $\frac{\mu_C \cdot x}{\sigma^2} - \frac{\|\mu_C\|^2}{2\sigma^2} + \ln\pi_C$
 
 {{<figure src="823390d4a186991b57d5fe3eb459e2ad.png" title="多类别LDA决策边界" width=400 >}}
 
@@ -98,8 +98,8 @@ $$\mathcal{L}(\mu, \sigma;X_1,X_2,\dots,X_n) = f(X_1)f(X_2)\cdots f(X_n)$$
 
 $$
 \begin{align*}
-l(\mu, \sigma;X_1,\dots,X_n) &= \ln{f(X_1)} + \dots \ln{f(X_n)} \\\\
-&= \sum_{i = 1}^n \left( -\frac{\|\| X_i - \mu\|\|^2}{2 \sigma^2} - d\ln{\sqrt{2\pi} -d \ln{\sigma}} \right)
+l(\mu, \sigma;X_1,\dots,X_n) &= \ln{f(X_1)} + \dots \ln{f(X_n)} \\
+&= \sum_{i = 1}^n \left( -\frac{\| X_i - \mu\|^2}{2 \sigma^2} - d\ln{\sqrt{2\pi} -d \ln{\sigma}} \right)
 \end{align*}
 $$
 
@@ -107,15 +107,12 @@ $$
 
 $$
 \begin{align*}
-& \nabla_ul = \sum_{i = 1}^n \frac{X_i - \mu}{\sigma^2} = 0  \quad \Rightarrow \quad \hat{\mu} = \frac{1}{n} \sum_{i = 1}^nX_i \\\\
-& \frac{\partial l}{\partial \sigma} = \sum_{i = 1}^n \frac{\|\|X_i - \mu\|\|^2 - d\sigma^2}{\sigma^2} = 0 \quad \Rightarrow \quad \hat{\sigma}^2 = \frac{1}{dn} \sum_{i = 1}^n \|\|X_i - \hat{\mu} \|\|^2
+& \nabla_ul = \sum_{i = 1}^n \frac{X_i - \mu}{\sigma^2} = 0  \quad \Rightarrow \quad \hat{\mu} = \frac{1}{n} \sum_{i = 1}^nX_i \\
+& \frac{\partial l}{\partial \sigma} = \sum_{i = 1}^n \frac{\|X_i - \mu\|^2 - d\sigma^2}{\sigma^2} = 0 \quad \Rightarrow \quad \hat{\sigma}^2 = \frac{1}{dn} \sum_{i = 1}^n \|X_i - \hat{\mu} \|^2
 \end{align*}
 $$
 
-对于 QDA，分别使用类别内的数据点每个类别 C 的均值和方差，使用所有数据点估计前验概率 $\hat{\pi_C} = \frac{n_C}{\sum_D n_D}$
+对于 QDA，分别使用类别内的数据点每个类别 C 的均值和方差，使用所有数据点估计前验概率 $\hat{\pi}_C = \frac{n_C}{\sum_D n_D}$
 
 对于 LDA，使用同样的方法估计每个类别的均值以及前验概率，然后使用所有数据估计方差
-$$\hat{\sigma}^2 = \frac{1}{dn} \sum_C \sum_{\\{i:y_i = c\\}} \|\|X_i - \hat{\mu}_C\|\|^2$$
-
-$$
-$$
+$$\hat{\sigma}^2 = \frac{1}{dn} \sum_C \sum_{\{i:y_i = c\}} \|X_i - \hat{\mu}_C\|^2$$

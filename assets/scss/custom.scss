@@ -80,3 +80,19 @@
   top: 5px;
   right: 35px; // card-padding + 5
 }
+
+a.footnote-ref{
+  color: #e66351;
+  font-weight: bold;
+}
+a.footnote-backref {
+  color: #e66351;
+}
+
+.article-content hr {
+  width: 90%;
+}
+
+mark {
+  background-color: #fece6f;  // changed
+}
