@@ -41,6 +41,12 @@ GRUB_DEFAULT=saved
 GRUB_SAVEDEFAULT=true
 ```
 
+修改完成后重新更新引导配置即可
+
+```bash
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
 ## 配置rEFInd
 
 rEFInd每次会默认加载最后安装的内核，所以如果不按F2进入子选单选择linux内核就会自动加载linux-lts内核。
@@ -106,9 +112,9 @@ menuentry "Arch Linux" {
 ```bash
 ❯ sudo lsblk -o name,mountpoint,label,size,uuid
 NAME          MOUNTP LABEL         SIZE UUID
-nvme0n1                            476.9G 
+nvme0n1                            476.9G
 ├─nvme0n1p1        SYSTEM_DRV    260M C2B6-5B79
-├─nvme0n1p2                      16M 
+├─nvme0n1p2                      16M
 ├─nvme0n1p3        Windows-SSD   175.7G 9292B82A92B81527
 ├─nvme0n1p4        Windows       50G B88EF24F8EF20622
 ├─nvme0n1p5        WINRE_DRV     1000M D800BC7600BC5CE6

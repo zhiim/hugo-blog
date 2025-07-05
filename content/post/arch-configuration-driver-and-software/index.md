@@ -196,7 +196,7 @@ refind-install
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/bobafetthotmail/refind-theme-regular/master/install.sh)"
 ```
 
-官方默认安装主题到`/boot/efi/EFI/refind/themes/refind-theme-regular/theme.conf`，如果在安装Arch时选择将ESP分区挂在在`/efi`的话，需要按照官方的手动安装指导将主题安装到`/efi/EFI/refind/themes/refind-theme-regular/theme.conf`。 最终的主题效果如下
+官方默认安装主题到`/boot/efi/EFI/refind/themes/refind-theme-regular`，如果在安装Arch时选择将ESP分区挂在在`/efi`的话，需要按照官方的手动安装指导将主题安装到`/efi/EFI/refind/themes/refind-theme-regular`。 最终的主题效果如下
 
 ![rEFInd 引导界面](refind.webp)
 
