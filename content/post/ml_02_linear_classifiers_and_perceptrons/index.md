@@ -1,6 +1,6 @@
 +++
 
-title = "机器学习 02 线性分类器和感知机"
+title = "机器学习 02 感知机 I：线性分类器和感知机"
 date = 2025-05-18T16:32:02+08:00
 slug = "ml_02_linear_classifiers_and_perceptrons"
 description = "线性分类器；决策函数和决策边界；质心法；感知机"

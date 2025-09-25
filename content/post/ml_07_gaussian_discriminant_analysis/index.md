@@ -1,6 +1,6 @@
 +++
 
-title = "机器学习 07 高斯判别分析（各向同性）"
+title = "机器学习 07 高斯判别分析 II：各向同性高斯"
 date = 2025-05-23T23:21:38+08:00
 slug = "ml_07_gaussian_discriminant_analysis"
 description = "高斯判别分析，包括二次判别分析（QDA）和线性判别分析（LDA）；统计模型参数的最大似然估计"

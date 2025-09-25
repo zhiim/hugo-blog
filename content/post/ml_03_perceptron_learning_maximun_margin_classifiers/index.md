@@ -1,6 +1,6 @@
 +++
 
-title = "机器学习 03 感知机学习和最大间隔分类器"
+title = "机器学习 03 感知机 II：感知机学习和最大间隔分类器"
 date = 2025-05-19T16:29:23+08:00
 slug = "ml_03_perceptron_learning_and_maximum_margin_classifiers"
 description = "梯度下降，随机梯度下降以及感知机算法；最大间隔分类器（硬间隔支持向量机）"

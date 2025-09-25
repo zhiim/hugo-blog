@@ -1,6 +1,6 @@
 +++
 
-title = "机器学习 08 特征向量和多维正态分布"
+title = "机器学习 08 高斯判别分析 III：特征向量和多维正态分布"
 date = 2025-06-18T20:45:13+08:00
 slug = "ml_08_eigenvectors_and_multivariate_normal"
 description = "特征向量和特征值，以及特征分解；二次型和其对应的等值面；各向异性高斯分布"

@@ -1,6 +1,6 @@
 +++
 
-title = "机器学习 09 高斯判别分析（各向异性）"
+title = "机器学习 09 高斯判别分析 IV：各向异性高斯"
 date = 2025-06-21T20:02:09+08:00
 slug = "ml_09_anisotropic_gaussian_discriminant_analysis"
 description = "各向异性高斯随机过程的参数估计、QDA算法和LDA算法"
