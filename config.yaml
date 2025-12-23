@@ -11,7 +11,7 @@ disableHugoGeneratorInject: true
 disqusShortname: hugo-theme-stack
 
 # GA Tracking ID
-googleAnalytics: G-D132QYJBV0
+googleAnalytics:
 
 # Theme i18n support
 # Available values: en, fr, id, ja, ko, pt-br, zh-cn, zh-tw, es, de, nl, it, th, el, uk
@@ -62,9 +62,9 @@ params:
     provider: twikoo
 
     disqusjs:
-      shortname: zhiim
-      apiUrl: https://disqus.zhiim.eu.org/
-      apiKey: zISoMc3WnXMqUN9voGP2jQHZTwaUqeSTS6RBa7Zw0jX4MgGGRu5zwWjhMNoEnWdi
+      shortname:
+      apiUrl:
+      apiKey:
       admin:
       adminLabel:
 
