@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on Zhiim's Blog</title><link>https://zhiim.github.io/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 12 Feb 2024 15:19:19 +0800</lastBuildDate><atom:link href="https://zhiim.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>通过Github Copilot获取GPT-4 API</title><link>https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/</link><pubDate>Mon, 12 Feb 2024 15:19:19 +0800</pubDate><guid>https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/</guid><description>&lt;p&gt;最近Github向GitHub Student Developer Pack添加了无限使用Github Copilot的权益，大大提升了学生包的价值，学生认证后即可免费体验这款强大的AI编程助手。Github Copilot的实际体验让人不得不感慨AI的强大，Copilot自动补全的代码大多数情况下可以直接使用，大大提升了编程效率；Copilot Chat也可以对各种编程问题提供非常有用的建议。&lt;/p&gt;
+&lt;p&gt;除此之外，由于Github Copilot的底层使用了GPT，我们也可以通过Copilot免费使用GPT-4。要实现这样的功能只需要使用开源项目copilot-gpt4-service获取GPT API，然后就可以通过GPT API搭配GPT前端来访问GPT-4，此外还可以使用GPT API部署AI学术助手gpt academic。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://github.com/aaamoon/copilot-gpt4-service" target="_blank" rel="noopener"
+&gt;copilot-gpt4-service&lt;/a&gt;：通过Github Copilot Plugin Token调用GPT API。&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://github.com/Bin-Huang/chatbox" target="_blank" rel="noopener"
+&gt;chatbox&lt;/a&gt;：GPT前端，搭配GPT API可以搭建自己的ChatGPT，并和GPT-4对话。&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://github.com/binary-husky/gpt_academic" target="_blank" rel="noopener"
+&gt;gpt_academic&lt;/a&gt;：使用GPT API的AI学术助手，支持英文论文润色，一键翻译论文等功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="获取gpt-api"&gt;获取GPT API
+&lt;/h2&gt;&lt;p&gt;从Copilot获取GPT API只需要两步&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;运行copilot-gpt4-service得到一个API URL用来替代OpenAI的API URL&lt;/li&gt;
+&lt;li&gt;获取Github Copilot Plugin Token代替OpenAI的API Key&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="编译可执行文件"&gt;编译可执行文件
+&lt;/h3&gt;&lt;p&gt;copilot-gpt4-service使用Go语言编写，官方未提供编译好的可执行文件，所以只能自己编译，需要下载并安装&lt;a class="link" href="https://go.dev/dl/" target="_blank" rel="noopener"
+&gt;Go语言编译器&lt;/a&gt;，然后将源码下载到本地编译。&lt;/p&gt;
+&lt;p&gt;将&lt;a class="link" href="https://github.com/aaamoon/copilot-gpt4-service" target="_blank" rel="noopener"
+&gt;copilot-gpt4-service&lt;/a&gt;克隆到本地&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/aaamoon/copilot-gpt4-service.git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;编译源码，得到一个名为&lt;code&gt;main&lt;/code&gt;的可执行文件&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 进入项目目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; copilot-gpt4-service
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 编译&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;go build main.go
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在终端中执行可执行文件，此时程序会打印出程序运行的端口以及可用的API地址&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;./main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;选择本地IP对应的API的地址&lt;code&gt;http://127.0.0.1:8080&lt;/code&gt;，在浏览器中打开，如果出现下方提示表示程序运行正常&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Very important: please do not make this service public, for personal use only, otherwise the account or Copilot will be banned. 非常重要：请不要将此服务公开，仅供个人使用，否则账户或 Copilot 将被封禁。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="获取github-copilot-plugin-token"&gt;获取Github Copilot Plugin Token
+&lt;/h3&gt;&lt;p&gt;打开新的终端（如果关闭原本终端，正在运行的copilot-gpt4-service也会被关闭），运行Python脚本获取Github Copilot Plugin Token。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 安装依赖库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install -r requests
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 运行脚本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python shells/get_copilot_token.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;根据终端输出的提示，在浏览器中打开Github验证页面，输入终端打印的认证码获取Github Copilot Plugin Token。&lt;/p&gt;
+&lt;h2 id="使用gpt前端"&gt;使用GPT前端
+&lt;/h2&gt;&lt;p&gt;Chatbox是一款跨平台的GPT前端，可以使用GPT API搭建自己的ChatGPT，下载安装并填入GPT API的URL和Github Copilot Plugin Token即可使用。&lt;/p&gt;
+&lt;p&gt;下载并打开&lt;a class="link" href="https://chatboxai.app" target="_blank" rel="noopener"
+&gt;chatbox&lt;/a&gt;，进行如下设置：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;AI模型提供方&lt;/code&gt;选择&lt;code&gt;OpenAI API&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;OpenAI API 密钥&lt;/code&gt;填入上一步获取的Github Copilot Plugin Token&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;API 域名&lt;/code&gt;填入&lt;code&gt;http://127.0.0.1:8080&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;模型&lt;/code&gt;选择&lt;code&gt;gpt-4&lt;/code&gt;或者GPT的其他任意版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/chatbox_setting.webp"
+width="748"
+height="441"
+loading="lazy"
+alt="chatbox 设置"
+class="gallery-image"
+data-flex-grow="169"
+data-flex-basis="407px"
+&gt;&lt;/p&gt;
+&lt;p&gt;为了验证API返回的结构是否来自GPT-4，可以提问&lt;code&gt;鲁迅为什么暴打周树人&lt;/code&gt;，GPT-3.5会胡说八道，GPT-4会给出正确答案。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/gpt4_or_not.webp"
+width="853"
+height="216"
+loading="lazy"
+alt="GPT4的回答"
+class="gallery-image"
+data-flex-grow="394"
+data-flex-basis="947px"
+&gt;&lt;/p&gt;
+&lt;h2 id="搭建gpt-academic"&gt;搭建GPT Academic
+&lt;/h2&gt;&lt;p&gt;将项目克隆到本地，并进入项目目录&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;git clone https://github.com/binary-husky/gpt_academic.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; gpt_academic
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;安装依赖库&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install -r requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;修改&lt;code&gt;config.py&lt;/code&gt;中的下面几项&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;API_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ghu_xxxxx&amp;#34;&lt;/span&gt; &lt;span class="c1"&gt;# Github Copilot Plugin Token&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;API_URL_REDIRECT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;https://api.openai.com/v1/chat/completions&amp;#34;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;#34;http://127.0.0.1:8080/v1/chat/completions&amp;#34;&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;CUSTOM_API_KEY_PATTERN&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ghu_[a-zA-Z0-9]{36}&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;WEB_PORT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1234&lt;/span&gt; &lt;span class="c1"&gt;# 固定端口，也可以为其他值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;运行程序，程序会自动在浏览器打开GPT Academic的页面，同样可以通过提问验证API配置是否正常&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python main.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/gpt_academic.webp"
+width="1849"
+height="923"
+loading="lazy"
+alt="GPT Academic"
+class="gallery-image"
+data-flex-grow="200"
+data-flex-basis="480px"
+&gt;&lt;/p&gt;</description></item><item><title>Windows下制作ChromeOS Live USB</title><link>https://zhiim.github.io/p/windows-install-chromeos/</link><pubDate>Sun, 05 Feb 2023 11:02:40 +0800</pubDate><guid>https://zhiim.github.io/p/windows-install-chromeos/</guid><description>&lt;p&gt;ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目&lt;a class="link" href="https://github.com/sebanc/brunch" target="_blank" rel="noopener"
+&gt;brunch&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件，从而在非Chromebook上安装原生ChromeOS。&lt;/p&gt;
+&lt;h2 id="硬件要求"&gt;硬件要求
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;x86_64架构，UEFI启动模式&lt;/li&gt;
+&lt;li&gt;Intel CPU至少第四代，或者AMD Ryzen&lt;/li&gt;
+&lt;li&gt;不支持独显，不支持虚拟机，不支持Arm&lt;/li&gt;
+&lt;li&gt;可以安装Linux子系统（WSL2）的Windows或者Linux系统&lt;/li&gt;
+&lt;li&gt;空闲空间至少有16G&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="安装chromeos到u盘"&gt;安装ChromeOS到U盘
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;下载ChromeOS recovery文件。&lt;/p&gt;
+&lt;p&gt;参考自己的CPU型号，选择一个和自己电脑配置接近的chrome设备，在&lt;a class="link" href="https://chromiumdash.appspot.com/serving-builds?deviceCategory=Chrome%20OS" target="_blank" rel="noopener"
+&gt;Chromium Dash&lt;/a&gt;下载该设备的recovery文件，一般选择最新的发行版本即可。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/recovery.webp"
+width="1311"
+height="292"
+loading="lazy"
+alt="ChromeOS recovery"
+class="gallery-image"
+data-flex-grow="448"
+data-flex-basis="1077px"
+&gt;&lt;/p&gt;
+&lt;p&gt;我选择的是Lenovo Yoga C630 Chromebook，codename为pantheon，下载发行版本为109的recovery文件。&lt;/p&gt;
+&lt;p&gt;如果不知道应该下载哪个recovery，brunch的项目文档里也给了&lt;a class="link" href="https://github.com/sebanc/brunch/blob/main/install-with-windows.md#recoveries" target="_blank" rel="noopener"
+&gt;推荐的recovery&lt;/a&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Intel
+&lt;ul&gt;
+&lt;li&gt;1代-9代：选择codename为rammus的设备对应的recovery&lt;/li&gt;
+&lt;li&gt;10代和11代：选择codename为volteer的设备对应的recovery&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;AMD Ryzen：选择codename为zork的设备对应的recovery&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下载brunch的release文件&lt;/p&gt;
+&lt;p&gt;在brunch的&lt;a class="link" href="https://github.com/sebanc/brunch/releases" target="_blank" rel="noopener"
+&gt;release&lt;/a&gt;页面下载和recovery版本号对应的文件，例如下载的recovery为109，则下载Brunch r109。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/release.webp"
+width="1138"
+height="558"
+loading="lazy"
+alt="brunch release"
+class="gallery-image"
+data-flex-grow="203"
+data-flex-basis="489px"
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;制作ChromeOS镜像文件&lt;/p&gt;
+&lt;p&gt;将下载好的Brunch和ChromeOS recovery放在一个文件夹，分别解压。&lt;/p&gt;
+&lt;p&gt;打开WSL终端，安装必要软件。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt -y install pv cgpt tar unzip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在终端中运行命令，制作ChromeOS镜像。把&lt;code&gt;chromeos_filename.bin&lt;/code&gt;用从recovery中解压得到的文件名替代，脚本运行完成后回到的名为&lt;code&gt;chromeos.img&lt;/code&gt;的系统镜像。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo bash chromeos-install.sh -src chromeos_filename.bin -dst chromeos.img
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;命令运行完成后直接键入ENTER结束。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将镜像文件写入U盘&lt;/p&gt;
+&lt;p&gt;下载&lt;a class="link" href="https://rufus.ie/" target="_blank" rel="noopener"
+&gt;Rufus&lt;/a&gt;，选中要使用的U盘和镜像文件，将镜像写入U盘。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进入ChromeOS&lt;/p&gt;
+&lt;p&gt;重启电脑，进入BIOS设置界面，关闭secure boot，设置优先从USB启动。&lt;/p&gt;
+&lt;p&gt;保存并退出BIOS设置，电脑会自动重启并从U盘启动系统，第一次进入系统时需要等待较长时间。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/chromeos.webp"
+width="1920"
+height="1080"
+loading="lazy"
+alt="ChromeOS"
+class="gallery-image"
+data-flex-grow="177"
+data-flex-basis="426px"
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="安装chromeos和windows双系统"&gt;安装ChromeOS和Windows双系统
+&lt;/h2&gt;&lt;p&gt;获取文件以及解压同“安装ChromeOS到Windows”中的步骤1、2、3。&lt;/p&gt;
+&lt;p&gt;安装ChromeOS双系统同样通过在WSL终端中运行脚本完成，首先新建一个文件夹用于安装系统如&lt;code&gt;/mnt/d/brunch&lt;/code&gt;，表示在d盘新建文件夹brunch，然后输入命令。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo bash chromeos-install.sh -src chromeos_filename.bin -dst /mnt/d/brunch/chromeos.img -s size
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;把命令中的&lt;code&gt;chromeos_filename.bin&lt;/code&gt;用从recovery中解压得到的文件名替代，size用一个数字替代，定义了分配给ChromeOS磁盘空间，不小于14并且为4的倍数（单位GB）。&lt;/p&gt;
+&lt;p&gt;等待脚本执行完成后输入&lt;code&gt;dualboot&lt;/code&gt;然后键入ENTER。&lt;/p&gt;
+&lt;p&gt;下一步可以安装&lt;a class="link" href="https://sourceforge.net/projects/grub2win/" target="_blank" rel="noopener"
+&gt;Grub2Win&lt;/a&gt;，实现在开机时选择想要进入的系统。本人未作尝试，具体步骤可以参考&lt;a class="link" href="https://github.com/sebanc/brunch/blob/main/install-with-windows.md" target="_blank" rel="noopener"
+&gt;brunch的官方安装教程&lt;/a&gt;。&lt;br&gt;
+安装Grub2Win后，依次点击&lt;code&gt;Manage Boot Menu-Add A New Entry-Type&lt;/code&gt;，选择“Create user section”。此时为自动用记事本新建一个文本文件，在之前设置的&lt;code&gt;/mnt/d/brunch&lt;/code&gt;文件夹中打开“chromeos.grub.txt”，将该文件中的内容复制到新建的空文本中。保存Grub2Win的更改，重启电脑，选择ChromeOS进入系统。&lt;/p&gt;</description></item><item><title>完全卸载VMware Workstation</title><link>https://zhiim.github.io/p/uninstall-vmware/</link><pubDate>Sat, 19 Mar 2022 12:05:03 +0800</pubDate><guid>https://zhiim.github.io/p/uninstall-vmware/</guid><description>&lt;p&gt;之前没有通过引导卸载VMware Workstation，直接把整个文件夹删了，导致卸载不彻底。VMware在安装时会先检测是否已经安装，使得我的电脑无法再次安装VMware Workstation。后来按照官方的卸载教程试了几次都没成功，偶然发现系统环境变量中还有VMware的路径，才解决了这个问题。关键在于卸载后没有删除环境变量，所以被认为没有完全卸载VMware Workstation。&lt;/p&gt;
+&lt;h3 id="通过workstation安装程序自动清理"&gt;通过Workstation安装程序自动清理
+&lt;/h3&gt;&lt;p&gt;下载对应版本的安装程序，在当前文件夹打开终端，在终端中输入&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;VMware-workstation&lt;/span&gt;&lt;span class="n"&gt;-full-xxx-xxx&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;exe&lt;/span&gt; &lt;span class="p"&gt;/&lt;/span&gt;&lt;span class="n"&gt;clean&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="停止vmware相关的服务"&gt;停止VMware相关的服务
+&lt;/h3&gt;&lt;p&gt;在Windows搜索框搜索&lt;code&gt;services.msc&lt;/code&gt;，打开“服务”，停止所有VMware相关的服务。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VMware Authorization Service&lt;/li&gt;
+&lt;li&gt;VMware Authentication Service&lt;/li&gt;
+&lt;li&gt;VMware Registration Service&lt;/li&gt;
+&lt;li&gt;VMware DHCP Service&lt;/li&gt;
+&lt;li&gt;VMware NAT Service&lt;/li&gt;
+&lt;li&gt;VMware USB Arbitration Service&lt;/li&gt;
+&lt;li&gt;VMware Workstation Server&lt;/li&gt;
+&lt;li&gt;VMware WSX Service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="删除vmware-network-bridge-adapter"&gt;删除VMware network bridge adapter
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;打开&lt;code&gt;控制面板\网络和 Internet\网络连接&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;右键，属性，选择VMware Bridge Protocol，卸载&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="删除vmware相关的网络适配器"&gt;删除VMware相关的网络适配器
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;打开&lt;code&gt;控制面板\硬件和声音\设备管理器&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;在“查看”工具栏勾选上“显示隐藏的设备”&lt;/li&gt;
+&lt;li&gt;点击“网络适配器”，卸载名字包含VMware的适配器&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="删除和vmware有关的文件夹"&gt;删除和VMware有关的文件夹
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;程序安装目录&lt;/li&gt;
+&lt;li&gt;数据目录&lt;br&gt;
+默认路径&lt;code&gt;C:\Program Files(X86)\VMware\&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;开始菜单中的VMware&lt;br&gt;
+路径&lt;code&gt;C:\ProgramData\VMware&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;快捷方式&lt;/li&gt;
+&lt;li&gt;其他文件
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vmnat.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vmnetbridge.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\VMNetDHCP.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vmnetdhcp.leases&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vmxw2ksetup.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vnetprobe.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vnetprobelib.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vnetinst.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vnetlib.dll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\vnetlib.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmnet.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmnetx.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\VMparport.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmx86.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmnetadapter.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmnetbridge.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmnetuserif.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\hcmon.sys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Windows\system32\drivers\vmusb.sys&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;注册表&lt;br&gt;
+打开注册表管理器，删除以下注册表
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HKEY_CLASSES_ROOT\Installer\Features\A57F49D06AE015943BFA1B54AFE9506C&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HKEY_CLASSES_ROOT\Installer\Products\A57F49D06AE015943BFA1B54AFE9506C&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HKEY_CLASSES_ROOT\Installer\UpgradeCodes\3F935F414A4C79542AD9C8D157A3CC39&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{0D94F75A-0EA6-4951-B3AF-B145FA9E05C6}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\VMware, Inc.\VMware Workstation&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\VMware, Inc.\Installer\VMware Workstation&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Applications\vmware.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="删除环境变量"&gt;删除环境变量
+&lt;/h3&gt;&lt;p&gt;打开系统环境变量设置，删除VMware Workstation的执行路径&lt;br&gt;
+重启电脑，就完成了VMware Workstation的完全卸载。&lt;br&gt;
+各版本路径存在一些不同，具体参考&lt;a class="link" href="https://kb.vmware.com/s/article/1308" target="_blank" rel="noopener"
+&gt;官方文档&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>将Hugo博客部署到Github Pages</title><link>https://zhiim.github.io/p/hugo_blog/</link><pubDate>Sat, 12 Feb 2022 19:34:01 +0800</pubDate><guid>https://zhiim.github.io/p/hugo_blog/</guid><description>&lt;h2 id="关于hugo"&gt;关于Hugo
+&lt;/h2&gt;&lt;p&gt;Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将markdown文档转换为网页。Hugo根据存放于content文件夹中的用户markdown文件，生成网页源文件，并存放于public文件夹中。&lt;/p&gt;
+&lt;p&gt;将博客部署到GitHub Pages，只需将Hugo生成的public文件夹推送到GitHub仓库。&lt;/p&gt;
+&lt;h2 id="关于github-pages"&gt;关于Github Pages
+&lt;/h2&gt;&lt;p&gt;官方文档定义：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GitHub Pages is a static site hosting service that takes HTML, CSS, and JavaScript files straight from a repository on GitHub, optionally runs the files through a build process, and publishes a website.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a class="link" href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages" target="_blank" rel="noopener"
+&gt;Github Pages&lt;/a&gt; 有两种形式，个人/组织页面和项目页面，两者访问时的url不同，为了能够使用&lt;code&gt;https://&amp;lt;USERNAME|ORGANIZATION&amp;gt;.github.io/&lt;/code&gt;访问个人博客，应当设置成个人页面。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;User/Organization Pages (&lt;code&gt;https://&amp;lt;USERNAME|ORGANIZATION&amp;gt;.github.io/&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Project Pages (&lt;code&gt;https://&amp;lt;USERNAME|ORGANIZATION&amp;gt;.github.io/&amp;lt;PROJECT&amp;gt;/&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="创建user-page"&gt;创建User Page
+&lt;/h2&gt;&lt;p&gt;在Github新建仓库时，个人页面的创建和项目页面不同：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用于个人页面的仓库必须被用户（而不是组织）所有，并将仓库命名为&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;个人页面的源文件放置于仓库的默认分支中，项目页面需存放在特定分支&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;创建仓库时需要注意，免费用户创建的页面仓库必须设置为Public&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214110340.png"
+loading="lazy"
+alt="新建仓库"
+&gt;&lt;/p&gt;
+&lt;p&gt;选择 &lt;strong&gt;Initialize this repository with a README&lt;/strong&gt; ，完成仓库创建&lt;/p&gt;
+&lt;h2 id="将源文件推送到仓库"&gt;将源文件推送到仓库
+&lt;/h2&gt;&lt;p&gt;在创建的仓库中复制远程仓库地址&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214111325.png"
+loading="lazy"
+alt="仓库地址"
+&gt;&lt;/p&gt;
+&lt;p&gt;在Hugo生成的文件夹中，在终端中输入&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;hugo&lt;/span&gt; &lt;span class="c"&gt;#生成网页源文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;&lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="c"&gt;#生成的源文件存放在public文件夹中，只需将该文件夹推送到所创建的仓库中&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt; &lt;span class="c"&gt;#git初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt;&lt;span class="nv"&gt;@github&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;/&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;.&lt;/span&gt;&lt;span class="py"&gt;github&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;io&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="py"&gt;git&lt;/span&gt; &lt;span class="c"&gt;#关联远程仓库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;commit&lt;/span&gt; &lt;span class="n"&gt;-m&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;first commit&amp;#34;&lt;/span&gt; &lt;span class="c"&gt;#在本地提交更改&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="n"&gt;-u&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt; &lt;span class="c"&gt;#将更改推送到远程仓库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;此时GitHub仓库中拥有main和master两个分支，其中main分支是创建仓库是自动生成的默认分支，mater分支由本地推送，即博客的网页源文件&lt;/p&gt;
+&lt;p&gt;GitHub Pages的个人页面默认从main分支提取网页源文件，所以还需要在仓库的&lt;code&gt;settings-pages-source&lt;/code&gt;中将分支改为master分支&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/fmpic/imghost/20220214111729.png"
+loading="lazy"
+alt="设置页面分支"
+&gt;&lt;/p&gt;
+&lt;p&gt;之后即可通过&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;访问博客页面&lt;/p&gt;</description></item></channel></rss>

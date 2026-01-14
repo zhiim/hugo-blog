@@ -1,0 +1,296 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="本文记录了将Tensorflow模型部署到Atlas 200 DK的过程，首先将SavedModel转换成ONNX模型，然后将ONNX模型转换为om格式，以及模型转换中遇到的一些问题"><title>在Atlas 200 DK中部署深度学习模型</title><link rel=canonical href=https://zhiim.github.io/p/deploy-deep-learning-model-on-atlas/><link rel=stylesheet href=/scss/style.min.ac431fe10688ef9b9238e997beeca03518549e89f1fd31a34bd20d1272b5a349.css><meta property='og:title' content="在Atlas 200 DK中部署深度学习模型"><meta property='og:description' content="本文记录了将Tensorflow模型部署到Atlas 200 DK的过程，首先将SavedModel转换成ONNX模型，然后将ONNX模型转换为om格式，以及模型转换中遇到的一些问题"><meta property='og:url' content='https://zhiim.github.io/p/deploy-deep-learning-model-on-atlas/'><meta property='og:site_name' content="Zhiim's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='深度学习'><meta property='article:published_time' content='2023-09-26T12:08:08+08:00'><meta property='article:modified_time' content='2023-09-26T12:08:08+08:00'><meta property='og:image' content='https://zhiim.github.io/img/default.webp'><meta name=twitter:site content="@zhiim_0"><meta name=twitter:creator content="@zhiim_0"><meta name=twitter:title content="在Atlas 200 DK中部署深度学习模型"><meta name=twitter:description content="本文记录了将Tensorflow模型部署到Atlas 200 DK的过程，首先将SavedModel转换成ONNX模型，然后将ONNX模型转换为om格式，以及模型转换中遇到的一些问题"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://zhiim.github.io/img/default.webp'><link rel="shortcut icon" href=/img/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_225519b38caf02f8.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>Zhiim's Blog</a></h1><h2 class=site-description>总有想不明白的事</h2></div></header><ol class=menu-social><li><a href=https://t.me/zhiim_0 target=_blank title=Telegram rel=me><svg class="icon icon-tabler icon-tabler-brand-telegram" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4 6 6 4-16-18 7 4 2 2 6 3-4"/></svg></a></li><li><a href=https://github.com/zhiim target=_blank title=Github rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://www.douban.com/people/zhiim target=_blank title=Douban rel=me><svg class="icon icon-tabler icon-tabler-brand-douban" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h16"/><path d="M5 4h14"/><path d="M8 8h8a2 2 0 012 2v2a2 2 0 01-2 2H8a2 2 0 01-2-2v-2a2 2 0 012-2z"/><path d="M16 14l-2 6"/><path d="M8 17l1 3"/></svg></a></li><li><a href=https://zhiim.github.io/index.xml target=_blank title=Rss rel=me><svg class="icon icon-tabler icon-tabler-rss" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="5" cy="19" r="1"/><path d="M4 4a16 16 0 0116 16"/><path d="M4 11a9 9 0 019 9"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>首页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/about><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>关于</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友链</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#环境准备>环境准备</a></li><li><a href=#cann-toolkit-配置>cann-toolkit 配置</a></li><li><a href=#模型转换>模型转换</a><ol><li><a href=#将tensorflow模型导出为savedmodel>将TensorFlow模型导出为SavedModel</a></li><li><a href=#将savedmodel转换为onnx模型>将SavedModel转换为ONNX模型</a></li><li><a href=#将onnx模型转换为om格式>将ONNX模型转换为om格式</a><ol><li><a href=#domain_version报错><code>domain_version</code>报错</a></li><li><a href=#模型输入维度报错>模型输入维度报错</a></li></ol></li></ol></li><li><a href=#在atlas-200-dk中进行模型推理>在Atlas 200 DK中进行模型推理</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/notes/ style=background-color:#e66351;color:#fff>Notes</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/deploy-deep-learning-model-on-atlas/>在Atlas 200 DK中部署深度学习模型</a></h2><h3 class=article-subtitle>本文记录了将Tensorflow模型部署到Atlas 200 DK的过程，首先将SavedModel转换成ONNX模型，然后将ONNX模型转换为om格式，以及模型转换中遇到的一些问题</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Sep 26, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 4 分钟</time></div></footer></div></header><section class=article-content><h2 id=环境准备>环境准备</h2><p>本文部署的模型是使用TensorFlow2训练的ResNet网络，用于干扰信号识别，原本的模型文件将权重保存在<code>ResNet.h5</code>中。</p><p>从模型文件中读取权重，并使用测试数据进行推理</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>ResNet</span> <span class=k>as</span> <span class=nn>ResNet</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 干扰类型</span>
+</span></span><span class=line><span class=cl><span class=n>class_names</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;CSNJ&#39;</span><span class=p>,</span> <span class=s1>&#39;CW&#39;</span><span class=p>,</span> <span class=s1>&#39;LFM&#39;</span><span class=p>,</span> <span class=s1>&#39;MTJ&#39;</span><span class=p>,</span> <span class=s1>&#39;PBNJ&#39;</span><span class=p>,</span> <span class=s1>&#39;PPNJ&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 权重文件的存储路径</span>
+</span></span><span class=line><span class=cl><span class=n>model_path</span> <span class=o>=</span> <span class=s2>&#34;ResNet.h5&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>data_dimension</span> <span class=o>=</span> <span class=p>(</span><span class=mi>256</span><span class=p>,</span> <span class=mi>256</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>ResNet</span><span class=o>.</span><span class=n>ResNet50</span><span class=p>(</span><span class=n>data_dimension</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># 导入网络模型</span>
+</span></span><span class=line><span class=cl><span class=n>model</span><span class=o>.</span><span class=n>load_weights</span><span class=p>(</span><span class=n>model_path</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 读取测试数据</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s1>&#39;test_img.npy&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 转换输入数据的维度</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>test_img</span><span class=p>)</span>  <span class=c1># (256, 256)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>expand_dims</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=n>axis</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># (256, 256, 1)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>expand_dims</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>  <span class=c1># (1, 256, 256, 1)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>test_output</span> <span class=o>=</span> <span class=n>model</span><span class=o>.</span><span class=n>predict</span><span class=p>(</span><span class=n>test_img</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 模型输出的干扰类型</span>
+</span></span><span class=line><span class=cl><span class=n>pred</span> <span class=o>=</span> <span class=n>class_names</span><span class=p>[</span><span class=n>test_output</span><span class=o>.</span><span class=n>argmax</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>pred</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Atlas 200 DK的环境部署采用“开发环境与运行环境分设”的方案，开发环境使用Windows下Linux子系统中的Ubuntu 22.04.3 LTS，CANN版本为6.0.RC1.alpha005。</p><p>参考官方教程<a class=link href=https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0018.html target=_blank rel=noopener>开发环境与运行环境分设</a>完成环境配置。</p><h2 id=cann-toolkit-配置>cann-toolkit 配置</h2><p>在Ubuntu中安装完Ascend-cann-toolkit后，运行模型转换工具<code>atc</code>时可能会出现报错</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>error <span class=k>while</span> loading shared libraries: libascend_hal.so: cannot open shared object file: No such file or directory
+</span></span></code></pre></td></tr></table></div></div><p>这是由于无法找到库文件<code>libascend_hal.so</code>，此时可以进入Ascend-cann-toolkit的安装路径，寻找<code>libascend_hal.so</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>xu@DESKTOP-9B4N33I:~$ <span class=nb>cd</span> Ascend/ascend-toolkit/latest/
+</span></span><span class=line><span class=cl>xu@DESKTOP-9B4N33I:~/Ascend/ascend-toolkit/latest$ find . -name libascend_hal.so
+</span></span><span class=line><span class=cl>./x86_64-linux/devlib/libascend_hal.so
+</span></span></code></pre></td></tr></table></div></div><p>将<code>libascend_hal.so</code>复制到任意路径，并将该路径添加到Ascend-cann-toolkit环境变量中的<code>LD_LIBRARY_PATH</code>。</p><p>例如将<code>libascend_hal.so</code>复制到<code>~/Ascend/missing_lib</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>xu@DESKTOP-9B4N33I:~$ mkdir ~/Ascend/missing_lib
+</span></span><span class=line><span class=cl>xu@DESKTOP-9B4N33I:~$ cp ~/Ascend/ascend-toolkit/latestx86_64-linux/devlib/libascend_hal.so ~/Ascend/missing_lib
+</span></span></code></pre></td></tr></table></div></div><p>在<code>~/.bashrc</code>中更改环境变量</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=nb>export</span> <span class=nv>LD_LIBRARY_PATH</span><span class=o>=</span><span class=si>${</span><span class=nv>ASCEND_TOOLKIT_HOME</span><span class=si>}</span>/lib64:<span class=si>${</span><span class=nv>ASCEND_TOOLKIT_HOME</span><span class=si>}</span>/lib64/plugin/opskernel:<span class=si>${</span><span class=nv>ASCEND_TOOLKIT_HOME</span><span class=si>}</span>/lib64/plugin/nnengine:/home/xu/Ascend/missing_lib:<span class=nv>$LD_LIBRARY_PATH</span>
+</span></span></code></pre></td></tr></table></div></div><p>在终端输入<code>source ~/.bashrc</code>并重启终端，此时<code>atc</code>可以正常运行。</p><h2 id=模型转换>模型转换</h2><p>由于TensorFlow2不再支持导出模型为FrozenGraphDef格式，而<code>atc</code>转换TensorFlow模型时只能使用FrozenGraphDef格式，所以本文采用的转换流程是，先将TensorFlow模型导出为SavedModel格式，再将模型转换为<a class=link href=https://onnx.ai target=_blank rel=noopener>ONNX</a>格式，最后使用<code>atc</code>将ONNX模型转换为.om格式。</p><h3 id=将tensorflow模型导出为savedmodel>将TensorFlow模型导出为SavedModel</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>tensorflow</span> <span class=k>as</span> <span class=nn>tf</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>ResNet</span> <span class=k>as</span> <span class=nn>ResNet</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>model_path</span> <span class=o>=</span> <span class=s1>&#39;ResNet.h5&#39;</span>  <span class=c1># 权重文件路径</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>data_dimension</span> <span class=o>=</span> <span class=p>(</span><span class=mi>256</span><span class=p>,</span> <span class=mi>256</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>ResNet</span><span class=o>.</span><span class=n>ResNet50</span><span class=p>(</span><span class=n>data_dimension</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 读取网络模型</span>
+</span></span><span class=line><span class=cl><span class=n>model</span><span class=o>.</span><span class=n>load_weights</span><span class=p>(</span><span class=n>model_path</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># export model to savedmodel</span>
+</span></span><span class=line><span class=cl><span class=n>mobilenet_save_path</span> <span class=o>=</span> <span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=s2>&#34;./model&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>tf</span><span class=o>.</span><span class=n>saved_model</span><span class=o>.</span><span class=n>save</span><span class=p>(</span><span class=n>model</span><span class=p>,</span> <span class=n>mobilenet_save_path</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=将savedmodel转换为onnx模型>将SavedModel转换为ONNX模型</h3><p>使用<a class=link href=https://github.com/onnx/tensorflow-onnx target=_blank rel=noopener>tf2onnx</a>将SavedModel转换为.onnx格式的模型。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>python -m tf2onnx.convert --saved-model tensorflow-model-path --output model.onnx
+</span></span></code></pre></td></tr></table></div></div><p>由于<code>atc</code>不支持ONNX的高版本算子，转换时<code>tf2onnx</code>的&ndash;opset 参数值需使用默认值15。</p><p>导出的ONNX模型可以使用<a class=link href=https://netron.app target=_blank rel=noopener>Netron</a>查看网络结构。使用ONNX模型完成推理以验证模型</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>onnxruntime</span> <span class=k>as</span> <span class=nn>onnxrt</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>class_names</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;CSNJ&#39;</span><span class=p>,</span> <span class=s1>&#39;CW&#39;</span><span class=p>,</span> <span class=s1>&#39;LFM&#39;</span><span class=p>,</span> <span class=s1>&#39;MTJ&#39;</span><span class=p>,</span> <span class=s1>&#39;PBNJ&#39;</span><span class=p>,</span> <span class=s1>&#39;PPNJ&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># load model</span>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>onnxrt</span><span class=o>.</span><span class=n>InferenceSession</span><span class=p>(</span><span class=s2>&#34;resnet.onnx&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>providers</span><span class=o>=</span><span class=p>[</span><span class=s1>&#39;AzureExecutionProvider&#39;</span><span class=p>,</span> <span class=s1>&#39;CPUExecutionProvider&#39;</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;loading model success!&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># input data</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s1>&#39;test_img.npy&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>np</span><span class=o>.</span><span class=n>float32</span><span class=p>)</span>  <span class=c1># (256, 256)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>expand_dims</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=n>axis</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># (256, 256, 1)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>expand_dims</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>  <span class=c1># (1, 256, 256, 1)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># input</span>
+</span></span><span class=line><span class=cl><span class=n>sf_input</span> <span class=o>=</span> <span class=p>{</span><span class=n>model</span><span class=o>.</span><span class=n>get_inputs</span><span class=p>()[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>name</span><span class=p>:</span><span class=n>test_img</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># output</span>
+</span></span><span class=line><span class=cl><span class=n>output</span> <span class=o>=</span> <span class=n>model</span><span class=o>.</span><span class=n>run</span><span class=p>(</span><span class=kc>None</span><span class=p>,</span> <span class=n>sf_input</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;get output of spatial filter success!&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>output</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>output</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>pred</span> <span class=o>=</span> <span class=n>class_names</span><span class=p>[</span><span class=n>output</span><span class=o>.</span><span class=n>argmax</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>pred</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=将onnx模型转换为om格式>将ONNX模型转换为om格式</h3><h4 id=domain_version报错><code>domain_version</code>报错</h4><p>在Ubuntu终端中运行<code>atc</code>模型转换工具</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>atc --model<span class=o>=</span>resnet.onnx --framework<span class=o>=</span><span class=m>5</span> --output<span class=o>=</span>resnet --soc_version<span class=o>=</span>Ascend310
+</span></span></code></pre></td></tr></table></div></div><p>可能会出现报错</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>E16005: The model has <span class=o>[</span>2<span class=o>]</span> <span class=o>[</span>--domain_version<span class=o>]</span> fields, but only one is allowed.
+</span></span></code></pre></td></tr></table></div></div><p>这是由于在将模型转换为ONNX是产生了两个<code>(domain, version)</code>（domain_version的概念参考<a class=link href=https://onnx.ai/onnx/intro/concepts.html target=_blank rel=noopener>ONNX Concepts</a>）。</p><p>获取ONNX模型中的<code>(domain,version)</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>onnx</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>onnx</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s2>&#34;resnet.onnx&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>model</span><span class=o>.</span><span class=n>opset_import</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>得到输出</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>domain: <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>version: <span class=m>15</span>
+</span></span><span class=line><span class=cl>, domain: <span class=s2>&#34;ai.onnx.ml&#34;</span>
+</span></span><span class=line><span class=cl>version: <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=o>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>此时只需去除多余的<code>(domain,version)</code>，保留一个即可</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>onnx</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>onnx</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s2>&#34;resnet.onnx&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># atc 模型转换只支持一个domain_version</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>model</span><span class=o>.</span><span class=n>opset_import</span><span class=p>)</span> <span class=o>&gt;</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 删除多余的domain_version</span>
+</span></span><span class=line><span class=cl>    <span class=n>model</span><span class=o>.</span><span class=n>opset_import</span><span class=o>.</span><span class=n>pop</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 将删除domain_version后的模型保存</span>
+</span></span><span class=line><span class=cl><span class=n>onnx</span><span class=o>.</span><span class=n>save</span><span class=p>(</span><span class=n>model</span><span class=p>,</span> <span class=s2>&#34;./resnet.onnx&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=模型输入维度报错>模型输入维度报错</h4><p>再次运行<code>atc</code>，出现报错</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>E10001: Value <span class=o>[</span>-1<span class=o>]</span> <span class=k>for</span> parameter <span class=o>[</span>input_2<span class=o>]</span> is invalid. Reason: maybe you should <span class=nb>set</span> input_shape to specify its shape.
+</span></span></code></pre></td></tr></table></div></div><p>使用Netron查看网络结构，发现<code>input_2</code>是输入节点，Netron中显示的该节点信息为</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=nx>name</span><span class=err>:</span> <span class=nx>input_2</span>
+</span></span><span class=line><span class=cl><span class=nx>tensor</span><span class=err>:</span> <span class=nx>float32</span><span class=p>[</span><span class=nx>unk__618</span><span class=p>,</span><span class=mi>256</span><span class=p>,</span><span class=mi>256</span><span class=p>,</span><span class=mi>1</span><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>输入数据为四维张量，每一个维度分别表示N（数量）H（高）W（宽）C（通道数），例如前面模型推理时使用的数据维度为<code>(1, 256, 256, 1)</code>表示1个高和宽都为256，通道数为1的图像。</p><p>在导出的ONNX模型中维度N的数值为指定，需要在模型转换时使用<code>--input-shape</code>参数指定输入节点的维度</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>atc --model<span class=o>=</span>resnet.onnx --framework<span class=o>=</span><span class=m>5</span> --output<span class=o>=</span>resnet --input-shape<span class=o>=</span><span class=s2>&#34;input_2:1,256,256,1&#34;</span> --soc_version<span class=o>=</span>Ascend310
+</span></span></code></pre></td></tr></table></div></div><h2 id=在atlas-200-dk中进行模型推理>在Atlas 200 DK中进行模型推理</h2><p>模型推理时使用的是<a class=link href=https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/70RC1alpha003/infacldevg/aclpythondevg/aclpythondevg_0001.html target=_blank rel=noopener>pyACL</a>接口，并使用了第三库<a class=link href=https://gitee.com/ascend/samples/tree/master/python/common/acllite target=_blank rel=noopener>acllite</a>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 将acllite路径添加到python环境变量</span>
+</span></span><span class=line><span class=cl><span class=n>path</span> <span class=o>=</span> <span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>dirname</span><span class=p>(</span><span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>abspath</span><span class=p>(</span><span class=vm>__file__</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>sys</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>path</span><span class=p>,</span> <span class=s2>&#34;..&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>sys</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>path</span><span class=p>,</span> <span class=s2>&#34;../../common&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>sys</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>path</span><span class=p>,</span> <span class=s2>&#34;../../common/acllite&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>acllite_model</span> <span class=kn>import</span> <span class=n>AclLiteModel</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>acllite_resource</span> <span class=kn>import</span> <span class=n>AclLiteResource</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>MODEL_PATH</span> <span class=o>=</span> <span class=s2>&#34;../model/resnet.om&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># init</span>
+</span></span><span class=line><span class=cl><span class=n>acl_resource</span> <span class=o>=</span> <span class=n>AclLiteResource</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>acl_resource</span><span class=o>.</span><span class=n>init</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=c1># load model</span>
+</span></span><span class=line><span class=cl><span class=n>model</span> <span class=o>=</span> <span class=n>AclLiteModel</span><span class=p>(</span><span class=n>model_path</span><span class=o>=</span><span class=n>MODEL_PATH</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s2>&#34;../data/test_img.npy&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>test_img</span><span class=p>)</span>  <span class=c1># (256, 256)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>expand_dims</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=n>axis</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># (256, 256, 1)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>expand_dims</span><span class=p>(</span><span class=n>test_img</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span>  <span class=c1># (1, 256, 256, 1)</span>
+</span></span><span class=line><span class=cl><span class=n>test_img</span> <span class=o>=</span> <span class=n>test_img</span><span class=o>.</span><span class=n>astype</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>float32</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># get output of model</span>
+</span></span><span class=line><span class=cl><span class=n>output</span> <span class=o>=</span> <span class=n>model</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>test_img</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>output</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>squeeze</span><span class=p>(</span><span class=n>output</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>output</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>class_names</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;CSNJ&#39;</span><span class=p>,</span> <span class=s1>&#39;CW&#39;</span><span class=p>,</span> <span class=s1>&#39;LFM&#39;</span><span class=p>,</span> <span class=s1>&#39;MTJ&#39;</span><span class=p>,</span> <span class=s1>&#39;PBNJ&#39;</span><span class=p>,</span> <span class=s1>&#39;PPNJ&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>pred</span> <span class=o>=</span> <span class=n>class_names</span><span class=p>[</span><span class=n>output</span><span class=o>.</span><span class=n>argmax</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>pred</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/>深度学习</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/pytorch-model/><div class=article-image><img src=/p/pytorch-tensor/pytorch.webp loading=lazy data-key=pytorch-model data-hash=/p/pytorch-tensor/pytorch.webp></div><div class=article-details><h2 class=article-title>PyTorch基础 （三）网络模型</h2></div></a></article><article class=has-image><a href=/p/pytorch-dataset/><div class=article-image><img src=/p/pytorch-tensor/pytorch.webp loading=lazy data-key=pytorch-dataset data-hash=/p/pytorch-tensor/pytorch.webp></div><div class=article-details><h2 class=article-title>PyTorch基础 （二）Dataset和DataLoader</h2></div></a></article><article class=has-image><a href=/p/pytorch-tensor/><div class=article-image><img src=/p/pytorch-tensor/pytorch.7899a0b479e389b343b4120312b0ff14.webp width=1200 height=500 loading=lazy alt="Featured image of post PyTorch基础 （一）Tensors" data-key=pytorch-tensor data-hash="md5-eJmgtHnjibNDtBIDErD/FA=="></div><div class=article-details><h2 class=article-title>PyTorch基础 （一）Tensors</h2></div></a></article></div></div></aside><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send{color:var(--twikoo-body-text-color-main)}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;border:none;color:var(--body-text-color)!important;border-radius:10px}.twikoo .tk-row .tk-avatar{height:5rem;width:5rem;border-radius:40%}.twikoo .tk-row .tk-avatar .tk-avatar-img{height:5rem;width:5rem}.twikoo .tk-avatar{height:3.5rem;width:3.5rem;border-radius:40%}.twikoo .tk-avatar .tk-avatar-img{height:3.5rem;width:3.5rem}.twikoo .el-input-group__prepend{border-top-left-radius:10px;border-bottom-left-radius:10px;font-weight:700;color:var(--twikoo-body-text-color);background-color:var(--card-background)!important}.twikoo .el-input__inner{border-top-right-radius:10px;border-bottom-right-radius:10px;background-color:var(--twikoo-input-background)}.twikoo .tk-meta-input input.el-input__inner:focus{background-color:var(--card)!important;border:2px solid var(--accent-color)!important}.twikoo .tk-meta-input .el-input input:invalid{background-color:var(--card)!important;border:2px solid #e66351!important}.twikoo svg{fill:var(--accent-color)}.twikoo .tk-input.el-textarea{border-radius:15px;background-color:var(--twikoo-input-background);border:none}.twikoo .el-textarea__inner{border-radius:15px}.twikoo .tk-preview-container{border-radius:15px;border:1px solid var(--accent-color)!important}.twikoo textarea.el-textarea__inner:focus{background-color:var(--card-background)!important;border:2px solid var(--accent-color)!important}.twikoo .el-button{border-radius:10px;border:none}.twikoo .el-button.tk-preview{font-weight:700;color:#fff!important;background-color:#e66351!important}.twikoo .el-button.tk-send{font-weight:700;color:#fff!important;background-color:var(--accent-color)!important}.twikoo .el-button.tk-send:disabled{background-color:#528fab!important}.twikoo .tk-comments-title{font-size:2rem}.twikoo .el-loading-mask circle{stroke:var(--accent-color)!important}.twikoo .tk-meta{padding:5px 10px;background-color:var(--body-background);border-radius:10px}.twikoo .tk-admin-container input.el-input__inner{color:var(--accent-color)!important}.twikoo .tk-tag-green{background-color:#fee7b5;border:1px solid #ffcf70;border-radius:2px;color:#e66351}</style><script>twikoo.init({envId:"https://twikoo.zhiim.eu.org",el:"#tcomment"})</script><footer class=site-footer><section class=copyright>&copy;
+2021 -
+2026 Zhiim's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
