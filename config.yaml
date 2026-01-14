@@ -1,4 +1,4 @@
-baseurl: https://zhiim.github.io
+baseurl: https://xland.cc
 languageCode: zh-cn
 theme: hugo-theme-stack
 pagination:
@@ -248,7 +248,7 @@ menu:
 
     - identifier: rss
       name: Rss
-      url: https://zhiim.github.io/index.xml
+      url: https://xland.cc/index.xml
       weight: 300
       params:
         icon: rss

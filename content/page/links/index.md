@@ -24,6 +24,6 @@ links:
 ```
 名称: Zhiim's Blog
 简介: 总有想不明白的事
-博客地址: https://zhiim.github.io
-头像: https://zhiim.github.io/img/avatar.jpg
+博客地址: https://xland.cc
+头像: https://xland.cc/img/avatar.jpg
 ```
