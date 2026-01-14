@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Zhiim's Blog</title><link>https://zhiim.github.io/tags/linux/</link><description>Recent content in Linux on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 08 Jan 2026 10:04:27 +0800</lastBuildDate><atom:link href="https://zhiim.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 桌面在非 TUN 模式下给 Antigravity 设置代理</title><link>https://zhiim.github.io/p/proxy_antigravity/</link><pubDate>Thu, 08 Jan 2026 10:04:27 +0800</pubDate><guid>https://zhiim.github.io/p/proxy_antigravity/</guid><description>&lt;p&gt;&lt;a class="link" href="https://antigravity.google" target="_blank" rel="noopener"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Zhiim's Blog</title><link>https://xland.cc/tags/linux/</link><description>Recent content in Linux on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 08 Jan 2026 10:04:27 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 桌面在非 TUN 模式下给 Antigravity 设置代理</title><link>https://xland.cc/p/proxy_antigravity/</link><pubDate>Thu, 08 Jan 2026 10:04:27 +0800</pubDate><guid>https://xland.cc/p/proxy_antigravity/</guid><description>&lt;p&gt;&lt;a class="link" href="https://antigravity.google" target="_blank" rel="noopener"
 &gt;Antigravity&lt;/a&gt; 是 Google 推出的 AI IDE，凭借慷慨的 AI 额度广受欢迎。然而在国内的网络环境下，目前使用 Antigravity 一般需要通过 Clash TUN 模式设置全局代理，这势必会对整个系统的网络造成负面影响。Windows、Mac 系统下如何不使用 TUN 模式实现 Antigravity 代理的方案，在 LINUX DO 等论坛已广为讨论。本文探究了在 Linux 桌面中，如何为 Antigravity 设置代理以在国内正常使用，而不使用 TUN 全局代理模式&lt;/p&gt;
 &lt;p&gt;Antigravity 的代理需要代理两个组件，一个是主体应用，一个是 &lt;code&gt;language_server&lt;/code&gt; 进程。主体应用基于 VS Code 开发，使用 Electron 技术栈，可以通过传入启动参数设置代理；&lt;code&gt;language_server&lt;/code&gt; 使用 Go 语言开发，不受启动参数和系统代理的影响，需要借助 &lt;code&gt;graftcp&lt;/code&gt; 实现代理&lt;/p&gt;
 &lt;h2 id="主体应用代理"&gt;主体应用代理
@@ -248,7 +248,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[*] Remaining processes are killed.&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里用脚本替换 Antigravity 的可执行文件即可。此脚本已经考虑了代理参数，所以在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里可以一并移除代理参数设置&lt;/p&gt;</description></item><item><title>Arch Linux 配置 — Btrfs与系统备份</title><link>https://zhiim.github.io/p/arch-linux-configuration-btrfs-and-system-backup/</link><pubDate>Tue, 11 Jul 2023 14:54:53 +0800</pubDate><guid>https://zhiim.github.io/p/arch-linux-configuration-btrfs-and-system-backup/</guid><description>&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 — Btrfs与系统备份" /&gt;&lt;h2 id="btrfs"&gt;Btrfs
+&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里用脚本替换 Antigravity 的可执行文件即可。此脚本已经考虑了代理参数，所以在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里可以一并移除代理参数设置&lt;/p&gt;</description></item><item><title>Arch Linux 配置 — Btrfs与系统备份</title><link>https://xland.cc/p/arch-linux-configuration-btrfs-and-system-backup/</link><pubDate>Tue, 11 Jul 2023 14:54:53 +0800</pubDate><guid>https://xland.cc/p/arch-linux-configuration-btrfs-and-system-backup/</guid><description>&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 — Btrfs与系统备份" /&gt;&lt;h2 id="btrfs"&gt;Btrfs
 &lt;/h2&gt;&lt;p&gt;更据官方文档的说明&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;BTRFS is a modern copy on write (COW) filesystem for Linux aimed at implementing advanced features while also focusing on fault tolerance, repair and easy administration.&lt;/p&gt;
@@ -626,7 +626,7 @@
 &gt;ArchWiki-Snapper&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.dwarmstrong.org/btrfs-snapshots-rollbacks/" target="_blank" rel="noopener"
 &gt;BTRFS snapshots and system rollbacks on Arch Linux&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</description></item><item><title>Arch Linux 配置 -- 安装linux-lts备用内核</title><link>https://zhiim.github.io/p/arch-linux-configuration-linux-lts-kernel/</link><pubDate>Sun, 09 Jul 2023 14:10:06 +0800</pubDate><guid>https://zhiim.github.io/p/arch-linux-configuration-linux-lts-kernel/</guid><description>&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 安装linux-lts备用内核" /&gt;&lt;p&gt;由于滚动更新的机制，Arch Linux采用的linux内核更新较频繁，难免会碰到由于内核更新无法进入系统。为了解决由于内核更新导致的系统故障，我们可以同时安装更新周期更长的linux-lts内核，如果linux内核更新后无法进入系统，此时就可以选择加载linux-lts内核进入系统，回退linux内核或者等待修复。&lt;/p&gt;
+&lt;/ol&gt;</description></item><item><title>Arch Linux 配置 -- 安装linux-lts备用内核</title><link>https://xland.cc/p/arch-linux-configuration-linux-lts-kernel/</link><pubDate>Sun, 09 Jul 2023 14:10:06 +0800</pubDate><guid>https://xland.cc/p/arch-linux-configuration-linux-lts-kernel/</guid><description>&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 安装linux-lts备用内核" /&gt;&lt;p&gt;由于滚动更新的机制，Arch Linux采用的linux内核更新较频繁，难免会碰到由于内核更新无法进入系统。为了解决由于内核更新导致的系统故障，我们可以同时安装更新周期更长的linux-lts内核，如果linux内核更新后无法进入系统，此时就可以选择加载linux-lts内核进入系统，回退linux内核或者等待修复。&lt;/p&gt;
 &lt;h2 id="安装linux-lts内核"&gt;安装linux-lts内核
 &lt;/h2&gt;&lt;p&gt;首先安装linux-lts内核&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -795,7 +795,7 @@
 &lt;/div&gt;&lt;p&gt;系统启动时会通过Boot Loader加载内核和ramfs，一般还要指定加载微码。内核文件vmlinuz-linux、内核对应的initramfs-linux.img以及微码intel-ucode.img默认位于&lt;code&gt;/boot&lt;/code&gt;文件夹，在rEFInd配置时需要确定自己系统中这些文件实际存在的路径。&lt;/p&gt;
 &lt;p&gt;Arch Linux启动过程参考&lt;a class="link" href="https://wiki.archlinux.org/title/Arch_boot_process" target="_blank" rel="noopener"
 &gt;Arch boot process&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;保存对&lt;code&gt;/efi/EFI/refind/refind.conf&lt;/code&gt;更改，此时重启进入rEFInd界面，会多出一个我们刚才定义的启动项，直接选择此项启动会直接加载linux内核，按F2进入此启动项的子选单会出现我们刚才定义的加载fallback initramfs和加载linux-lts内核等选项。选中原先的Arch Linux启动项按Delete隐藏即可。&lt;/p&gt;</description></item><item><title>Arch Linux 配置 -- 驱动和软件安装</title><link>https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/</link><pubDate>Sat, 08 Jul 2023 17:40:07 +0800</pubDate><guid>https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/</guid><description>&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 驱动和软件安装" /&gt;&lt;p&gt;最近趁着假期把Manjaro换成了Arch Linux，本文记录了我安装Arch Linux中的一些配置。&lt;/p&gt;
+&lt;p&gt;保存对&lt;code&gt;/efi/EFI/refind/refind.conf&lt;/code&gt;更改，此时重启进入rEFInd界面，会多出一个我们刚才定义的启动项，直接选择此项启动会直接加载linux内核，按F2进入此启动项的子选单会出现我们刚才定义的加载fallback initramfs和加载linux-lts内核等选项。选中原先的Arch Linux启动项按Delete隐藏即可。&lt;/p&gt;</description></item><item><title>Arch Linux 配置 -- 驱动和软件安装</title><link>https://xland.cc/p/arch-linux-configuration-driver-and-software/</link><pubDate>Sat, 08 Jul 2023 17:40:07 +0800</pubDate><guid>https://xland.cc/p/arch-linux-configuration-driver-and-software/</guid><description>&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 驱动和软件安装" /&gt;&lt;p&gt;最近趁着假期把Manjaro换成了Arch Linux，本文记录了我安装Arch Linux中的一些配置。&lt;/p&gt;
 &lt;h2 id="arch-linux安装"&gt;Arch Linux安装
 &lt;/h2&gt;&lt;p&gt;安装教程参考&lt;a class="link" href="https://arch.icekylin.online/" target="_blank" rel="noopener"
 &gt;archlinux 简明指南&lt;/a&gt;和&lt;a class="link" href="https://wiki.archlinux.org/title/Installation_guide" target="_blank" rel="noopener"
@@ -946,7 +946,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;此时在浏览器中进入&lt;code&gt;vivaldi:gpu&lt;/code&gt;，已经正常启用了硬件加速。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/vivaldi-gpu.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/vivaldi-gpu.webp"
 width="765"
 height="446"
 loading="lazy"
@@ -969,7 +969,7 @@ data-flex-basis="411px"
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;在打开的页面中展开&lt;code&gt;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Keys&lt;/code&gt;，里面有一个以Windows蓝牙控制器的MAC地址命名的文件夹，打开该文件夹，里面的文件夹名对应的是蓝牙设备的MAC地址，记下蓝牙设备的MAC地址和里面注册表的值。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/windows-bluetooth.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/windows-bluetooth.webp"
 width="1168"
 height="467"
 loading="lazy"
@@ -1068,7 +1068,7 @@ data-flex-basis="600px"
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;官方默认安装主题到&lt;code&gt;/boot/efi/EFI/refind/themes/refind-theme-regular&lt;/code&gt;，如果在安装Arch时选择将ESP分区挂在在&lt;code&gt;/efi&lt;/code&gt;的话，需要按照官方的手动安装指导将主题安装到&lt;code&gt;/efi/EFI/refind/themes/refind-theme-regular&lt;/code&gt;。 最终的主题效果如下&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/refind.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/refind.webp"
 width="854"
 height="480"
 loading="lazy"
@@ -1153,7 +1153,7 @@ data-flex-basis="427px"
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这时MATLAB安装界面可以正常运行，正常安装即可。&lt;/p&gt;
 &lt;p&gt;如果在MATLAB运行时碰到问题，可以参考我之前写的&lt;a class="link" href="https://zhiim.github.io/p/manjaro-linux-matlab/" target="_blank" rel="noopener"
-&gt;Manjaro Linux 安装 MATLAB&lt;/a&gt;，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。&lt;/p&gt;</description></item><item><title>Manjaro Linux 安装 MATLAB</title><link>https://zhiim.github.io/p/manjaro-linux-matlab/</link><pubDate>Sun, 19 Mar 2023 18:40:57 +0800</pubDate><guid>https://zhiim.github.io/p/manjaro-linux-matlab/</guid><description>&lt;p&gt;最近从 Windows 换到了 Manjaro，日常离不开 MATLAB，虽然 MATLAB 官方提供了 Linux 版本，但是没有对 Manjaro 做适配，所以在安装 MATLAB 的过程中遇到了各种问题，以此记录。任何其他问题建议查阅&lt;a class="link" href="wiki.archlinux.org" &gt;ArchWiki&lt;/a&gt;。&lt;/p&gt;
+&gt;Manjaro Linux 安装 MATLAB&lt;/a&gt;，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。&lt;/p&gt;</description></item><item><title>Manjaro Linux 安装 MATLAB</title><link>https://xland.cc/p/manjaro-linux-matlab/</link><pubDate>Sun, 19 Mar 2023 18:40:57 +0800</pubDate><guid>https://xland.cc/p/manjaro-linux-matlab/</guid><description>&lt;p&gt;最近从 Windows 换到了 Manjaro，日常离不开 MATLAB，虽然 MATLAB 官方提供了 Linux 版本，但是没有对 Manjaro 做适配，所以在安装 MATLAB 的过程中遇到了各种问题，以此记录。任何其他问题建议查阅&lt;a class="link" href="wiki.archlinux.org" &gt;ArchWiki&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id="matlab-安装报错"&gt;MATLAB 安装报错
 &lt;/h2&gt;&lt;p&gt;最初安装的时候，我下载的是 MATLAB 2020b 的 iso 镜像，即使按照 ArchWiki 的指导，移除了&lt;code&gt;libfreetype.so*&lt;/code&gt;还是会继续报错。后来换成 MATLAB 2022a 的镜像才成功安装。&lt;br&gt;
 进入 MATLAB 2022a 安装文件所处的文件夹，运行&lt;code&gt;./install&lt;/code&gt;，出现报错&lt;/p&gt;

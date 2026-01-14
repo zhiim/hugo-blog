@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on Zhiim's Blog</title><link>https://zhiim.github.io/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 12 Feb 2024 15:19:19 +0800</lastBuildDate><atom:link href="https://zhiim.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>通过Github Copilot获取GPT-4 API</title><link>https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/</link><pubDate>Mon, 12 Feb 2024 15:19:19 +0800</pubDate><guid>https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/</guid><description>&lt;p&gt;最近Github向GitHub Student Developer Pack添加了无限使用Github Copilot的权益，大大提升了学生包的价值，学生认证后即可免费体验这款强大的AI编程助手。Github Copilot的实际体验让人不得不感慨AI的强大，Copilot自动补全的代码大多数情况下可以直接使用，大大提升了编程效率；Copilot Chat也可以对各种编程问题提供非常有用的建议。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on Zhiim's Blog</title><link>https://xland.cc/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 12 Feb 2024 15:19:19 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>通过Github Copilot获取GPT-4 API</title><link>https://xland.cc/p/get-access-to-gpt4-with-github-copilot/</link><pubDate>Mon, 12 Feb 2024 15:19:19 +0800</pubDate><guid>https://xland.cc/p/get-access-to-gpt4-with-github-copilot/</guid><description>&lt;p&gt;最近Github向GitHub Student Developer Pack添加了无限使用Github Copilot的权益，大大提升了学生包的价值，学生认证后即可免费体验这款强大的AI编程助手。Github Copilot的实际体验让人不得不感慨AI的强大，Copilot自动补全的代码大多数情况下可以直接使用，大大提升了编程效率；Copilot Chat也可以对各种编程问题提供非常有用的建议。&lt;/p&gt;
 &lt;p&gt;除此之外，由于Github Copilot的底层使用了GPT，我们也可以通过Copilot免费使用GPT-4。要实现这样的功能只需要使用开源项目copilot-gpt4-service获取GPT API，然后就可以通过GPT API搭配GPT前端来访问GPT-4，此外还可以使用GPT API部署AI学术助手gpt academic。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://github.com/aaamoon/copilot-gpt4-service" target="_blank" rel="noopener"
@@ -82,7 +82,7 @@
 &lt;li&gt;&lt;code&gt;API 域名&lt;/code&gt;填入&lt;code&gt;http://127.0.0.1:8080&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;模型&lt;/code&gt;选择&lt;code&gt;gpt-4&lt;/code&gt;或者GPT的其他任意版本&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/chatbox_setting.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/get-access-to-gpt4-with-github-copilot/chatbox_setting.webp"
 width="748"
 height="441"
 loading="lazy"
@@ -92,7 +92,7 @@ data-flex-grow="169"
 data-flex-basis="407px"
 &gt;&lt;/p&gt;
 &lt;p&gt;为了验证API返回的结构是否来自GPT-4，可以提问&lt;code&gt;鲁迅为什么暴打周树人&lt;/code&gt;，GPT-3.5会胡说八道，GPT-4会给出正确答案。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/gpt4_or_not.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/get-access-to-gpt4-with-github-copilot/gpt4_or_not.webp"
 width="853"
 height="216"
 loading="lazy"
@@ -152,7 +152,7 @@ data-flex-basis="947px"
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python main.py
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/gpt_academic.webp"
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://xland.cc/p/get-access-to-gpt4-with-github-copilot/gpt_academic.webp"
 width="1849"
 height="923"
 loading="lazy"
@@ -160,7 +160,7 @@ alt="GPT Academic"
 class="gallery-image"
 data-flex-grow="200"
 data-flex-basis="480px"
-&gt;&lt;/p&gt;</description></item><item><title>Windows下制作ChromeOS Live USB</title><link>https://zhiim.github.io/p/windows-install-chromeos/</link><pubDate>Sun, 05 Feb 2023 11:02:40 +0800</pubDate><guid>https://zhiim.github.io/p/windows-install-chromeos/</guid><description>&lt;p&gt;ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目&lt;a class="link" href="https://github.com/sebanc/brunch" target="_blank" rel="noopener"
+&gt;&lt;/p&gt;</description></item><item><title>Windows下制作ChromeOS Live USB</title><link>https://xland.cc/p/windows-install-chromeos/</link><pubDate>Sun, 05 Feb 2023 11:02:40 +0800</pubDate><guid>https://xland.cc/p/windows-install-chromeos/</guid><description>&lt;p&gt;ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目&lt;a class="link" href="https://github.com/sebanc/brunch" target="_blank" rel="noopener"
 &gt;brunch&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件，从而在非Chromebook上安装原生ChromeOS。&lt;/p&gt;
 &lt;h2 id="硬件要求"&gt;硬件要求
@@ -177,7 +177,7 @@ data-flex-basis="480px"
 &lt;p&gt;下载ChromeOS recovery文件。&lt;/p&gt;
 &lt;p&gt;参考自己的CPU型号，选择一个和自己电脑配置接近的chrome设备，在&lt;a class="link" href="https://chromiumdash.appspot.com/serving-builds?deviceCategory=Chrome%20OS" target="_blank" rel="noopener"
 &gt;Chromium Dash&lt;/a&gt;下载该设备的recovery文件，一般选择最新的发行版本即可。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/recovery.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/windows-install-chromeos/recovery.webp"
 width="1311"
 height="292"
 loading="lazy"
@@ -203,7 +203,7 @@ data-flex-basis="1077px"
 &lt;p&gt;下载brunch的release文件&lt;/p&gt;
 &lt;p&gt;在brunch的&lt;a class="link" href="https://github.com/sebanc/brunch/releases" target="_blank" rel="noopener"
 &gt;release&lt;/a&gt;页面下载和recovery版本号对应的文件，例如下载的recovery为109，则下载Brunch r109。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/release.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/windows-install-chromeos/release.webp"
 width="1138"
 height="558"
 loading="lazy"
@@ -245,7 +245,7 @@ data-flex-basis="489px"
 &lt;p&gt;进入ChromeOS&lt;/p&gt;
 &lt;p&gt;重启电脑，进入BIOS设置界面，关闭secure boot，设置优先从USB启动。&lt;/p&gt;
 &lt;p&gt;保存并退出BIOS设置，电脑会自动重启并从U盘启动系统，第一次进入系统时需要等待较长时间。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/chromeos.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/windows-install-chromeos/chromeos.webp"
 width="1920"
 height="1080"
 loading="lazy"
@@ -272,7 +272,7 @@ data-flex-basis="426px"
 &lt;p&gt;下一步可以安装&lt;a class="link" href="https://sourceforge.net/projects/grub2win/" target="_blank" rel="noopener"
 &gt;Grub2Win&lt;/a&gt;，实现在开机时选择想要进入的系统。本人未作尝试，具体步骤可以参考&lt;a class="link" href="https://github.com/sebanc/brunch/blob/main/install-with-windows.md" target="_blank" rel="noopener"
 &gt;brunch的官方安装教程&lt;/a&gt;。&lt;br&gt;
-安装Grub2Win后，依次点击&lt;code&gt;Manage Boot Menu-Add A New Entry-Type&lt;/code&gt;，选择“Create user section”。此时为自动用记事本新建一个文本文件，在之前设置的&lt;code&gt;/mnt/d/brunch&lt;/code&gt;文件夹中打开“chromeos.grub.txt”，将该文件中的内容复制到新建的空文本中。保存Grub2Win的更改，重启电脑，选择ChromeOS进入系统。&lt;/p&gt;</description></item><item><title>完全卸载VMware Workstation</title><link>https://zhiim.github.io/p/uninstall-vmware/</link><pubDate>Sat, 19 Mar 2022 12:05:03 +0800</pubDate><guid>https://zhiim.github.io/p/uninstall-vmware/</guid><description>&lt;p&gt;之前没有通过引导卸载VMware Workstation，直接把整个文件夹删了，导致卸载不彻底。VMware在安装时会先检测是否已经安装，使得我的电脑无法再次安装VMware Workstation。后来按照官方的卸载教程试了几次都没成功，偶然发现系统环境变量中还有VMware的路径，才解决了这个问题。关键在于卸载后没有删除环境变量，所以被认为没有完全卸载VMware Workstation。&lt;/p&gt;
+安装Grub2Win后，依次点击&lt;code&gt;Manage Boot Menu-Add A New Entry-Type&lt;/code&gt;，选择“Create user section”。此时为自动用记事本新建一个文本文件，在之前设置的&lt;code&gt;/mnt/d/brunch&lt;/code&gt;文件夹中打开“chromeos.grub.txt”，将该文件中的内容复制到新建的空文本中。保存Grub2Win的更改，重启电脑，选择ChromeOS进入系统。&lt;/p&gt;</description></item><item><title>完全卸载VMware Workstation</title><link>https://xland.cc/p/uninstall-vmware/</link><pubDate>Sat, 19 Mar 2022 12:05:03 +0800</pubDate><guid>https://xland.cc/p/uninstall-vmware/</guid><description>&lt;p&gt;之前没有通过引导卸载VMware Workstation，直接把整个文件夹删了，导致卸载不彻底。VMware在安装时会先检测是否已经安装，使得我的电脑无法再次安装VMware Workstation。后来按照官方的卸载教程试了几次都没成功，偶然发现系统环境变量中还有VMware的路径，才解决了这个问题。关键在于卸载后没有删除环境变量，所以被认为没有完全卸载VMware Workstation。&lt;/p&gt;
 &lt;h3 id="通过workstation安装程序自动清理"&gt;通过Workstation安装程序自动清理
 &lt;/h3&gt;&lt;p&gt;下载对应版本的安装程序，在当前文件夹打开终端，在终端中输入&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -354,7 +354,7 @@ data-flex-basis="426px"
 &lt;/h3&gt;&lt;p&gt;打开系统环境变量设置，删除VMware Workstation的执行路径&lt;br&gt;
 重启电脑，就完成了VMware Workstation的完全卸载。&lt;br&gt;
 各版本路径存在一些不同，具体参考&lt;a class="link" href="https://kb.vmware.com/s/article/1308" target="_blank" rel="noopener"
-&gt;官方文档&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>将Hugo博客部署到Github Pages</title><link>https://zhiim.github.io/p/hugo_blog/</link><pubDate>Sat, 12 Feb 2022 19:34:01 +0800</pubDate><guid>https://zhiim.github.io/p/hugo_blog/</guid><description>&lt;h2 id="关于hugo"&gt;关于Hugo
+&gt;官方文档&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>将Hugo博客部署到Github Pages</title><link>https://xland.cc/p/hugo_blog/</link><pubDate>Sat, 12 Feb 2022 19:34:01 +0800</pubDate><guid>https://xland.cc/p/hugo_blog/</guid><description>&lt;h2 id="关于hugo"&gt;关于Hugo
 &lt;/h2&gt;&lt;p&gt;Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将markdown文档转换为网页。Hugo根据存放于content文件夹中的用户markdown文件，生成网页源文件，并存放于public文件夹中。&lt;/p&gt;
 &lt;p&gt;将博客部署到GitHub Pages，只需将Hugo生成的public文件夹推送到GitHub仓库。&lt;/p&gt;
 &lt;h2 id="关于github-pages"&gt;关于Github Pages

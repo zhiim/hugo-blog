@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhiim's Blog</title><link>https://zhiim.github.io/</link><description>Recent content on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 08 Jan 2026 10:04:27 +0800</lastBuildDate><atom:link href="https://zhiim.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 桌面在非 TUN 模式下给 Antigravity 设置代理</title><link>https://zhiim.github.io/p/proxy_antigravity/</link><pubDate>Thu, 08 Jan 2026 10:04:27 +0800</pubDate><guid>https://zhiim.github.io/p/proxy_antigravity/</guid><description>&lt;p&gt;&lt;a class="link" href="https://antigravity.google" target="_blank" rel="noopener"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhiim's Blog</title><link>https://xland.cc/</link><description>Recent content on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 08 Jan 2026 10:04:27 +0800</lastBuildDate><atom:link href="https://xland.cc/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 桌面在非 TUN 模式下给 Antigravity 设置代理</title><link>https://xland.cc/p/proxy_antigravity/</link><pubDate>Thu, 08 Jan 2026 10:04:27 +0800</pubDate><guid>https://xland.cc/p/proxy_antigravity/</guid><description>&lt;p&gt;&lt;a class="link" href="https://antigravity.google" target="_blank" rel="noopener"
 &gt;Antigravity&lt;/a&gt; 是 Google 推出的 AI IDE，凭借慷慨的 AI 额度广受欢迎。然而在国内的网络环境下，目前使用 Antigravity 一般需要通过 Clash TUN 模式设置全局代理，这势必会对整个系统的网络造成负面影响。Windows、Mac 系统下如何不使用 TUN 模式实现 Antigravity 代理的方案，在 LINUX DO 等论坛已广为讨论。本文探究了在 Linux 桌面中，如何为 Antigravity 设置代理以在国内正常使用，而不使用 TUN 全局代理模式&lt;/p&gt;
 &lt;p&gt;Antigravity 的代理需要代理两个组件，一个是主体应用，一个是 &lt;code&gt;language_server&lt;/code&gt; 进程。主体应用基于 VS Code 开发，使用 Electron 技术栈，可以通过传入启动参数设置代理；&lt;code&gt;language_server&lt;/code&gt; 使用 Go 语言开发，不受启动参数和系统代理的影响，需要借助 &lt;code&gt;graftcp&lt;/code&gt; 实现代理&lt;/p&gt;
 &lt;h2 id="主体应用代理"&gt;主体应用代理
@@ -248,9 +248,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[*] Remaining processes are killed.&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里用脚本替换 Antigravity 的可执行文件即可。此脚本已经考虑了代理参数，所以在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里可以一并移除代理参数设置&lt;/p&gt;</description></item><item><title>机器学习 20 kNN</title><link>https://zhiim.github.io/p/ml_20_knn/</link><pubDate>Fri, 26 Sep 2025 20:03:09 +0800</pubDate><guid>https://zhiim.github.io/p/ml_20_knn/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 20 kNN" /&gt;&lt;h2 id="nearest-neighbor-classification"&gt;Nearest Neighbor Classification
+&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里用脚本替换 Antigravity 的可执行文件即可。此脚本已经考虑了代理参数，所以在 &lt;code&gt;antigravity.desktop&lt;/code&gt; 里可以一并移除代理参数设置&lt;/p&gt;</description></item><item><title>机器学习 20 kNN</title><link>https://xland.cc/p/ml_20_knn/</link><pubDate>Fri, 26 Sep 2025 20:03:09 +0800</pubDate><guid>https://xland.cc/p/ml_20_knn/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 20 kNN" /&gt;&lt;h2 id="nearest-neighbor-classification"&gt;Nearest Neighbor Classification
 &lt;/h2&gt;&lt;p&gt;给定一个查询样本 $q$，找到 k 个离 $q$ 最近的样本点。对于回归任务，返回这 k 个点的均值；对于分类任务，返回数量最多的类别或者分布表&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_20_knn/cb3a4fc2eecf909ffb846ee32153a2dc.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_20_knn/cb3a4fc2eecf909ffb846ee32153a2dc.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;随着超参数 k 的数值增大，kNN 一般会由过拟合变为欠拟合&lt;/p&gt;
 &lt;h3 id="exhaustive-k-nn-算法"&gt;Exhaustive k-NN 算法
@@ -259,7 +259,7 @@
 &lt;h3 id="voronoi-diagrams"&gt;Voronoi Diagrams
 &lt;/h3&gt;&lt;p&gt;设 $X$ 是一个点集，对于 $w \in X$，它的 Voronoi cell 定义为&lt;/p&gt;
 $$Vor(w) = \{ p \in \mathbb{R}^d : \|p - w\| \le \|p - v\|, \forall v \in X \}$$&lt;p&gt;$X$ 中 所有的 Voronoi cell 就是 Voronoi diagram&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_20_knn/6430250960958b92ba61c74efaa5a8b4.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_20_knn/6430250960958b92ba61c74efaa5a8b4.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;Voronoi diagram 的空间复杂度为 $O(n^{[d / 2]}$（用边来衡量），当维度 d 增加是空间复杂度会稍微低于这个公式，但是仍然是指数级增长，所以不适合于高维数据。但是在实际应用中复杂度一般都是 $O(n)$&lt;/p&gt;
 &lt;p&gt;在运行时，给定一个点 $q$，找出一个点 $w$ 使得 $q \in Var(w)$，那么我们就可以使用 $w$ 的属性来预测 $q$&lt;/p&gt;
@@ -272,14 +272,14 @@ $$Vor(w) = \{ p \in \mathbb{R}^d : \|p - w\| \le \|p - v\|, \forall v \in X \}$$
 &lt;li&gt;选择特征的中位数或者中值作为划分边界。使用中位数可以保证树的深度为 $\log_2 n$，建树复杂度为 $O(nd \log n)$；如果使用中值可能导致树失衡&lt;/li&gt;
 &lt;li&gt;每个中间节点都会存储一个训练数据点，所以每次搜索的时候不用下降到叶节点&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_20_knn/74f6575d219af2056137a8ae78e32041.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_20_knn/74f6575d219af2056137a8ae78e32041.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;在运行时，给定一个点 $q$，寻找一个训练样本点 $w$ 满足 $\|q - w \| \le (1 + \epsilon) \|q - u\|$，其中 $u$ 是训练样本中距离 $q$ 最近的距离，也就是我们找到的样本点 $w$ 不能远于最小距离的 $1+\epsilon$ 倍&lt;/p&gt;
 &lt;p&gt;在搜索时，我们需要计算 $q$ 到区域 B 的最小距离 $dist(q, B) = \min_{z \in B} \|q - z\|$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_20_knn/41de3b27aac7e077137e5c8caec7d046.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_20_knn/41de3b27aac7e077137e5c8caec7d046.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;搜索过程中需要维护一个小顶堆，用来保存在还没有搜索的 box 的距离。每次搜索的时候优先搜索离 $q$ 最近的 box。如果当前搜索的 box 离 $q$ 的距离的 $1 + \epsilon$ 倍小于下一个最近 box 则继续，反之停止搜索&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_20_knn/2422184e4d1774c17980fa124dd54f2d.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_20_knn/2422184e4d1774c17980fa124dd54f2d.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;1-NN 算法：&lt;/p&gt;
 &lt;ul&gt;
@@ -298,7 +298,7 @@ $$Vor(w) = \{ p \in \mathbb{R}^d : \|p - w\| \le \|p - v\|, \forall v \in X \}$$
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;返回 $w$&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>机器学习 19 AdaBoost</title><link>https://zhiim.github.io/p/ml_19_adaboost/</link><pubDate>Fri, 26 Sep 2025 19:59:30 +0800</pubDate><guid>https://zhiim.github.io/p/ml_19_adaboost/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 19 AdaBoost" /&gt;&lt;h2 id="adaboost"&gt;AdaBoost
+&lt;/ul&gt;</description></item><item><title>机器学习 19 AdaBoost</title><link>https://xland.cc/p/ml_19_adaboost/</link><pubDate>Fri, 26 Sep 2025 19:59:30 +0800</pubDate><guid>https://xland.cc/p/ml_19_adaboost/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 19 AdaBoost" /&gt;&lt;h2 id="adaboost"&gt;AdaBoost
 &lt;/h2&gt;&lt;p&gt;AdaBoost 是一个集成学习方法，它可以降低偏差（Bagging 法可以降低方差）&lt;/p&gt;
 &lt;p&gt;AdaBoost 使用不同权重的训练样本训练学习器，如果某个样本被错误分类，那么它的权重将增加；并且对每个学习器使用不同的权重，更加准确的学习器施加更大的权重&lt;/p&gt;
 &lt;p&gt;假设我们训练 T 个分类器 $G_1, \dots, G_T$，训练样本 $X_i$ 在训练 $G_t$ 是的权重取决于 $G_1, \dots, G_{t-1}$ 错误分类它的次数，此外如果 $X_t$ 被一个非常精准的分类器分类错误，它的权重将会增加的更多，每次 $X_i$ 被正确分类，它的权重也会相应缩小。&lt;/p&gt;
@@ -347,7 +347,7 @@ $$\beta_T = \frac{1}{2} \ln \left( \frac{1 - err_T}{err_T} \right)$$&lt;p&gt;从
 &lt;/li&gt;
 &lt;li&gt;返回组合学习器 $h(z) = sign\left( \sum_{t = 1}^T \beta_t G_t(z) \right)$&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_19_adaboost/d4cd3fea6576cbd89df241142d3e2524.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_19_adaboost/d4cd3fea6576cbd89df241142d3e2524.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;如上图所示，初始时我们为每个训练样本施加相同的权重，然后根据分类器分类正确与错误的情况减小或者增加权重&lt;/p&gt;
 &lt;blockquote&gt;
@@ -359,7 +359,7 @@ $$\beta_T = \frac{1}{2} \ln \left( \frac{1 - err_T}{err_T} \right)$$&lt;p&gt;从
 &lt;li&gt;AdaBoost 加上短树相当于是一种特征子集选择，无法提高 metalearning 估计能力的特征完全没有使用（err 为 50% 的）&lt;/li&gt;
 &lt;li&gt;线性决策边界和 boost 的组合并不好&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/blockquote&gt;</description></item><item><title>机器学习 18 主成分分析</title><link>https://zhiim.github.io/p/ml_18_principal_components_analysis/</link><pubDate>Fri, 26 Sep 2025 19:57:00 +0800</pubDate><guid>https://zhiim.github.io/p/ml_18_principal_components_analysis/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 18 主成分分析" /&gt;&lt;h2 id="无监督学习"&gt;无监督学习
+&lt;/blockquote&gt;</description></item><item><title>机器学习 18 主成分分析</title><link>https://xland.cc/p/ml_18_principal_components_analysis/</link><pubDate>Fri, 26 Sep 2025 19:57:00 +0800</pubDate><guid>https://xland.cc/p/ml_18_principal_components_analysis/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 18 主成分分析" /&gt;&lt;h2 id="无监督学习"&gt;无监督学习
 &lt;/h2&gt;&lt;p&gt;有时候我们的训练数据里面没有标签，但是我们还是希望寻找数据的结构信息&lt;/p&gt;
 &lt;p&gt;无监督学习的应用主要分为如下几个大类：&lt;/p&gt;
 &lt;ul&gt;
@@ -377,9 +377,9 @@ $$\beta_T = \frac{1}{2} \ln \left( \frac{1 - err_T}{err_T} \right)$$&lt;p&gt;从
 &lt;/ul&gt;
 &lt;p&gt;假设 $X$ 是一个 $n \times d$ 的设计矩阵，并且 $X$ 的均值为 0。假设有一些正交基 ${} v_1, \dots, v_k {}$，那么 x 可以在正交基下表示为 $\widetilde{x} = \sum_{i = 1}^k (x \cdot v_i) v_i$，其中 $x \cdot v_i$ 表示主坐标，是 x 在 $v_i$ 方向投影的长度&lt;/p&gt;
 &lt;p&gt;在降维的时候我们希望最大程度保留原始信息，在主成分分析中信息被定义为方差，所以最佳的方向就是协方差矩阵 $X^TX$ 的特征向量。&lt;/p&gt;
-&lt;p&gt;假设 $X^TX$ 的特征特征值为 $0 \le \lambda_1 \le \lambda_2 \le \dots \le \lambda_d$，对应到特征向量 $v_1, v_2, \dots, v_k$ 就是主成分。计算每个数据点在主成分下的主坐标，就是实现了对数据的降维&lt;/p&gt;</description></item><item><title>机器学习 17 神经网络 II：梯度消失和爆炸</title><link>https://zhiim.github.io/p/ml_17_gradient_vanish/</link><pubDate>Fri, 26 Sep 2025 19:51:29 +0800</pubDate><guid>https://zhiim.github.io/p/ml_17_gradient_vanish/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 17 神经网络 II：梯度消失和爆炸" /&gt;&lt;h2 id="梯度消失与爆炸"&gt;梯度消失与爆炸
+&lt;p&gt;假设 $X^TX$ 的特征特征值为 $0 \le \lambda_1 \le \lambda_2 \le \dots \le \lambda_d$，对应到特征向量 $v_1, v_2, \dots, v_k$ 就是主成分。计算每个数据点在主成分下的主坐标，就是实现了对数据的降维&lt;/p&gt;</description></item><item><title>机器学习 17 神经网络 II：梯度消失和爆炸</title><link>https://xland.cc/p/ml_17_gradient_vanish/</link><pubDate>Fri, 26 Sep 2025 19:51:29 +0800</pubDate><guid>https://xland.cc/p/ml_17_gradient_vanish/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 17 神经网络 II：梯度消失和爆炸" /&gt;&lt;h2 id="梯度消失与爆炸"&gt;梯度消失与爆炸
 &lt;/h2&gt;&lt;p&gt;当使用 sigmoid 函数时，如果 sigmoid 的输出接近 0 或 1，那么梯度 $s' = s(1 - s) \approx 0$，此时梯度更新将会特别缓慢，这个问题被称为&lt;em&gt;梯度消失&lt;/em&gt;，在深层网络中，反向传播会使得梯度消失加剧&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_17_gradient_vanish/a9c103ee0fbac66eb94e884e5db1952b.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_17_gradient_vanish/a9c103ee0fbac66eb94e884e5db1952b.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;将激活函数换为 ReLU 将会缓解梯度消失，ReLU 的定义为 $r(\gamma) = max\{0, \gamma\}$，它的导数为&lt;/p&gt;
 $$
@@ -387,21 +387,21 @@ r'(\gamma) = \begin{cases}
 1, \quad \gamma \ge 0, \\
 0, \quad \gamma &lt; 0
 \end{cases}
-$$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_17_gradient_vanish/c1b654a499edbf6249026f47069ba571.png" width="600"&gt;
+$$&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_17_gradient_vanish/c1b654a499edbf6249026f47069ba571.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;在现代神经网络中，ReLU 一般被用于中间层的激活函数，因为 ReLU 的梯度很少全部为 0，更多的情况是部分神经元的梯度为 0&lt;/p&gt;
 &lt;p&gt;然而 ReLU 的输出可以无限大，带了&lt;em&gt;梯度爆炸&lt;/em&gt;问题，特别是在深层网络中，大输入造成了梯度随着网络深度不断变大&lt;/p&gt;
 &lt;h2 id="输出层"&gt;输出层
-&lt;/h2&gt;&lt;p&gt;ReLU 一般被使用于隐藏层，而在输出层一般为线性单元（回归问题）或者 sigmoid/softmax 单元（分类问题），分别对应了线性回归、logistic 回归和 softmax 回归&lt;/p&gt;</description></item><item><title>机器学习 16 神经网络 I：神经网络与梯度计算</title><link>https://zhiim.github.io/p/ml_16_neural_network/</link><pubDate>Fri, 26 Sep 2025 19:41:36 +0800</pubDate><guid>https://zhiim.github.io/p/ml_16_neural_network/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 16 神经网络 I：神经网络与梯度计算" /&gt;&lt;h2 id="神经网络"&gt;神经网络
+&lt;/h2&gt;&lt;p&gt;ReLU 一般被使用于隐藏层，而在输出层一般为线性单元（回归问题）或者 sigmoid/softmax 单元（分类问题），分别对应了线性回归、logistic 回归和 softmax 回归&lt;/p&gt;</description></item><item><title>机器学习 16 神经网络 I：神经网络与梯度计算</title><link>https://xland.cc/p/ml_16_neural_network/</link><pubDate>Fri, 26 Sep 2025 19:41:36 +0800</pubDate><guid>https://xland.cc/p/ml_16_neural_network/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 16 神经网络 I：神经网络与梯度计算" /&gt;&lt;h2 id="神经网络"&gt;神经网络
 &lt;/h2&gt;&lt;p&gt;单个的、基础的感知机存在严重局限性，无法解决像 XOR（异或）这样看似简单但非线性的问题。如下图，异或的二维输入和输出表示了三维空间的点，无法被线性分类器分类&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_16_neural_network/xor_probelm.png" width="400"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_16_neural_network/xor_probelm.png" width="400"&gt;
 &lt;/figure&gt;
 &lt;p&gt;如果添加一个二次特征 $x_1x_2$，那么 XOR 将在 3 维空间线性可分&lt;/p&gt;
 &lt;p&gt;当然，我们也有更佳的方法，通过多个单层线性分类器的叠加可以实现类似电路的逻辑连接，此外在每个线性分类器的输出添加一个非线性的函数 $s$ 可以实现类似电路逻辑门。所以通过多个线性连接+非线性函数（一般为 logistic 函数）可以轻易实现异或，其中每个线性线性连接+非线性函数组成了一个神经元&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_16_neural_network/aa65087cd7ec36ba247340feba9e24f2.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_16_neural_network/aa65087cd7ec36ba247340feba9e24f2.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;h3 id="一层隐藏层的网络"&gt;一层隐藏层的网络
-&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_16_neural_network/fcc46df680c9253fabfe67759b5c9de1.png" width="600"&gt;
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_16_neural_network/fcc46df680c9253fabfe67759b5c9de1.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;多个神经元组成的三层网络如同&lt;/p&gt;
 &lt;p&gt;集合函数 $s(\gamma) = \frac{1}{1 + e^{-\gamma}}$，被称为激活函数。对于一个向量 $u$，定义 $s(u) =\begin{bmatrix}s(u_1) \\ s(u_2) \\ \vdots\end{bmatrix}$，$s_1(u) = \begin{bmatrix} s(u_1) \\ s(u_2) \\ \vdots \\ 1\end{bmatrix}$ 表示包含偏置的形式&lt;/p&gt;
@@ -421,18 +421,18 @@ $$&lt;p&gt;神经网络可以有多个输出节点，所以我们可以基于相
 &lt;h3 id="梯度计算"&gt;梯度计算
 &lt;/h3&gt;&lt;p&gt;我们可以使用链式法则求每个节点的梯度&lt;/p&gt;
 &lt;p&gt;对于公式 $f=((a + b) c)^2$，可以将其拆解成链式传播的形式，然后从 $f$ 开始逐次求解每个节点的梯度&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_16_neural_network/55c5081feacddfc77a55a222e6f28a39.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_16_neural_network/55c5081feacddfc77a55a222e6f28a39.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;对于多元数据，同样可以使用多元微分
 &lt;/p&gt;
-$$\frac{\partial}{\partial \alpha} L(y_1(\alpha), y_2(\alpha)) = \frac{\partial L}{\partial y_1} \frac{\partial y_1}{\partial \alpha} + \frac{\partial L}{\partial y_2} \frac{\partial y_2}{\partial \alpha} = \nabla_y L\cdot \frac{\partial}{\partial \alpha} y$$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_16_neural_network/9c52dfcaeb7a9de6094621b6674aed24.png" width="800"&gt;
+$$\frac{\partial}{\partial \alpha} L(y_1(\alpha), y_2(\alpha)) = \frac{\partial L}{\partial y_1} \frac{\partial y_1}{\partial \alpha} + \frac{\partial L}{\partial y_2} \frac{\partial y_2}{\partial \alpha} = \nabla_y L\cdot \frac{\partial}{\partial \alpha} y$$&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_16_neural_network/9c52dfcaeb7a9de6094621b6674aed24.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;同样我们也可以通过链式法则求成本函数，梯度计算是从后往前进行的，被称为反向传播算法&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_16_neural_network/a8519d1a53f7e4ba5259464c6d5a05c9.png" width="800"&gt;
-&lt;/figure&gt;</description></item><item><title>机器学习 15 决策树 II：决策树扩展</title><link>https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/</link><pubDate>Fri, 26 Sep 2025 19:32:13 +0800</pubDate><guid>https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 15 决策树 II：决策树扩展" /&gt;&lt;h2 id="决策树的变种"&gt;决策树的变种
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_16_neural_network/a8519d1a53f7e4ba5259464c6d5a05c9.png" width="800"&gt;
+&lt;/figure&gt;</description></item><item><title>机器学习 15 决策树 II：决策树扩展</title><link>https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/</link><pubDate>Fri, 26 Sep 2025 19:32:13 +0800</pubDate><guid>https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 15 决策树 II：决策树扩展" /&gt;&lt;h2 id="决策树的变种"&gt;决策树的变种
 &lt;/h2&gt;&lt;h3 id="决策树回归"&gt;决策树回归
 &lt;/h3&gt;&lt;p&gt;决策树回归就是通过一系列是否问题，创建了一个分段常数函数（Piecewise Constant Regression Fn），在函数的每一段，决策树的预测是一个固定的常数&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/1379e6faa8e219b3268c2a4bd72f1101.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/1379e6faa8e219b3268c2a4bd72f1101.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;ul&gt;
 &lt;li&gt;上图左边是一个对特征维度为 2 的样本进行决策回归的过程，数据顺着路径到达某一个叶子节点得到最终的预测值&lt;/li&gt;
@@ -446,10 +446,10 @@ $$\mu_S = \frac{1}{|S|}\sum_{i \in S}y_i$$&lt;p&gt;其中 $S$ 表示落入某个
 $$J(S) = Var(\{ y_i: i\in S \}) = \frac{1}{|S|} \sum_{i \in S} (y_i - \mu_S)^2$$&lt;p&gt;所以每次选择可以使得划分出的两个子集方差的加权平均（根据样本点树加权）最小的划分点&lt;/p&gt;
 &lt;h3 id="早停"&gt;早停
 &lt;/h3&gt;&lt;p&gt;在构造决策树的时候，没必要让每个叶节点到达纯净，可以实现加速以及防止过拟合&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/877b1a22fcc1f8be2e6752cca6dc733e.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/877b1a22fcc1f8be2e6752cca6dc733e.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;对于上图两个重合非常大的概率分布，得到一个叶子节点的纯净决策树一定会造成过拟合&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/2a6c07a89432ebc2b635c349581577d5.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/2a6c07a89432ebc2b635c349581577d5.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;此外叶子节点不那么纯净，往往能包含更加丰富的信息。例如，对于上图的决策树划分，我们可以通过统计每个子区域内不同类别的点数，得到某种类别被分到该叶子节点的概率。对于分类树，直接去概率最大的类别最为叶子节点输出的类别；对于回归树，使用平均值作为叶子节点的预测值&lt;/p&gt;
 &lt;p&gt;决策树可以使用的早停策略包括：&lt;/p&gt;
@@ -465,10 +465,10 @@ $$J(S) = Var(\{ y_i: i\in S \}) = \frac{1}{|S|} \sum_{i \in S} (y_i - \mu_S)^2$$
 &lt;/h3&gt;&lt;p&gt;如果树太大，可以通过移除一些划分来提高在验证集的表现&lt;/p&gt;
 &lt;p&gt;剪枝往往比早停更加有效，因为有时候某次划分带来的提升不明显，但是接下来可能出现提升明显的划分&lt;/p&gt;
 &lt;p&gt;在剪枝时，如果每次去除一个分割后重新从头计算验证集指标会造成非常大的开销。相反，我们应该在构建深度树的时候记录下每个节点中包含了哪些样本，这样剪枝的时候只需将子节点的样本合并到父节点&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/09402d778b86912a85e12ed8bc37d0f4.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/09402d778b86912a85e12ed8bc37d0f4.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;h3 id="多变量划分"&gt;多变量划分
-&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_15_decision_tree_and_ensemble_learning/0c9125da35eb1f9b9da75261f0290f7a.png" width="600"&gt;
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_15_decision_tree_and_ensemble_learning/0c9125da35eb1f9b9da75261f0290f7a.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;一个标准的决策树一次只对一个特征进行划分（如左图），对于 SVM 可以轻易区分的斜线，决策树需要学习一个非常复杂的规则&lt;/p&gt;
 &lt;p&gt;如果想要使用多个特征进行划分，可以在每个节点使用例如 SVM、逻辑回归和高斯判别分析，这些分类器通过决策树的层级结构可以学习到非线性的决策边界&lt;/p&gt;
@@ -489,16 +489,16 @@ $$J(S) = Var(\{ y_i: i\in S \}) = \frac{1}{|S|} \sum_{i \in S} (y_i - \mu_S)^2$$
 &lt;p&gt;Bagging 法存在一个问题：某些样本被采样了 $j$ 次，所以他们在训练数据中占有更大的比重&lt;/p&gt;
 &lt;h3 id="随机森林"&gt;随机森林
 &lt;/h3&gt;&lt;p&gt;仅仅使用 Bagging 法加上决策树仍然不够，因为可能不同的树模型非常相似。例如，某个特征非常强，那么不同的树都会从它开始划分&lt;/p&gt;
-&lt;p&gt;为了得到不同的决策树，对于每个节点，随机选取 $m$ 个特征，从这 $m$ 个特征中一个可以最佳划分的特征。其中 $m$ 是超参数，$m$ 越小越随机，不同树之间越不相关，偏差更大&lt;/p&gt;</description></item><item><title>机器学习 14 决策树 I：决策树基础</title><link>https://zhiim.github.io/p/ml_14_decision_tree/</link><pubDate>Fri, 26 Sep 2025 17:42:31 +0800</pubDate><guid>https://zhiim.github.io/p/ml_14_decision_tree/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 14 决策树 I：决策树基础" /&gt;&lt;p&gt;决策树是一种用于分类和回归的非线性方法&lt;/p&gt;
+&lt;p&gt;为了得到不同的决策树，对于每个节点，随机选取 $m$ 个特征，从这 $m$ 个特征中一个可以最佳划分的特征。其中 $m$ 是超参数，$m$ 越小越随机，不同树之间越不相关，偏差更大&lt;/p&gt;</description></item><item><title>机器学习 14 决策树 I：决策树基础</title><link>https://xland.cc/p/ml_14_decision_tree/</link><pubDate>Fri, 26 Sep 2025 17:42:31 +0800</pubDate><guid>https://xland.cc/p/ml_14_decision_tree/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 14 决策树 I：决策树基础" /&gt;&lt;p&gt;决策树是一种用于分类和回归的非线性方法&lt;/p&gt;
 &lt;p&gt;决策树有两种节点状态：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;内部节点：对特征值进行测试（通常是一个），并决定走向哪个分支&lt;/li&gt;
 &lt;li&gt;叶节点：确定最终的类别&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_14_decision_tree/f5d21c304134513e4142469b65c70576.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_14_decision_tree/f5d21c304134513e4142469b65c70576.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;决策树对类别特征和数值特征都较为有效，并且可解释性强，上图是决策树的工作模式。如右图所示，决策树将 x-空间划分成了长方形区块，不过不同程度的分支组合，决策树的决策边界可以任意复杂&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_14_decision_tree/409c50b8f09006bfd345a7940d5385d5.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_14_decision_tree/409c50b8f09006bfd345a7940d5385d5.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;设 $X$ 是一个 $n\times d$ 设计矩阵，$y\in \mathbb{R}^n$ 是标签，$S \in \{ 1, 2, \dots, n\}$ 是采样点的索引&lt;/p&gt;
 &lt;p&gt;决策树的构造&lt;/p&gt;
@@ -524,20 +524,20 @@ $$&lt;p&gt;其中的关键是如何选择最优的划分&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;现在我们只需要确定如何计算成本 $J (S)$&lt;/p&gt;
 &lt;p&gt;方案一：假设 $S$ 中类别最多的类别是 $C$，那么定义 $J (S)$ 为 $S$ 中不属于类别 $C$ 的样本个数&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_14_decision_tree/1b92b4914ea2aa31f10cfd28040df325.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_14_decision_tree/1b92b4914ea2aa31f10cfd28040df325.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;但是对于上图这种划分，最后都能得到 $J(S_l) + J(S_r) = 10$ 的结果，但是左边的更好（划分后类别更纯净）， $\frac{|S_l|J(S_l) + |S_r|J(S_r)}{|S_l| + |S_r|}$ 甚至会优先选择右边&lt;/p&gt;
 &lt;p&gt;方案二：衡量熵&lt;/p&gt;
 &lt;p&gt;假设 $Y$ 是一个随机类别变量，$P (Y = C) = p_C$，那么 $Y$ 属于 $C$ 的惊讶度（degree of suprise）是 $-\log_2p_C$（如果一个非常可能发生的事发生了，我们并不惊讶；如果不太可能发生的事发生了，我们非常惊讶，它的信息量更大）&lt;/p&gt;
 &lt;p&gt;那么集合 $S$ 的熵为&lt;/p&gt;
 $$H(S) = - \sum p_C \log_2 p_C, \quad p_C = \frac{|\{ i \in S: y_i = C\}|}{|S|}$$&lt;p&gt;熵代表了在均匀分布下随机采样的子集 $S$ 中，为了正确识别它的类别，我们需要传输的信息量&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_14_decision_tree/f95b243606fb48d31c4fbbd3dbcf6239.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_14_decision_tree/f95b243606fb48d31c4fbbd3dbcf6239.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;上图分别是两个类别和三个类别的条件下，熵随着类别概率变化的曲线，可以看出如果一个集合中类别约纯净，它的熵越小&lt;/p&gt;
 &lt;p&gt;在每次划分时，我们可以计算划分后的平均熵&lt;/p&gt;
 $$H_{after} = \frac{|S_l|H(S_l) + |S_r|H(S_r)}{|S_l| + |S_r|}$$&lt;p&gt;那么我们选择划分的准则就是最大化&lt;em&gt;信息增益&lt;/em&gt; $H(S) - H_{after}$，也就是最小化 $H_{after}$&lt;/p&gt;
 &lt;p&gt;信息增益将会永远大于等于 0，当某一个子集为空或者所有子集内部类别分布完全一致时，信息增益为 0&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_14_decision_tree/4bc92ff374632d67db16ca4381ad90b7.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_14_decision_tree/4bc92ff374632d67db16ca4381ad90b7.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;左图是使用熵作为成本函数的划分，可以看到，熵随 $p_C$ 的变化曲线是严格凸的，父节点的熵永远大于两个自节点熵的加权平均；左图是使用 $J(S)$ 作为成本函数的曲线，在很多情况下划分前后的成本相同，无法衡量划分好坏&lt;/p&gt;
 &lt;ul&gt;
@@ -545,7 +545,7 @@ $$H_{after} = \frac{|S_l|H(S_l) + |S_r|H(S_r)}{|S_l| + |S_r|}$$&lt;p&gt;那么�
 &lt;li&gt;如果 $x_i$ 有三个或者以上的离散值，可以二元分裂，也可以多元分裂&lt;/li&gt;
 &lt;li&gt;如果 $x_i$ 是一个数值，需要在每两个不同值间尝试分裂点&lt;br&gt;
 为了加速计算，我们首先对数值进行排序（如下图），每两个不同值之间都存在一个分裂点（竖线），使用不同的分裂点只会将一个样本从右侧移动到左侧，所以只需初始一次排序，后续记录不同类别的数量变化，这样从左到右改变分裂点时只需要 $O (1)$ 的时间重新计算熵
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_14_decision_tree/75bb6cce5d0feffa5abde2e830f73ded.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_14_decision_tree/75bb6cce5d0feffa5abde2e830f73ded.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -558,7 +558,7 @@ $$H_{after} = \frac{|S_l|H(S_l) + |S_r|H(S_r)}{|S_l| + |S_r|}$$&lt;p&gt;那么�
 &lt;li&gt;对于整个树。每个样本点参与 $O (depth)$ 个节点（从上至下），每个样本点在每个节点的计算复杂度为 $O(d)$（$n'd$ 平均到 $n'$ 个点），总共有 $n$ 个样本点，所以训练复杂度 $\le O(nd \cdot depth)$&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>机器学习 13 回归 IV：正则化</title><link>https://zhiim.github.io/p/ml_13_regularization/</link><pubDate>Fri, 26 Sep 2025 17:15:20 +0800</pubDate><guid>https://zhiim.github.io/p/ml_13_regularization/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 13 回归 IV：正则化" /&gt;&lt;h2 id="岭回归-ridge-regression"&gt;岭回归 Ridge Regression
+&lt;/ul&gt;</description></item><item><title>机器学习 13 回归 IV：正则化</title><link>https://xland.cc/p/ml_13_regularization/</link><pubDate>Fri, 26 Sep 2025 17:15:20 +0800</pubDate><guid>https://xland.cc/p/ml_13_regularization/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 13 回归 IV：正则化" /&gt;&lt;h2 id="岭回归-ridge-regression"&gt;岭回归 Ridge Regression
 &lt;/h2&gt;&lt;p&gt;岭回归即是最小二乘线性规划加上 $l_2$ 正则化，可以描述为：&lt;br&gt;
 寻找一个 $w$，最小化 $J(w) = \|Xw - y\|^2 + \lambda \|w'\|^2$&lt;br&gt;
 其中，$w'$ 是使用 0 替代了 $w$ 中对应常数项权重的 $\alpha$ （不用对常数项进行惩罚）&lt;/p&gt;
@@ -568,13 +568,13 @@ $$H_{after} = \frac{|S_l|H(S_l) + |S_r|H(S_r)}{|S_l| + |S_r|}$$&lt;p&gt;那么�
 &lt;li&gt;通过降低方差防止过拟合&lt;br&gt;
 如果权重过大，细微的数据动荡将会造成较大的变化&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_13_regularization/02e72d7ed10bd0b1534d3cf0c3147e93.png" width="400"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_13_regularization/02e72d7ed10bd0b1534d3cf0c3147e93.png" width="400"&gt;
 &lt;/figure&gt;
 &lt;p&gt;上图中红色的表示 $\|Xw - y\|^2$ 的等值线，蓝色的表示 $\|w\|$ 的等值线，红色等值线第一次和蓝色等值线相交的点就是岭回归的解&lt;/p&gt;
 &lt;p&gt;可以通过使代价函数的梯度为 0 得到最优 $w$，即求解线性方程组&lt;/p&gt;
 $$(X^TX + \lambda I')w = X^T y$$&lt;p&gt;其中 $I'$ 是一个特殊的单位矩阵，它的右下角元素被设为 0（不对常数项偏置惩罚）&lt;/p&gt;
 &lt;p&gt;岭回归的方差为 $Var(z^T(X^TX + \lambda I')^{-1} X^T e)$，可以看出 $\lambda$ 增大时，方差减小，但是偏差会增大&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_13_regularization/61bc163d627382dd809faf4c337ef1c1.png" width="400"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_13_regularization/61bc163d627382dd809faf4c337ef1c1.png" width="400"&gt;
 &lt;/figure&gt;
 &lt;h3 id="岭回归的贝叶斯解释"&gt;岭回归的贝叶斯解释
 &lt;/h3&gt;&lt;p&gt;假设$w'$的先验概率满足 $w' \sim \mathcal{N}(0, \varsigma^2)$，则概率密度函数为 $f(w') \propto e^{- \|w'\|^2 / (2 \varsigma^2)}$&lt;/p&gt;
@@ -600,9 +600,9 @@ $$&lt;p&gt;最大化后验概率，即最小化 $\|Xw - y\|^2 + \|w'\|^2$&lt;/p&
 &lt;p&gt;LASSO 和岭回归一样，都是在最小二乘回归的基础上正则项，但是 LASSO 的 $l_1$ 会使某些维度的权重接近 0&lt;/p&gt;
 &lt;p&gt;寻找 $w$ 可以最小化 $\|Xw-y\|^2 + \lambda \|w'\|_1$，其中 $\|w'\|_1 = \sum_{i = 1}^d|w_i|$（不对常数项 $\alpha$ 惩罚）&lt;/p&gt;
 &lt;p&gt;岭回归的正则项 $\|w'\|^2$ 是一个超球面，而 $\|w'\|_1$ 对应的是一个正多面体&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_13_regularization/2ed62fd7cb9d7249c919fc7048d2729a.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_13_regularization/2ed62fd7cb9d7249c919fc7048d2729a.png" width="600"&gt;
 &lt;/figure&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_13_regularization/f4e3ee03d617d3bc3414a5c1e7f5f27e.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_13_regularization/f4e3ee03d617d3bc3414a5c1e7f5f27e.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;上图中，红色的椭圆形表示 $\|Xw - y\|^2$，其中最小二乘法的解为中心的红点。左边蓝色的四边形表示 $l_1$ 正则项，如果 $\lambda$ 较大，对应的四边形约小，两个图形的第一次相交于竖轴，此时特征 $w_1$ 对应的权重为 0，这种方法可以用于去除无用特征&lt;/p&gt;
 &lt;div class="footnotes" role="doc-endnotes"&gt;
@@ -615,7 +615,7 @@ $$&lt;p&gt;最大化后验概率，即最小化 $\|Xw - y\|^2 + \|w'\|^2$&lt;/p&
 &lt;p&gt;由于 $y = Xw + e$，其中噪声 $e$ 符合高斯分布，所以 $y$ 符合均值为 $Xw$ 的高斯分布，即 $f_{Y| X, W}(y) \propto \exp(-(y - Xw)^2) / 2 \sigma^2$，所以 ${} \ln f_{Y| X, W}(y) =-\text{const} \|Xw - y\|^2 {}$&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>机器学习 12 回归 III：回归的统计解释</title><link>https://zhiim.github.io/p/ml_12_statistical_justifications_for_regression/</link><pubDate>Fri, 26 Sep 2025 17:05:20 +0800</pubDate><guid>https://zhiim.github.io/p/ml_12_statistical_justifications_for_regression/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 12 回归 III：回归的统计解释" /&gt;&lt;h2 id="统计解释"&gt;统计解释
+&lt;/div&gt;</description></item><item><title>机器学习 12 回归 III：回归的统计解释</title><link>https://xland.cc/p/ml_12_statistical_justifications_for_regression/</link><pubDate>Fri, 26 Sep 2025 17:05:20 +0800</pubDate><guid>https://xland.cc/p/ml_12_statistical_justifications_for_regression/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 12 回归 III：回归的统计解释" /&gt;&lt;h2 id="统计解释"&gt;统计解释
 &lt;/h2&gt;&lt;p&gt;一种典型的模型假设：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;采样点来自一个未知的概率分布，即 $X_i \sim D$&lt;/li&gt;
@@ -659,7 +659,7 @@ R(h) &amp;= E[L(h(z), \gamma)] \\
 &amp; = \underbrace{(E[h(z)] - E[\gamma])^2}_{偏差的平方} + \underbrace{Var(h(z))}_{方差} + \underbrace{Var(\varepsilon)}_{噪声}
 \end{align*}
 $$&lt;p&gt;上式被称为风险函数的&lt;em&gt;偏差-方差分解&lt;/em&gt;&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_12_statistical_justifications_for_regression/d8e36849ec7632e77e8fc9709fd67052.png" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_12_statistical_justifications_for_regression/d8e36849ec7632e77e8fc9709fd67052.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;偏差-方差分解&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -677,13 +677,13 @@ $$&lt;p&gt;上式被称为风险函数的&lt;em&gt;偏差-方差分解&lt;/em&gt
 &lt;li&gt;噪声误差无法去除&lt;/li&gt;
 &lt;li&gt;在测试集中，噪声只影响 $Var (\varepsilon)$；在训练集中，噪声同时影响偏差和方差&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_12_statistical_justifications_for_regression/768e12a5f7e9de77d1e229b0d99807f4.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_12_statistical_justifications_for_regression/768e12a5f7e9de77d1e229b0d99807f4.png" width="800"&gt;
 &lt;/figure&gt;
-&lt;p&gt;左图中黑色线条为真实的函数，所有点在真实的分布上添加噪声采样而得，不同颜色的曲线分别是使用不同阶数拟合数据得到的曲线。中间灰色的曲线表示训练误差随模型阶数变化的曲线，红色的是测试误差随训练阶数变化的曲线。右边红色曲线是测试集上的平方误差（包含了偏差和方差）随结束变化的曲线，绿色的表示偏差，红色的表示方差&lt;/p&gt;</description></item><item><title>机器学习 11 回归 II：牛顿法和ROC曲线</title><link>https://zhiim.github.io/p/ml_11_newtons_method_and_roc_curve/</link><pubDate>Fri, 26 Sep 2025 16:50:48 +0800</pubDate><guid>https://zhiim.github.io/p/ml_11_newtons_method_and_roc_curve/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 11 回归 II：牛顿法和ROC曲线" /&gt;&lt;h2 id="最小二乘多项式回归"&gt;最小二乘多项式回归
+&lt;p&gt;左图中黑色线条为真实的函数，所有点在真实的分布上添加噪声采样而得，不同颜色的曲线分别是使用不同阶数拟合数据得到的曲线。中间灰色的曲线表示训练误差随模型阶数变化的曲线，红色的是测试误差随训练阶数变化的曲线。右边红色曲线是测试集上的平方误差（包含了偏差和方差）随结束变化的曲线，绿色的表示偏差，红色的表示方差&lt;/p&gt;</description></item><item><title>机器学习 11 回归 II：牛顿法和ROC曲线</title><link>https://xland.cc/p/ml_11_newtons_method_and_roc_curve/</link><pubDate>Fri, 26 Sep 2025 16:50:48 +0800</pubDate><guid>https://xland.cc/p/ml_11_newtons_method_and_roc_curve/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 11 回归 II：牛顿法和ROC曲线" /&gt;&lt;h2 id="最小二乘多项式回归"&gt;最小二乘多项式回归
 &lt;/h2&gt;&lt;p&gt;我们可以使用一个非线性的多项式特征 $\Phi(X_i)$ 来替代 $X_i$，例如
 &lt;/p&gt;
 $$\Phi(X_i) = \begin{bmatrix}X_{i1}^2 &amp; X_{i1}X_{i2} &amp; X_{i2}^2 &amp; X_{i1} &amp; X_{i2} &amp; 1\end{bmatrix}$$&lt;p&gt;一旦我们创建了多项式特征向量，接下来的流程将和线性回归或 logistic 回归一致&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_11_newtons_method_and_roc_curve/cf75b6b805ca2a0356e57df81c422205.png" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_11_newtons_method_and_roc_curve/cf75b6b805ca2a0356e57df81c422205.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;不同次数的拟合效果&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -695,7 +695,7 @@ $$\Phi(X_i) = \begin{bmatrix}X_{i1}^2 &amp; X_{i1}X_{i2} &amp; X_{i2}^2 &amp; X_
 &lt;p&gt;同样，我们可以通过计算梯度为 0 的点求解 $w$，即 $X^T\Omega X w = X^T \Omega y$&lt;/p&gt;
 &lt;h2 id="牛顿法"&gt;牛顿法
 &lt;/h2&gt;&lt;p&gt;牛顿法是一种迭代寻找函数 $J(w)$ 的最优解的方法（$J(w)$ 必须是光滑的），通常比梯度下降更快&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_11_newtons_method_and_roc_curve/2fd9b53968905775ad1c3b725df770c4.png" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_11_newtons_method_and_roc_curve/2fd9b53968905775ad1c3b725df770c4.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;牛顿法的迭代过程&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -761,7 +761,7 @@ logistic 回归对于距离边界不同距离的点施加的权重不同，而 L
 &lt;li&gt;logistic 回归对非高斯数据的鲁棒性更好&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="roc-曲线"&gt;ROC 曲线
-&lt;/h2&gt;&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_11_newtons_method_and_roc_curve/5c9e60da29954ce37ea6a4c984ed5340.png" width="800"&gt;&lt;figcaption&gt;
+&lt;/h2&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_11_newtons_method_and_roc_curve/5c9e60da29954ce37ea6a4c984ed5340.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;ROC曲线&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -773,7 +773,7 @@ logistic 回归对于距离边界不同距离的点施加的权重不同，而 L
 &lt;li&gt;曲线到右边的水平距离表示真阴性的比例&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;右上角的点表示永远被判别为正例，左下角的点表示永远被判别为负例，对角线表示一个随机分类器&lt;/p&gt;
-&lt;p&gt;通过计算 ROC 曲面下的面积可以衡量一个分类器的好坏，面积为 1 表示分类器永远可以正确分类，面积为 0.5 表示一个随机分类器&lt;/p&gt;</description></item><item><title>机器学习 10 回归 I：最小二乘回归和逻辑回归</title><link>https://zhiim.github.io/p/ml_10_regression/</link><pubDate>Sun, 22 Jun 2025 20:29:21 +0800</pubDate><guid>https://zhiim.github.io/p/ml_10_regression/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 10 回归 I：最小二乘回归和逻辑回归" /&gt;&lt;h2 id="回归问题"&gt;回归问题
+&lt;p&gt;通过计算 ROC 曲面下的面积可以衡量一个分类器的好坏，面积为 1 表示分类器永远可以正确分类，面积为 0.5 表示一个随机分类器&lt;/p&gt;</description></item><item><title>机器学习 10 回归 I：最小二乘回归和逻辑回归</title><link>https://xland.cc/p/ml_10_regression/</link><pubDate>Sun, 22 Jun 2025 20:29:21 +0800</pubDate><guid>https://xland.cc/p/ml_10_regression/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 10 回归 I：最小二乘回归和逻辑回归" /&gt;&lt;h2 id="回归问题"&gt;回归问题
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;分类问题：给定样本点 $x$，预测类别&lt;/li&gt;
 &lt;li&gt;回归问题：给定样本点 $x$，预测数值&lt;/li&gt;
@@ -809,7 +809,7 @@ logistic 回归对于距离边界不同距离的点施加的权重不同，而 L
 &lt;h2 id="最小二乘回归"&gt;最小二乘回归
 &lt;/h2&gt;&lt;p&gt;线性回归函数 + 平方损失 + 平均代价&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;问题描述&lt;/strong&gt;：寻找$w$，$\alpha$使得$\sum_{i = 1}^n (X_i \cdot w + \alpha - y_i)^2$最小。如果将偏置$\alpha$包含在权重$w$中，使$w$为一个$d+1$维的向量，那么上述优化问题可以表述成最小化$RSS(w) = \| X w - y \|^2$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_10_regression/elfebiapeohphceccdmmh_lineregress.png" width="300"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_10_regression/elfebiapeohphceccdmmh_lineregress.png" width="300"&gt;
 &lt;/figure&gt;
 &lt;p&gt;$RSS(w)$为凸函数，在导数为$0$达到最小值，即$2X^TXw - 2X^T y = 0$，解得$w = (X^T X)^{-1} X^T y$&lt;/p&gt;
 &lt;p&gt;上式包含一个假设，即$X^T X$是非奇异的（如果某些样本点共线或者共面），反之解不唯一或不存在&lt;/p&gt;
@@ -826,7 +826,7 @@ logistic 回归对于距离边界不同距离的点施加的权重不同，而 L
 &lt;p&gt;问题描述：寻找$w$使其可以最小化代价函数&lt;/p&gt;
 $$
 J = \sum_{i = 1} ^n L(s(X_i \cdot w), y_i) = -\sum_{i = 1}^n \left( y_i \ln s(X_i \cdot w) + (1 - y_i) \ln(1 - s(X_i \cdot w)) \right)
-$$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_10_regression/mgkmohcmgbfcdfmpjapkc_logloss.png" width="800"&gt;
+$$&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_10_regression/mgkmohcmgbfcdfmpjapkc_logloss.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;可以看出，在预测概率$\hat{y}$和真实概率相同的条件下，logistics损失达到最小值&lt;/p&gt;
 &lt;p&gt;逻辑回归的代价函数$J(w)$是凸的，可以通过梯度下降法求解&lt;/p&gt;
@@ -856,7 +856,7 @@ $$&lt;p&gt;对于线性可分数据，逻辑回归的梯度下降法虽然能保
 &lt;p&gt;logistic的形式和LDA类似，所以我们也可以不使用高斯分布拟合数据，而是直接通过logistic函数去拟合概率&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>机器学习 09 高斯判别分析 IV：各向异性高斯</title><link>https://zhiim.github.io/p/ml_09_anisotropic_gaussian_discriminant_analysis/</link><pubDate>Sat, 21 Jun 2025 20:02:09 +0800</pubDate><guid>https://zhiim.github.io/p/ml_09_anisotropic_gaussian_discriminant_analysis/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 09 高斯判别分析 IV：各向异性高斯" /&gt;&lt;p&gt;我们已经定义了多维正态分布&lt;/p&gt;
+&lt;/div&gt;</description></item><item><title>机器学习 09 高斯判别分析 IV：各向异性高斯</title><link>https://xland.cc/p/ml_09_anisotropic_gaussian_discriminant_analysis/</link><pubDate>Sat, 21 Jun 2025 20:02:09 +0800</pubDate><guid>https://xland.cc/p/ml_09_anisotropic_gaussian_discriminant_analysis/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 09 高斯判别分析 IV：各向异性高斯" /&gt;&lt;p&gt;我们已经定义了多维正态分布&lt;/p&gt;
 $$
 f(x)=n(q(x)),\quad n(q) = \frac{1}{\sqrt{(2\pi)^d|\Sigma|}}e^{-q/2},\quad q(x)=(x-\mu)^T \Sigma^{-1} (x-\mu)
 $$&lt;p&gt;其中有三个重要的矩阵：&lt;/p&gt;
@@ -887,7 +887,7 @@ Q_C(x) &amp;= \ln \left( (\sqrt{2\pi})^d f_{X|Y=C}(x) \pi_C \right) \\
 &amp;= -\frac{1}{2} (x - \mu_C)^T \Sigma_C^{-1} (x - \mu_C) - \frac{1}{2} \ln |\Sigma_C | + \ln \pi_C
 \end{align*}
 $$&lt;p&gt;在多类别的条件下，只需要选择最大的判别函数对应的类别&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussian_discriminant_analysis/idbaiabafbhhfjokhpjge_qdaaniso.png" width="700"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_09_anisotropic_gaussian_discriminant_analysis/idbaiabafbhhfjokhpjge_qdaaniso.png" width="700"&gt;
 &lt;/figure&gt;
 &lt;p&gt;上图中，在两个类别的场景下 &lt;/p&gt;
 &lt;ul&gt;
@@ -911,7 +911,7 @@ $$&lt;p&gt;其中决策边界为$w^T x + \alpha = 0$ &lt;/p&gt;
 &lt;p&gt;多类别LDA的情况：选择使线性判别函数最大的类别$C$，判别函数的定义为&lt;/p&gt;
 $$
 \mu_C^T \Sigma^{-1} x - \frac{\mu_C^T \Sigma^{-1} \mu_C}{2} + \ln \pi_C
-$$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussian_discriminant_analysis/mgflipbagfemehelhcdco_lda.png" width="700"&gt;
+$$&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_09_anisotropic_gaussian_discriminant_analysis/mgflipbagfemehelhcdco_lda.png" width="700"&gt;
 &lt;/figure&gt;
 &lt;h3 id="qda和lda的对比"&gt;QDA和LDA的对比
 &lt;/h3&gt;&lt;p&gt;在两个类别的条件下，虽然我们估计了高斯分布地较多参数，但是在决策函数$Q_C(x) - Q_D(x)$中 &lt;/p&gt;
@@ -919,7 +919,7 @@ $$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussia
 &lt;li&gt;LDA有$d+1$个参数（包括$w$的$d$个参数和$\alpha$的1个参数），所以LDA更加容易欠拟合&lt;/li&gt;
 &lt;li&gt;QDA有$\frac{d(d+3)}{2}+1$个参数&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，所以QDA更加容易过拟合&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussian_discriminant_analysis/bhbfopmiekcmoiaojilbm_ldaqda.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_09_anisotropic_gaussian_discriminant_analysis/bhbfopmiekcmoiaojilbm_ldaqda.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;在上图中，贝叶斯决策边界是紫色的虚线，QDA决策边界是绿色的实线，LDA的决策边界是黑色的点线。当贝叶斯决策边界是线性的时，LDA可以得到更加稳定的拟合，而QDA可能过拟合；当贝叶斯决策边界是曲线时，QDA可能得到更好的拟合效果&lt;/p&gt;
 &lt;p&gt;改变先验概率$\pi$或者损失，等价于对决策函数施加额外的常数偏置&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
@@ -934,7 +934,7 @@ $$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussia
 &lt;li&gt;&lt;strong&gt;对&lt;/strong&gt;$\dot{X}$&lt;strong&gt;球化&lt;/strong&gt;：$W=\dot{X} \text{Var}(R)^{-1/2}$&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;对$X$白化&lt;/strong&gt;：中心化+球化，$X \rightarrow \dot{X} \rightarrow W$&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussian_discriminant_analysis/pdmaoalfaajlfpbdfmaho_white.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_09_anisotropic_gaussian_discriminant_analysis/pdmaoalfaajlfpbdfmaho_white.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;白化被应用到很多机器学习算法，例如支持向量机和神经网络。某些特征的数值可能远大于其他特征，例如它们的测量单位不同。SVM 对由数值大的特征的惩罚，会比对数值小的特征更重&lt;/p&gt;
 &lt;div class="footnotes" role="doc-endnotes"&gt;
@@ -953,10 +953,10 @@ $$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_09_anisotropic_gaussia
 &lt;p&gt;$\Sigma^{1/2}$将球面映射到椭球面&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>机器学习 08 高斯判别分析 III：特征向量和多维正态分布</title><link>https://zhiim.github.io/p/ml_08_eigenvectors_and_multivariate_normal/</link><pubDate>Wed, 18 Jun 2025 20:45:13 +0800</pubDate><guid>https://zhiim.github.io/p/ml_08_eigenvectors_and_multivariate_normal/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 08 高斯判别分析 III：特征向量和多维正态分布" /&gt;&lt;h2 id="特征向量"&gt;特征向量
+&lt;/div&gt;</description></item><item><title>机器学习 08 高斯判别分析 III：特征向量和多维正态分布</title><link>https://xland.cc/p/ml_08_eigenvectors_and_multivariate_normal/</link><pubDate>Wed, 18 Jun 2025 20:45:13 +0800</pubDate><guid>https://xland.cc/p/ml_08_eigenvectors_and_multivariate_normal/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 08 高斯判别分析 III：特征向量和多维正态分布" /&gt;&lt;h2 id="特征向量"&gt;特征向量
 &lt;/h2&gt;&lt;p&gt;给定一个方阵 $A$，如果存在一个向量 $v \neq 0$ 和常量 $\lambda$，满足 $Av = \lambda v$，那么 $v$ 是 $A$ 的一个&lt;em&gt;特征向量&lt;/em&gt;，$\lambda$ 是与其对应的 $A$ 的&lt;em&gt;特征值&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;特征向量乘以 $A$ 后，仍然指向相同的或者相反的方向&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_08_eigenvectors_and_multivariate_normal/a7a757292e2db8db86aa71b068909864.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_08_eigenvectors_and_multivariate_normal/a7a757292e2db8db86aa71b068909864.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;strong&gt;定理&lt;/strong&gt;：如果 $v$ 是 $A$ 的特征向量，并且其对应的特征值为 $\lambda$，那么 $v$ 也是 $A^k$ 的特征向量，对应的特征值为 $\lambda^k$&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;谱定理（Spectral Theorem）&lt;/em&gt;：每个 $n \times n$ 维的实对称矩阵有 $n$ 个实数特征值和 $n$ 个特征向量，并且不同特征值的特征向量之间正交&lt;/p&gt;
@@ -984,7 +984,7 @@ $$A=V\Lambda V^T = \sum_{i=1}^n \lambda_iv_iv_i^T$$&lt;p&gt;
 &lt;/ul&gt;
 &lt;h3 id="二次型-quadratic-form"&gt;二次型 Quadratic Form
 &lt;/h3&gt;&lt;p&gt;矩阵 $M$ 的&lt;em&gt;二次型&lt;/em&gt;为 $x^T M x$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_08_eigenvectors_and_multivariate_normal/ba5e1ff1111e4bdf4842bcbe5606415a.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_08_eigenvectors_and_multivariate_normal/ba5e1ff1111e4bdf4842bcbe5606415a.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;假设我们已知一个二次型 $q_s(z)=z^TIz =\|z\|^2$ ，它的等值线为圆形如上图左边&lt;br&gt;
 我们有一个变化矩阵&lt;/p&gt;
@@ -1015,7 +1015,7 @@ $$q_e(x) = q_s(A^{-1}x) = \|A^{-1}x\|^2=x^TA^{-2}x$$&lt;p&gt;
 &lt;li&gt;如果既不是半正定矩阵又不是半负定矩阵，则 $M$ 是&lt;em&gt;不定矩阵&lt;/em&gt;（indefinite matrix）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;em&gt;可逆矩阵&lt;/em&gt;$\Leftrightarrow$ 行列式不为 0 $\Leftrightarrow$ 没有 0 特征值&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_08_eigenvectors_and_multivariate_normal/006cc46996cef0e17c1fedafb5494261.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_08_eigenvectors_and_multivariate_normal/006cc46996cef0e17c1fedafb5494261.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;对于正定矩阵，它在所有方向上束缚住了曲面，形成了一个封闭的椭球面；而半正定矩阵在某些方向松开，使得曲面可以在这些方向无限延生，形成了柱面；如果不是正定矩阵，则为双曲面&lt;/p&gt;
 &lt;h2 id="各向异性高斯-anisotropic-gaussians"&gt;各向异性高斯 Anisotropic Gaussians
@@ -1023,7 +1023,7 @@ $$q_e(x) = q_s(A^{-1}x) = \|A^{-1}x\|^2=x^TA^{-2}x$$&lt;p&gt;
 $$f(x) = \frac{1}{\sqrt{(2\pi)^d|\Sigma|}}\exp(-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu))$$&lt;p&gt;其中 $\Sigma$ 是一个半正定矩阵，被称为&lt;em&gt;协方差矩阵&lt;/em&gt;；$\Sigma^{-1}$ 也是半正定矩阵，被称为&lt;em&gt;精度矩阵（precision matrix）&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;如果把概率密度函数写成 $f(x)=n(q(x))$，其中 $q(x)=(x-\mu)^T\Sigma^{-1}(x-\mu)$&lt;br&gt;
 $q(x)$ 是一个中心在 $\mu$ 的柱面，由精度矩阵 $\Sigma^{-1}$ 决定；$n(\cdot)$ 是一个单调凸函数，不会改变等值面的形状（只改变数值，不改变性质和位置，如下图）&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_08_eigenvectors_and_multivariate_normal/1e87ef8d639d80002631fba7a0531532.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_08_eigenvectors_and_multivariate_normal/1e87ef8d639d80002631fba7a0531532.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;对于高斯随机过程的概率密度函数来说，对应的等值面和 $q(x)=(x-\mu)^T\Sigma^{-1}(x-\mu)$ 相同，只是经过了数值缩放。它在均值 $\mu$ 处到达最大值，在远离 $\mu$ 处逐渐趋近于零&lt;/p&gt;
 &lt;p&gt;$q(x)$ 也等于 $\Sigma^{-1 / 2}x$ 到 $\Sigma^{-1 / 2}\mu$ 的距离的平方，即
@@ -1047,12 +1047,12 @@ $$&lt;p&gt;对于一个符合高斯分布的变量 $R \sim \mathcal{N}(\mu, \Sig
 &lt;/ul&gt;
 &lt;p&gt;如果 $Var(R)=\Sigma$ 是一个对角矩阵，并且满足多维高斯分布（向量中的每个元素互相独立）&lt;br&gt;
 $\Leftrightarrow f(R) = f(R_1)f(R_2)\cdots f(R_d)$&lt;br&gt;
-$\Rightarrow$ 椭球面是轴对齐的，并且 $\Sigma$ 的对角元素等于半径的平方&lt;/p&gt;</description></item><item><title>机器学习 07 高斯判别分析 II：各向同性高斯</title><link>https://zhiim.github.io/p/ml_07_gaussian_discriminant_analysis/</link><pubDate>Fri, 23 May 2025 23:21:38 +0800</pubDate><guid>https://zhiim.github.io/p/ml_07_gaussian_discriminant_analysis/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 07 高斯判别分析 II：各向同性高斯" /&gt;&lt;h2 id="高斯判别分析-gaussian-discriminant-analysis"&gt;高斯判别分析 Gaussian Discriminant Analysis
+$\Rightarrow$ 椭球面是轴对齐的，并且 $\Sigma$ 的对角元素等于半径的平方&lt;/p&gt;</description></item><item><title>机器学习 07 高斯判别分析 II：各向同性高斯</title><link>https://xland.cc/p/ml_07_gaussian_discriminant_analysis/</link><pubDate>Fri, 23 May 2025 23:21:38 +0800</pubDate><guid>https://xland.cc/p/ml_07_gaussian_discriminant_analysis/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 07 高斯判别分析 II：各向同性高斯" /&gt;&lt;h2 id="高斯判别分析-gaussian-discriminant-analysis"&gt;高斯判别分析 Gaussian Discriminant Analysis
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;基本假设&lt;/strong&gt;：每个类别服从高斯分布&lt;/p&gt;
 $$X \sim \mathcal{N}(\mu, \sigma^2): f(x) = \frac{1}{(\sqrt{2 \pi} \sigma)^d}\exp{\left( -\frac{\|x - \mu\|^2}{2\sigma^2} \right)}$$&lt;p&gt;其中 $x,\mu$ 是向量，$\sigma$ 是标量，$d$ 表示维度。（注：这里使用的正态分布公式是一个简化版本，它假设数据在所有的特征维度上的方差相同，并且不考虑不同特征之间的相关性）&lt;/p&gt;
 &lt;p&gt;对于每个类别 $C$，假设我们知道了均值 $\mu_C$ 和协方差 $\sigma_C^2$，那么我们就可以根据上述高斯分布公式，将均值和方差代入确定概率密度函数 $f_{X|Y=C}(x)$。同时假设前验概率 $\pi_C=P(Y = C)$ 已知&lt;/p&gt;
 &lt;p&gt;在给定观测 $x$ 的条件下，贝叶斯决策准则 $r^*(x)$ 根据最大化 $f_{X|Y=C}(x)$ 来判决类别 $C$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_07_gaussian_discriminant_analysis/9265fadf674aa9dfce38e558124f5253.png" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_07_gaussian_discriminant_analysis/9265fadf674aa9dfce38e558124f5253.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;两个类别的概率密度函数&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1073,12 +1073,12 @@ $$P(Y = C | X = x) = \frac{f_{X | Y = C}\pi_C}{f_{X | Y = C}\pi_C + f_{X | Y = D
 &lt;/p&gt;
 $$P(Y = C | X = x) = \frac{e^{Q_C(x)}}{e^{Q_C(x)} + e^{Q_D(x)}} = s(Q_C(x) - Q_D(x))$$&lt;p&gt;
 其中 $s(\gamma)=\frac{1}{1 + e^{-\gamma}}$ 是 Logistic 函数也即是 Sigmoid 函数&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_07_gaussian_discriminant_analysis/19ef8537b1068b93b5d7ac865151ebe4.png" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_07_gaussian_discriminant_analysis/19ef8537b1068b93b5d7ac865151ebe4.png" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;Logistic函数&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;Logistic 函数满足 $s(0) = 0.5$，也就是说当 $Q_C(x) = Q_D(x)$ 时，判别成两种类型的概率均等&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_07_gaussian_discriminant_analysis/3560589dbc4fdc3bf12bef2f35ec6c2d.png" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_07_gaussian_discriminant_analysis/3560589dbc4fdc3bf12bef2f35ec6c2d.png" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;多类别QDA判决边界&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1093,7 +1093,7 @@ $$Q_C(x) - Q_D(x) = \underbrace{\frac{(\mu_C - \mu_D) \cdot x}{\sigma^2}}_{w \cd
 &lt;/ul&gt;
 &lt;p&gt;特殊情况：如果 $\pi_C = \pi_D = 0.5$，那么决策边界变为 $(\mu_C - \mu_D) \cdot x - (\mu_C - \mu_D) \cdot \left( \frac{\mu_C + \mu_D}{2} \right) = 0$，此时变成了质心法&lt;/p&gt;
 &lt;p&gt;多类别 LDA：选择类别 C，最大化线性决策函数 $\frac{\mu_C \cdot x}{\sigma^2} - \frac{\|\mu_C\|^2}{2\sigma^2} + \ln\pi_C$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_07_gaussian_discriminant_analysis/823390d4a186991b57d5fe3eb459e2ad.png" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_07_gaussian_discriminant_analysis/823390d4a186991b57d5fe3eb459e2ad.png" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;多类别LDA决策边界&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1125,7 +1125,7 @@ $$
 $$&lt;p&gt;对于 QDA，分别使用类别内的数据点每个类别 C 的均值和方差，使用所有数据点估计前验概率 $\hat{\pi}_C = \frac{n_C}{\sum_D n_D}$&lt;/p&gt;
 &lt;p&gt;对于 LDA，使用同样的方法估计每个类别的均值以及前验概率，然后使用所有数据估计方差
 &lt;/p&gt;
-$$\hat{\sigma}^2 = \frac{1}{dn} \sum_C \sum_{\{i:y_i = c\}} \|X_i - \hat{\mu}_C\|^2$$</description></item><item><title>机器学习 06 高斯判别分析 I：决策理论</title><link>https://zhiim.github.io/p/ml_06_decision_theory/</link><pubDate>Fri, 23 May 2025 14:43:55 +0800</pubDate><guid>https://zhiim.github.io/p/ml_06_decision_theory/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 06 高斯判别分析 I：决策理论" /&gt;&lt;h2 id="决策理论亦风险最小化"&gt;决策理论亦风险最小化
+$$\hat{\sigma}^2 = \frac{1}{dn} \sum_C \sum_{\{i:y_i = c\}} \|X_i - \hat{\mu}_C\|^2$$</description></item><item><title>机器学习 06 高斯判别分析 I：决策理论</title><link>https://xland.cc/p/ml_06_decision_theory/</link><pubDate>Fri, 23 May 2025 14:43:55 +0800</pubDate><guid>https://xland.cc/p/ml_06_decision_theory/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 06 高斯判别分析 I：决策理论" /&gt;&lt;h2 id="决策理论亦风险最小化"&gt;决策理论亦风险最小化
 &lt;/h2&gt;&lt;p&gt;如果多个属于不同类别的样本点可能处于同一个位置（例如训练数据中，升高为 1.70m 的样本，可能男性和女性同样存在），此时我们没法通过一个分类器直接将样本划分为某一种类别，所以我们需要一个概率分类器，输出当前样本为某种类别的概率&lt;/p&gt;
 &lt;p&gt;贝叶斯定理：&lt;/p&gt;
 $$P(Y| X) = \frac{P(X| Y) P(Y)}{P(X)}$$&lt;p&gt;其中 $P(Y | X)$ 表示观测到 $X$ 的条件下事件 $Y$ 发生的后验概率，$ P(Y)$ 表示事件发生的先验概率。&lt;/p&gt;
@@ -1189,7 +1189,7 @@ $$&lt;p&gt;当损失函数 $L$ 是对称的时，$r^*$ 就是&lt;strong&gt;选�
 &lt;p&gt;&lt;strong&gt;获得使风险函数最小的 $r^*$ 的过程被称为&lt;em&gt;风险最小化&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id="连续概率分布"&gt;连续概率分布
 &lt;/h3&gt;&lt;p&gt;假设 $X$ 有一个连续的概率密度函数，则&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_06_decision_theory/cd3ee7bf682b292e11e2f7242823ff31.png" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_06_decision_theory/cd3ee7bf682b292e11e2f7242823ff31.png" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;概率密度函数&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1207,7 +1207,7 @@ r^* (x) = \begin{cases}
 \end{cases}
 $$&lt;p&gt;上式表示，在观测到数据 $x$ 时，如果它有更多的可能为类别 1 则被判别为类别 1，反之不为类别 1&lt;/p&gt;
 &lt;p&gt;我们可以画出 $f_{X | Y = 1}(x)P(Y = 1)$ 和 $f_{X | Y = -1}(x)P(Y = -1)$ 的概率密度曲线&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_06_decision_theory/872da1136c31970df2a4dc704d3e39fe.png" width="600"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_06_decision_theory/872da1136c31970df2a4dc704d3e39fe.png" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;贝叶斯最优决策边界&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1247,7 +1247,7 @@ $$R(r^*) = \int \min_{y = \pm 1} L(-y, y) f_{X |Y=y}(x) P(Y = y) dx$$&lt;h2 id="
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;相较于方法 3，方法 1 和 2 都可以直接给出估计正确的概率。相较于方法 2，方法 1 一般在有异常值和少量训练样本下更加稳定，但是现实问题中很难准确估计概率分布&lt;/p&gt;
-&lt;p&gt;如果数据服从高斯分布或者一个特定的概率分布，一般使用生成模型效果更稳定&lt;/p&gt;</description></item><item><title>机器学习 05 机器学习抽象和数值优化</title><link>https://zhiim.github.io/p/ml_05_machine_learning_abstractions_and_numerical_optimization/</link><pubDate>Fri, 23 May 2025 14:33:10 +0800</pubDate><guid>https://zhiim.github.io/p/ml_05_machine_learning_abstractions_and_numerical_optimization/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 05 机器学习抽象和数值优化" /&gt;&lt;h2 id="机器学习问题的抽象"&gt;机器学习问题的抽象
+&lt;p&gt;如果数据服从高斯分布或者一个特定的概率分布，一般使用生成模型效果更稳定&lt;/p&gt;</description></item><item><title>机器学习 05 机器学习抽象和数值优化</title><link>https://xland.cc/p/ml_05_machine_learning_abstractions_and_numerical_optimization/</link><pubDate>Fri, 23 May 2025 14:33:10 +0800</pubDate><guid>https://xland.cc/p/ml_05_machine_learning_abstractions_and_numerical_optimization/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 05 机器学习抽象和数值优化" /&gt;&lt;h2 id="机器学习问题的抽象"&gt;机器学习问题的抽象
 &lt;/h2&gt;&lt;p&gt;机器学习问题可以抽象成数据、模型、优化问题、优化算法四个层级&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;数据&lt;/strong&gt;&lt;/p&gt;
@@ -1277,7 +1277,7 @@ $$R(r^*) = \int \min_{y = \pm 1} L(-y, y) f_{X |Y=y}(x) P(Y = y) dx$$&lt;h2 id="
 &lt;p&gt;如果 $f$ 的导数也是连续的则称 $f$ 是&lt;em&gt;光滑&lt;/em&gt;的&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;全局最小值&lt;/em&gt;：对于任意 $v$，有 $f(w) \le f(v)$&lt;br&gt;
 &lt;em&gt;局部最小值&lt;/em&gt;：一个 $w$ 附近的区间内，对于任意 $v$，有 $f(w)\le f(v)$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_05_machine_learning_abstractions_and_numerical_optimization/bd8dc79dab48cd26c8f44288954b173a.png" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_05_machine_learning_abstractions_and_numerical_optimization/bd8dc79dab48cd26c8f44288954b173a.png" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;全局最小值和局部最小值&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1296,7 +1296,7 @@ $$R(r^*) = \int \min_{y = \pm 1} L(-y, y) f_{X |Y=y}(x) P(Y = y) dx$$&lt;h2 id="
 &lt;/h3&gt;&lt;p&gt;线性目标函数 + 线性约束函数&lt;/p&gt;
 &lt;p&gt;目标：寻找 $w$ 最大化（或者最小化）$c \cdot w$，并满足 $Aw \le b$&lt;br&gt;
 其中 $A$ 是一个 $n \times d$ 维度的矩阵，$b \in \mathbb{R}^n$。所以上述不等式包含了 $n$ 个线性约束&lt;/p&gt;
-$$A_i \cdot w \le b_i, \quad i \in [1, n]$$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_05_machine_learning_abstractions_and_numerical_optimization/dc81dbe98ddeaa023a6b39498a59a4f0.png" width="800"&gt;&lt;figcaption&gt;
+$$A_i \cdot w \le b_i, \quad i \in [1, n]$$&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_05_machine_learning_abstractions_and_numerical_optimization/dc81dbe98ddeaa023a6b39498a59a4f0.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;线性规划&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1309,19 +1309,19 @@ $$A_i \cdot w \le b_i, \quad i \in [1, n]$$&lt;figure&gt;&lt;img src="https://zh
 &lt;/h3&gt;&lt;p&gt;二次凸目标函数 + 线性不等式约束&lt;/p&gt;
 &lt;p&gt;目标：寻找 $w$ 最小化 $f(w) = w^T Q w + c^T w$，并满足 $Aw \le b$&lt;br&gt;
 其中 $Q$ 是一个对称半正定矩阵&lt;/p&gt;
-&lt;p&gt;如果 $Q$ 是一个&lt;em&gt;正定矩阵&lt;/em&gt;，目标函数是严格凸的，那么二次规划只有一个唯一的全局最优解（如果有解的话）。如果 $Q$ 是一个&lt;em&gt;半正定矩阵&lt;/em&gt;，目标函数是凸的，但不一定是严格凸的，可能有多个目标函数值相同的全局最优解。如果 $Q$ 是非正定的，目标函数是非凸的，可能存在多个局部最优解，求解全局最优解通常是 NP-hard&lt;/p&gt;</description></item><item><title>机器学习 04 支持向量机</title><link>https://zhiim.github.io/p/ml_04_support_vector_machine/</link><pubDate>Wed, 21 May 2025 12:41:59 +0800</pubDate><guid>https://zhiim.github.io/p/ml_04_support_vector_machine/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 04 支持向量机" /&gt;&lt;h2 id="软间隔支持向量机"&gt;软间隔支持向量机
+&lt;p&gt;如果 $Q$ 是一个&lt;em&gt;正定矩阵&lt;/em&gt;，目标函数是严格凸的，那么二次规划只有一个唯一的全局最优解（如果有解的话）。如果 $Q$ 是一个&lt;em&gt;半正定矩阵&lt;/em&gt;，目标函数是凸的，但不一定是严格凸的，可能有多个目标函数值相同的全局最优解。如果 $Q$ 是非正定的，目标函数是非凸的，可能存在多个局部最优解，求解全局最优解通常是 NP-hard&lt;/p&gt;</description></item><item><title>机器学习 04 支持向量机</title><link>https://xland.cc/p/ml_04_support_vector_machine/</link><pubDate>Wed, 21 May 2025 12:41:59 +0800</pubDate><guid>https://xland.cc/p/ml_04_support_vector_machine/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 04 支持向量机" /&gt;&lt;h2 id="软间隔支持向量机"&gt;软间隔支持向量机
 &lt;/h2&gt;&lt;p&gt;硬间隔 SVM 存在两个问题：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如果数据不是线性可分的，则算法将会失效；&lt;/li&gt;
 &lt;li&gt;对极端值（outliers）敏感，例如右图添加了一个极端值，严重改变了决策边界。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_04_support_vector_machine/2f171bd2708ce6c0d926e02aabfacc60.png" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_04_support_vector_machine/2f171bd2708ce6c0d926e02aabfacc60.png" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;异常值造成了决策边界的偏移&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;em&gt;软间隔支持向量机&lt;/em&gt;：通过引入&lt;em&gt;松弛变量&lt;/em&gt;，允许一些样本点违背最小间隔的约束，此时约束条件可以变为&lt;/p&gt;
 $$y_i (X_i \cdot w + \alpha) \ge 1 - \xi_i$$&lt;p&gt;其中 $\xi_i$ 为引入的松弛变量，满足 $\xi_i \ge 0$。只有当样本点违背最小间隔约束时，松弛变量 $\xi_i$ 不为 $0$。&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_04_support_vector_machine/f3ea99726ceb561f856e542debef3c17.png" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_04_support_vector_machine/f3ea99726ceb561f856e542debef3c17.png" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;松弛变量存在的情况&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1366,7 +1366,7 @@ $$&lt;p&gt;这是一个 $d + n + 1$ 维空间的、具有 $2n$ 个约束项的�
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_04_support_vector_machine/8d7ca67f5ea4176993da2f0615155dae.png" width="600"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_04_support_vector_machine/8d7ca67f5ea4176993da2f0615155dae.png" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;不同C值的决策边界，右下方C更大&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1381,7 +1381,7 @@ $$
 x \\ \|x\|^2
 \end{bmatrix}
 \end{align*}
-$$&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_04_support_vector_machine/851322ecf7bca26253ddb6646d6d3ab3.png" width="600"&gt;&lt;figcaption&gt;
+$$&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_04_support_vector_machine/851322ecf7bca26253ddb6646d6d3ab3.png" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;点被提升到抛物面&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1400,7 +1400,7 @@ x \\ \|x\|^2
 \end{align*}
 $$&lt;p&gt;其中 $\begin{bmatrix}-2c^T &amp; 1\end{bmatrix}$ 是 $\mathbb{R}^{d + 1}$ 中的法向量，而 $\Phi(x)$ 表示 $\mathbb{R}^{d + 1}$ 中的一个点，所以 $\mathbb{R}^{d}$ 中的超球面内等价于 $\mathbb{R}^{d + 1}$ 中的超平面以下。&lt;/p&gt;
 &lt;h3 id="样例-2椭球体双曲面抛物面决策边界"&gt;样例 2：椭球体/双曲面/抛物面决策边界
-&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_04_support_vector_machine/354198eae8587f9626e0af64267a4c63.png" width="600"&gt;&lt;figcaption&gt;
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_04_support_vector_machine/354198eae8587f9626e0af64267a4c63.png" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;不同的二次曲面&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1420,7 +1420,7 @@ A &amp; B &amp; C &amp; D &amp; E &amp; F &amp; G &amp; H &amp; I
 \end{align*}
 $$&lt;p&gt;此时，决策函数可以为任意二次多项式，决策超曲面可以为任意二次曲面。$\Phi-$ 空间的线性决策边界等价于 $x-$ 空间的二次曲面分类边界。&lt;/p&gt;
 &lt;h3 id="样例-3-次多项式作为决策函数"&gt;样例 3：$p$ 次多项式作为决策函数
-&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_04_support_vector_machine/3e4fe1b91d90ca7b5db1e13b5952e64c.png" width="600"&gt;&lt;figcaption&gt;
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_04_support_vector_machine/3e4fe1b91d90ca7b5db1e13b5952e64c.png" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;拥有不同次方的决策函数的硬支持向量机：1，2，5&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1472,8 +1472,8 @@ $$
 &amp; 0 \le \alpha_i \le C, \quad i = 1,2,\dots,n
 \end{aligned}
 \end{align*}
-$$&lt;p&gt;此时我们可以在核函数 $K(x, z)$ 对应的高维特征空间 $\mathcal{H}$ 中寻找一个线性决策超平面，但是参数学习是在低维输入空间 $\mathcal{X}$ 进行的，这称为支持向量机的&lt;em&gt;核技巧&lt;/em&gt;。&lt;/p&gt;</description></item><item><title>机器学习 03 感知机 II：感知机学习和最大间隔分类器</title><link>https://zhiim.github.io/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/</link><pubDate>Mon, 19 May 2025 16:29:23 +0800</pubDate><guid>https://zhiim.github.io/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 03 感知机 II：感知机学习和最大间隔分类器" /&gt;&lt;h2 id="感知机算法"&gt;感知机算法
-&lt;/h2&gt;&lt;p&gt;在 &lt;a class="link" href="https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/#%e6%84%9f%e7%9f%a5%e6%9c%ba" target="_blank" rel="noopener"
+$$&lt;p&gt;此时我们可以在核函数 $K(x, z)$ 对应的高维特征空间 $\mathcal{H}$ 中寻找一个线性决策超平面，但是参数学习是在低维输入空间 $\mathcal{X}$ 进行的，这称为支持向量机的&lt;em&gt;核技巧&lt;/em&gt;。&lt;/p&gt;</description></item><item><title>机器学习 03 感知机 II：感知机学习和最大间隔分类器</title><link>https://xland.cc/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/</link><pubDate>Mon, 19 May 2025 16:29:23 +0800</pubDate><guid>https://xland.cc/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 03 感知机 II：感知机学习和最大间隔分类器" /&gt;&lt;h2 id="感知机算法"&gt;感知机算法
+&lt;/h2&gt;&lt;p&gt;在 &lt;a class="link" href="https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/#%e6%84%9f%e7%9f%a5%e6%9c%ba" target="_blank" rel="noopener"
 &gt;机器学习 02 线性分类器和感知机——感知机&lt;/a&gt;中，我们将在 $x-$ 空间寻找分类超平面的问题转换为在 $w-$ 空间寻找一个最优点 $w$ 的问题。&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -1502,7 +1502,7 @@ $$&lt;p&gt;此时我们可以在核函数 $K(x, z)$ 对应的高维特征空间 
 &lt;li&gt;在 $x-$ 空间，存在一个超平面，分离了不同类别的点。所有属于类别 $C$ 的点与 $w$ 在超平面的同侧；所有不属于类别 $C$ 的点与 $w$ 在超平面的不同侧。&lt;/li&gt;
 &lt;li&gt;在 $w-$ 空间，每一个点 $X_i$ 对应了 $w-$ 空间一个超平面 $H_i$。如果 ${} X_i \in \text{class C}$，那么 $w$ 与 $X_i$ 在 $H_i$ 的同侧；反之，在不同侧。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/53660548c2812635c4ce367acba8da3b.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/53660548c2812635c4ce367acba8da3b.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;ul&gt;
 &lt;li&gt;在左图中，$x-$ 空间内寻找一个超平面，可以将蓝色的样本点 $C$ （类别为 $C$ 的点）和红色的样本点 $X$ （类别不为 $C$ 的点）正确分类，$w$ 是这个超平面的法线。并且 $w$ 和样本点 $C$ 处于同侧。&lt;/li&gt;
@@ -1512,7 +1512,7 @@ $$&lt;p&gt;此时我们可以在核函数 $K(x, z)$ 对应的高维特征空间 
 &lt;p&gt;现在我们需要在 $w-$ 空间中找出最优的 $w$，使其最小化 $R(w)$ 。&lt;/p&gt;
 &lt;p&gt;优化算法：对风险函数 $R(w)$ &lt;em&gt;梯度下降&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;首先初始化 $w$ 的值，然后计算 $R(w)$ 关于 $w$ 的梯度（即 $R(w)$ 增长最快的方向），然后在相反的方向移动一步。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;使用 &lt;a class="link" href="https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/#%e6%84%9f%e7%9f%a5%e6%9c%ba" target="_blank" rel="noopener"
+&lt;p&gt;使用 &lt;a class="link" href="https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/#%e6%84%9f%e7%9f%a5%e6%9c%ba" target="_blank" rel="noopener"
 &gt;机器学习 02 线性分类器和感知机——感知机&lt;/a&gt; 中定义的风险函数&lt;/p&gt;
 $$R(w) = \frac{1}{n} \sum_{i = 1}^n L(X_i \cdot w, y_i) = \frac{1}{n} \sum_{i = 1}^n -y_iX_i \cdot w$$&lt;p&gt;计算其梯度为&lt;/p&gt;
 $$
@@ -1554,7 +1554,7 @@ $$&lt;p&gt;此时我们的每个样本数据点存在于实数空间 $\mathbb{R}
 &lt;p&gt;&lt;em&gt;感知机收敛理论&lt;/em&gt;：如果数据是线性可分的，感知机算法可以在最多 $O(r^2/\gamma^2)$ 的迭代中找到一个可以将所有数据正确分类的分类器。其中 $r=\max{\|X_i\|}$ 是数据的半径，$\gamma$ 是最大间隔。&lt;/p&gt;
 &lt;h2 id="最大边界分类器"&gt;最大边界分类器
 &lt;/h2&gt;&lt;p&gt;一个线性分类器的&lt;em&gt;间隔&lt;/em&gt;是超平面到最近的一个训练样本点的距离。如果我们可以找到一个超平面，它的间隔最大，那么这个分类器最优（决策边界离所有的点距离最远，最不容易分类错误）。&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/1fde55281481c2de74c3cd3b96b57416.png" width="600"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/1fde55281481c2de74c3cd3b96b57416.png" width="600"&gt;
 &lt;/figure&gt;
 &lt;p&gt;如图，一个满足上述条件的超平面可以表示为 $w \cdot x + \alpha = 0$，那么平行于这个超平面的、经过最近的样本点的超平面可以表示为 $|w \cdot x + \alpha| = 1$（$1$ 只是为了方便讨论，也可以为 $w \cdot x + \alpha = k$，对 $k$ 归一化后也为 $1$）。&lt;/p&gt;
 &lt;p&gt;由于所有的样本点都在这两个最近超平面之外，所有样本点满足
@@ -1575,16 +1575,16 @@ $$
 $$&lt;p&gt;上述问题被称为在 $d + 1$ 维空间中，有 $n$ 个约束的的二次规划（quadratic program）。如果所有样本点线性可分，它有唯一解，反之无解。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;最小化 $\|w\|^2$ 而不是 $\|w\|$ 的原因：$\|w\|$ 在 0 处不平滑。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;上述方法可以得到一个&lt;em&gt;最大间隔分类器&lt;/em&gt;，即&lt;em&gt;硬间隔支持向量机&lt;/em&gt;（hard-margin support vector machine， SVM）。&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/eb9976478a95b52b81156b59409096c8.png" width="800"&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_03_perceptron_learning_and_maximum_margin_classifiers/eb9976478a95b52b81156b59409096c8.png" width="800"&gt;
 &lt;/figure&gt;
 &lt;p&gt;上图是 $(w_1, w_2, \alpha)$ 的三维空间。类别 $C$ 的样本点为法线的超平面为绿色，非类别 $C$ 的样本点为法线的超平面为红色。图中为 3 个样本点的情况。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;为了满足约束条件 $y_i (X_i \cdot w + \alpha) \ge 1$，$w, \alpha$ 存在于绿色超平面之上，红色超平面之下&lt;/li&gt;
 &lt;li&gt;为了满足 $\|w\|^2$ 最小，$w, \alpha$ 应该最接近 $\alpha$ 轴&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;和感知机算法类似，只有所有数据点线性可分时，硬边界 SVM 可行。&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>机器学习 02 感知机 I：线性分类器和感知机</title><link>https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/</link><pubDate>Sun, 18 May 2025 16:32:02 +0800</pubDate><guid>https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 02 感知机 I：线性分类器和感知机" /&gt;&lt;h2 id="分类器"&gt;分类器
+&lt;p&gt;&lt;strong&gt;和感知机算法类似，只有所有数据点线性可分时，硬边界 SVM 可行。&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>机器学习 02 感知机 I：线性分类器和感知机</title><link>https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/</link><pubDate>Sun, 18 May 2025 16:32:02 +0800</pubDate><guid>https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 02 感知机 I：线性分类器和感知机" /&gt;&lt;h2 id="分类器"&gt;分类器
 &lt;/h2&gt;&lt;p&gt;假设我们有 $n$ 个观测样例（bofservations），每个观测样例有 $d$ 个特征（features），有些样例属于类别 C，有些不是&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/decision_boudaries.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/decision_boudaries.webp" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;不同的决策边界&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1598,7 +1598,7 @@ f(x) &gt; 0 &amp; &amp; \text{if } x \in \text{class } C; \\
 f(x) \le 0 &amp; &amp; \text{if } x \notin \text{class } C;
 \end{matrix}
 $$&lt;p&gt;则分类边界为 $\{x\in \mathbb{R}^{d}: f(x)=0\}$&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/dc_2.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/dc_2.webp" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;分类边界&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1612,7 +1612,7 @@ $$&lt;p&gt;则分类边界为 $\{x\in \mathbb{R}^{d}: f(x)=0\}$&lt;/p&gt;
 &lt;li&gt;它是无限且平展的&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;$w$ 和超平面 $H$ 上的任何直线正交。所以 $w$ 被称为 $H$ 的&lt;em&gt;法线&lt;/em&gt;（normal vector）。如果 $w$ 是一个单位向量，那么 $f(x) = w \cdot x + \alpha$ 是 $x$ 到 $H$ 的有符号距离（singed distance）。此外，$H$ 到原点的距离为 $\alpha$。&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/normal_vector.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/normal_vector.webp" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;平面的法线&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1621,7 +1621,7 @@ $$&lt;p&gt;则分类边界为 $\{x\in \mathbb{R}^{d}: f(x)=0\}$&lt;/p&gt;
 &lt;/h2&gt;&lt;p&gt;&lt;em&gt;质心法&lt;/em&gt;（Centroid method）：首先分别计算属于类别 $C$ 的所有点的平均 $\mu_C$，以及所有不属于 $C$ 的平均 $\mu_X$。则决策函数可以表示为
 &lt;/p&gt;
 $$f(x) = (\mu_C - \mu_X) \cdot x - (\mu_C - \mu_X) \cdot \frac{\mu_C + \mu_X}{2}$$&lt;p&gt;质心法非常简洁，但是也只能处理简单的情况。例如下图中的数据点无法使用质心法正确分类。&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_02_linear_classifiers_and_perceptrons/centorid_method.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_02_linear_classifiers_and_perceptrons/centorid_method.webp" width="400"&gt;&lt;figcaption&gt;
 &lt;h4&gt;质心法失效的情况&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1657,14 +1657,14 @@ $$&lt;p&gt;其中 $\hat{y}$ 是分类器的预测值。&lt;/p&gt;
 &lt;p&gt;于是，我们可以定义风险函数（即优化问题的目标函数）为
 &lt;/p&gt;
 $$R(w) = \frac{1}{n} \sum_{i = 1}^n L(X_i \cdot w, y_i) = \frac{1}{n} \sum_{i = 1}^n -y_iX_i \cdot w$$&lt;p&gt;
-所以寻找超平面的问题变为一个最优化问题：寻找 $w$ ，使得 $R(w)$ 最小。&lt;/p&gt;</description></item><item><title>机器学习 01 引言</title><link>https://zhiim.github.io/p/ml_01_introduction/</link><pubDate>Sun, 18 May 2025 15:40:22 +0800</pubDate><guid>https://zhiim.github.io/p/ml_01_introduction/</guid><description>&lt;img src="https://zhiim.github.io/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 01 引言" /&gt;&lt;p&gt;机器学习系列是我学习 &lt;a class="link" href="https://people.eecs.berkeley.edu/~jrs/189/" target="_blank" rel="noopener"
+所以寻找超平面的问题变为一个最优化问题：寻找 $w$ ，使得 $R(w)$ 最小。&lt;/p&gt;</description></item><item><title>机器学习 01 引言</title><link>https://xland.cc/p/ml_01_introduction/</link><pubDate>Sun, 18 May 2025 15:40:22 +0800</pubDate><guid>https://xland.cc/p/ml_01_introduction/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 01 引言" /&gt;&lt;p&gt;机器学习系列是我学习 &lt;a class="link" href="https://people.eecs.berkeley.edu/~jrs/189/" target="_blank" rel="noopener"
 &gt;CS 189/289A Introduction to Machine Learning&lt;/a&gt; Spring 2025 时记录的学习笔记，也可以当作是对课程笔记的翻译，经供参考。&lt;/p&gt;
 &lt;h2 id="分类问题"&gt;分类问题
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;收集具有标签的训练样本&lt;/li&gt;
 &lt;li&gt;预测新样本的类别&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_01_introduction/classifier.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_01_introduction/classifier.webp" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;两种不同分类器的决策边界&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1680,7 +1680,7 @@ $$R(w) = \frac{1}{n} \sum_{i = 1}^n L(X_i \cdot w, y_i) = \frac{1}{n} \sum_{i = 
 &lt;em&gt;验证误差&lt;/em&gt;：验证集中分类错误的比例&lt;br&gt;
 &lt;em&gt;测试误差&lt;/em&gt;：测试集中分类错误的比例&lt;/p&gt;
 &lt;p&gt;大多数机器学习算法的一些超参数改变会造成欠拟合或者过拟合&lt;/p&gt;
-&lt;figure&gt;&lt;img src="https://zhiim.github.io/p/ml_01_introduction/overfitting.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/ml_01_introduction/overfitting.webp" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;[k邻接算法中超参数k的改变带来的影响]&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -1688,7 +1688,7 @@ $$R(w) = \frac{1}{n} \sum_{i = 1}^n L(X_i \cdot w, y_i) = \frac{1}{n} \sum_{i = 
 &lt;li&gt;&lt;em&gt;过拟合&lt;/em&gt;：当验证/测试误差恶化时，原因是分类器对异常值或其他虚假模式变得过于敏感。&lt;/li&gt;
 &lt;li&gt;&lt;em&gt;欠拟合&lt;/em&gt;：当验证/测试误差恶化时，原因是分类器不够灵活，无法拟合模式。&lt;/li&gt;
 &lt;li&gt;&lt;em&gt;异常值&lt;/em&gt;：具有非典型标签的点（例如，富裕的借款人仍然违约）。增加过拟合的风险。&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>用于 DOA 估计的 Python 包 DOA_py</title><link>https://zhiim.github.io/p/python_package_doa_estimation/</link><pubDate>Sun, 07 Jul 2024 10:59:51 +0800</pubDate><guid>https://zhiim.github.io/p/python_package_doa_estimation/</guid><description>&lt;h2 id="项目地址"&gt;项目地址
+&lt;/ul&gt;</description></item><item><title>用于 DOA 估计的 Python 包 DOA_py</title><link>https://xland.cc/p/python_package_doa_estimation/</link><pubDate>Sun, 07 Jul 2024 10:59:51 +0800</pubDate><guid>https://xland.cc/p/python_package_doa_estimation/</guid><description>&lt;h2 id="项目地址"&gt;项目地址
 &lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://github.com/zhiim/doa_py" target="_blank" rel="noopener"
 &gt;DOA_py: DOA etimation algorithms implemented in Python for ULA, UCA and broadband/wideband DOA estimation&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id="安装"&gt;安装
@@ -1868,7 +1868,7 @@ s_1(t) &amp; s_2(t) &amp; \dots &amp; s_N(t)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/python_package_doa_estimation/img/music.webp"
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://xland.cc/p/python_package_doa_estimation/img/music.webp"
 width="578"
 height="432"
 loading="lazy"
@@ -1904,7 +1904,7 @@ data-flex-basis="321px"
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;plot_estimated_value&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;estimates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;rmusic_estimates&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ground_truth&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;angle_incidence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/python_package_doa_estimation/img/rmusic.webp"
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://xland.cc/p/python_package_doa_estimation/img/rmusic.webp"
 width="576"
 height="438"
 loading="lazy"
@@ -1940,7 +1940,7 @@ data-flex-basis="315px"
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;plot_estimated_value&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;estimates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;esprit_estimates&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ground_truth&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;angle_incidence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/python_package_doa_estimation/img/esprit.webp"
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://xland.cc/p/python_package_doa_estimation/img/esprit.webp"
 width="576"
 height="438"
 loading="lazy"
@@ -1980,7 +1980,7 @@ data-flex-basis="315px"
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;plot_estimated_value&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;estimates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;omp_estimates&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ground_truth&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;angle_incidence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/python_package_doa_estimation/img/omp.webp"
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://xland.cc/p/python_package_doa_estimation/img/omp.webp"
 width="576"
 height="438"
 loading="lazy"
@@ -1991,7 +1991,7 @@ data-flex-basis="315px"
 &gt;&lt;/p&gt;
 &lt;h2 id="更多"&gt;更多
 &lt;/h2&gt;&lt;p&gt;查看&lt;a class="link" href="https://github.com/zhiim/doa_py/tree/master/examples" target="_blank" rel="noopener"
-&gt;项目仓库&lt;/a&gt;，了解更多的功能和使用方法&lt;/p&gt;</description></item><item><title>通过Github Copilot获取GPT-4 API</title><link>https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/</link><pubDate>Mon, 12 Feb 2024 15:19:19 +0800</pubDate><guid>https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/</guid><description>&lt;p&gt;最近Github向GitHub Student Developer Pack添加了无限使用Github Copilot的权益，大大提升了学生包的价值，学生认证后即可免费体验这款强大的AI编程助手。Github Copilot的实际体验让人不得不感慨AI的强大，Copilot自动补全的代码大多数情况下可以直接使用，大大提升了编程效率；Copilot Chat也可以对各种编程问题提供非常有用的建议。&lt;/p&gt;
+&gt;项目仓库&lt;/a&gt;，了解更多的功能和使用方法&lt;/p&gt;</description></item><item><title>通过Github Copilot获取GPT-4 API</title><link>https://xland.cc/p/get-access-to-gpt4-with-github-copilot/</link><pubDate>Mon, 12 Feb 2024 15:19:19 +0800</pubDate><guid>https://xland.cc/p/get-access-to-gpt4-with-github-copilot/</guid><description>&lt;p&gt;最近Github向GitHub Student Developer Pack添加了无限使用Github Copilot的权益，大大提升了学生包的价值，学生认证后即可免费体验这款强大的AI编程助手。Github Copilot的实际体验让人不得不感慨AI的强大，Copilot自动补全的代码大多数情况下可以直接使用，大大提升了编程效率；Copilot Chat也可以对各种编程问题提供非常有用的建议。&lt;/p&gt;
 &lt;p&gt;除此之外，由于Github Copilot的底层使用了GPT，我们也可以通过Copilot免费使用GPT-4。要实现这样的功能只需要使用开源项目copilot-gpt4-service获取GPT API，然后就可以通过GPT API搭配GPT前端来访问GPT-4，此外还可以使用GPT API部署AI学术助手gpt academic。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://github.com/aaamoon/copilot-gpt4-service" target="_blank" rel="noopener"
@@ -2075,7 +2075,7 @@ data-flex-basis="315px"
 &lt;li&gt;&lt;code&gt;API 域名&lt;/code&gt;填入&lt;code&gt;http://127.0.0.1:8080&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;模型&lt;/code&gt;选择&lt;code&gt;gpt-4&lt;/code&gt;或者GPT的其他任意版本&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/chatbox_setting.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/get-access-to-gpt4-with-github-copilot/chatbox_setting.webp"
 width="748"
 height="441"
 loading="lazy"
@@ -2085,7 +2085,7 @@ data-flex-grow="169"
 data-flex-basis="407px"
 &gt;&lt;/p&gt;
 &lt;p&gt;为了验证API返回的结构是否来自GPT-4，可以提问&lt;code&gt;鲁迅为什么暴打周树人&lt;/code&gt;，GPT-3.5会胡说八道，GPT-4会给出正确答案。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/gpt4_or_not.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/get-access-to-gpt4-with-github-copilot/gpt4_or_not.webp"
 width="853"
 height="216"
 loading="lazy"
@@ -2145,7 +2145,7 @@ data-flex-basis="947px"
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;python main.py
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src="https://zhiim.github.io/p/get-access-to-gpt4-with-github-copilot/gpt_academic.webp"
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://xland.cc/p/get-access-to-gpt4-with-github-copilot/gpt_academic.webp"
 width="1849"
 height="923"
 loading="lazy"
@@ -2153,7 +2153,7 @@ alt="GPT Academic"
 class="gallery-image"
 data-flex-grow="200"
 data-flex-basis="480px"
-&gt;&lt;/p&gt;</description></item><item><title>在Atlas 200 DK中部署深度学习模型</title><link>https://zhiim.github.io/p/deploy-deep-learning-model-on-atlas/</link><pubDate>Tue, 26 Sep 2023 12:08:08 +0800</pubDate><guid>https://zhiim.github.io/p/deploy-deep-learning-model-on-atlas/</guid><description>&lt;h2 id="环境准备"&gt;环境准备
+&gt;&lt;/p&gt;</description></item><item><title>在Atlas 200 DK中部署深度学习模型</title><link>https://xland.cc/p/deploy-deep-learning-model-on-atlas/</link><pubDate>Tue, 26 Sep 2023 12:08:08 +0800</pubDate><guid>https://xland.cc/p/deploy-deep-learning-model-on-atlas/</guid><description>&lt;h2 id="环境准备"&gt;环境准备
 &lt;/h2&gt;&lt;p&gt;本文部署的模型是使用TensorFlow2训练的ResNet网络，用于干扰信号识别，原本的模型文件将权重保存在&lt;code&gt;ResNet.h5&lt;/code&gt;中。&lt;/p&gt;
 &lt;p&gt;从模型文件中读取权重，并使用测试数据进行推理&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -2572,7 +2572,7 @@ data-flex-basis="480px"
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pred&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>Arch Linux 配置 — Btrfs与系统备份</title><link>https://zhiim.github.io/p/arch-linux-configuration-btrfs-and-system-backup/</link><pubDate>Tue, 11 Jul 2023 14:54:53 +0800</pubDate><guid>https://zhiim.github.io/p/arch-linux-configuration-btrfs-and-system-backup/</guid><description>&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 — Btrfs与系统备份" /&gt;&lt;h2 id="btrfs"&gt;Btrfs
+&lt;/div&gt;</description></item><item><title>Arch Linux 配置 — Btrfs与系统备份</title><link>https://xland.cc/p/arch-linux-configuration-btrfs-and-system-backup/</link><pubDate>Tue, 11 Jul 2023 14:54:53 +0800</pubDate><guid>https://xland.cc/p/arch-linux-configuration-btrfs-and-system-backup/</guid><description>&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 — Btrfs与系统备份" /&gt;&lt;h2 id="btrfs"&gt;Btrfs
 &lt;/h2&gt;&lt;p&gt;更据官方文档的说明&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;BTRFS is a modern copy on write (COW) filesystem for Linux aimed at implementing advanced features while also focusing on fault tolerance, repair and easy administration.&lt;/p&gt;
@@ -2950,7 +2950,7 @@ data-flex-basis="480px"
 &gt;ArchWiki-Snapper&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.dwarmstrong.org/btrfs-snapshots-rollbacks/" target="_blank" rel="noopener"
 &gt;BTRFS snapshots and system rollbacks on Arch Linux&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</description></item><item><title>Arch Linux 配置 -- 安装linux-lts备用内核</title><link>https://zhiim.github.io/p/arch-linux-configuration-linux-lts-kernel/</link><pubDate>Sun, 09 Jul 2023 14:10:06 +0800</pubDate><guid>https://zhiim.github.io/p/arch-linux-configuration-linux-lts-kernel/</guid><description>&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 安装linux-lts备用内核" /&gt;&lt;p&gt;由于滚动更新的机制，Arch Linux采用的linux内核更新较频繁，难免会碰到由于内核更新无法进入系统。为了解决由于内核更新导致的系统故障，我们可以同时安装更新周期更长的linux-lts内核，如果linux内核更新后无法进入系统，此时就可以选择加载linux-lts内核进入系统，回退linux内核或者等待修复。&lt;/p&gt;
+&lt;/ol&gt;</description></item><item><title>Arch Linux 配置 -- 安装linux-lts备用内核</title><link>https://xland.cc/p/arch-linux-configuration-linux-lts-kernel/</link><pubDate>Sun, 09 Jul 2023 14:10:06 +0800</pubDate><guid>https://xland.cc/p/arch-linux-configuration-linux-lts-kernel/</guid><description>&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 安装linux-lts备用内核" /&gt;&lt;p&gt;由于滚动更新的机制，Arch Linux采用的linux内核更新较频繁，难免会碰到由于内核更新无法进入系统。为了解决由于内核更新导致的系统故障，我们可以同时安装更新周期更长的linux-lts内核，如果linux内核更新后无法进入系统，此时就可以选择加载linux-lts内核进入系统，回退linux内核或者等待修复。&lt;/p&gt;
 &lt;h2 id="安装linux-lts内核"&gt;安装linux-lts内核
 &lt;/h2&gt;&lt;p&gt;首先安装linux-lts内核&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -3119,7 +3119,7 @@ data-flex-basis="480px"
 &lt;/div&gt;&lt;p&gt;系统启动时会通过Boot Loader加载内核和ramfs，一般还要指定加载微码。内核文件vmlinuz-linux、内核对应的initramfs-linux.img以及微码intel-ucode.img默认位于&lt;code&gt;/boot&lt;/code&gt;文件夹，在rEFInd配置时需要确定自己系统中这些文件实际存在的路径。&lt;/p&gt;
 &lt;p&gt;Arch Linux启动过程参考&lt;a class="link" href="https://wiki.archlinux.org/title/Arch_boot_process" target="_blank" rel="noopener"
 &gt;Arch boot process&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;保存对&lt;code&gt;/efi/EFI/refind/refind.conf&lt;/code&gt;更改，此时重启进入rEFInd界面，会多出一个我们刚才定义的启动项，直接选择此项启动会直接加载linux内核，按F2进入此启动项的子选单会出现我们刚才定义的加载fallback initramfs和加载linux-lts内核等选项。选中原先的Arch Linux启动项按Delete隐藏即可。&lt;/p&gt;</description></item><item><title>Arch Linux 配置 -- 驱动和软件安装</title><link>https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/</link><pubDate>Sat, 08 Jul 2023 17:40:07 +0800</pubDate><guid>https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/</guid><description>&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 驱动和软件安装" /&gt;&lt;p&gt;最近趁着假期把Manjaro换成了Arch Linux，本文记录了我安装Arch Linux中的一些配置。&lt;/p&gt;
+&lt;p&gt;保存对&lt;code&gt;/efi/EFI/refind/refind.conf&lt;/code&gt;更改，此时重启进入rEFInd界面，会多出一个我们刚才定义的启动项，直接选择此项启动会直接加载linux内核，按F2进入此启动项的子选单会出现我们刚才定义的加载fallback initramfs和加载linux-lts内核等选项。选中原先的Arch Linux启动项按Delete隐藏即可。&lt;/p&gt;</description></item><item><title>Arch Linux 配置 -- 驱动和软件安装</title><link>https://xland.cc/p/arch-linux-configuration-driver-and-software/</link><pubDate>Sat, 08 Jul 2023 17:40:07 +0800</pubDate><guid>https://xland.cc/p/arch-linux-configuration-driver-and-software/</guid><description>&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/arch.webp" alt="Featured image of post Arch Linux 配置 -- 驱动和软件安装" /&gt;&lt;p&gt;最近趁着假期把Manjaro换成了Arch Linux，本文记录了我安装Arch Linux中的一些配置。&lt;/p&gt;
 &lt;h2 id="arch-linux安装"&gt;Arch Linux安装
 &lt;/h2&gt;&lt;p&gt;安装教程参考&lt;a class="link" href="https://arch.icekylin.online/" target="_blank" rel="noopener"
 &gt;archlinux 简明指南&lt;/a&gt;和&lt;a class="link" href="https://wiki.archlinux.org/title/Installation_guide" target="_blank" rel="noopener"
@@ -3270,7 +3270,7 @@ data-flex-basis="480px"
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;此时在浏览器中进入&lt;code&gt;vivaldi:gpu&lt;/code&gt;，已经正常启用了硬件加速。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/vivaldi-gpu.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/vivaldi-gpu.webp"
 width="765"
 height="446"
 loading="lazy"
@@ -3293,7 +3293,7 @@ data-flex-basis="411px"
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;在打开的页面中展开&lt;code&gt;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Keys&lt;/code&gt;，里面有一个以Windows蓝牙控制器的MAC地址命名的文件夹，打开该文件夹，里面的文件夹名对应的是蓝牙设备的MAC地址，记下蓝牙设备的MAC地址和里面注册表的值。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/windows-bluetooth.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/windows-bluetooth.webp"
 width="1168"
 height="467"
 loading="lazy"
@@ -3392,7 +3392,7 @@ data-flex-basis="600px"
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;官方默认安装主题到&lt;code&gt;/boot/efi/EFI/refind/themes/refind-theme-regular&lt;/code&gt;，如果在安装Arch时选择将ESP分区挂在在&lt;code&gt;/efi&lt;/code&gt;的话，需要按照官方的手动安装指导将主题安装到&lt;code&gt;/efi/EFI/refind/themes/refind-theme-regular&lt;/code&gt;。 最终的主题效果如下&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/arch-linux-configuration-driver-and-software/refind.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/arch-linux-configuration-driver-and-software/refind.webp"
 width="854"
 height="480"
 loading="lazy"
@@ -3477,7 +3477,7 @@ data-flex-basis="427px"
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这时MATLAB安装界面可以正常运行，正常安装即可。&lt;/p&gt;
 &lt;p&gt;如果在MATLAB运行时碰到问题，可以参考我之前写的&lt;a class="link" href="https://zhiim.github.io/p/manjaro-linux-matlab/" target="_blank" rel="noopener"
-&gt;Manjaro Linux 安装 MATLAB&lt;/a&gt;，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。&lt;/p&gt;</description></item><item><title>Manjaro Linux 安装 MATLAB</title><link>https://zhiim.github.io/p/manjaro-linux-matlab/</link><pubDate>Sun, 19 Mar 2023 18:40:57 +0800</pubDate><guid>https://zhiim.github.io/p/manjaro-linux-matlab/</guid><description>&lt;p&gt;最近从 Windows 换到了 Manjaro，日常离不开 MATLAB，虽然 MATLAB 官方提供了 Linux 版本，但是没有对 Manjaro 做适配，所以在安装 MATLAB 的过程中遇到了各种问题，以此记录。任何其他问题建议查阅&lt;a class="link" href="wiki.archlinux.org" &gt;ArchWiki&lt;/a&gt;。&lt;/p&gt;
+&gt;Manjaro Linux 安装 MATLAB&lt;/a&gt;，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。&lt;/p&gt;</description></item><item><title>Manjaro Linux 安装 MATLAB</title><link>https://xland.cc/p/manjaro-linux-matlab/</link><pubDate>Sun, 19 Mar 2023 18:40:57 +0800</pubDate><guid>https://xland.cc/p/manjaro-linux-matlab/</guid><description>&lt;p&gt;最近从 Windows 换到了 Manjaro，日常离不开 MATLAB，虽然 MATLAB 官方提供了 Linux 版本，但是没有对 Manjaro 做适配，所以在安装 MATLAB 的过程中遇到了各种问题，以此记录。任何其他问题建议查阅&lt;a class="link" href="wiki.archlinux.org" &gt;ArchWiki&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id="matlab-安装报错"&gt;MATLAB 安装报错
 &lt;/h2&gt;&lt;p&gt;最初安装的时候，我下载的是 MATLAB 2020b 的 iso 镜像，即使按照 ArchWiki 的指导，移除了&lt;code&gt;libfreetype.so*&lt;/code&gt;还是会继续报错。后来换成 MATLAB 2022a 的镜像才成功安装。&lt;br&gt;
 进入 MATLAB 2022a 安装文件所处的文件夹，运行&lt;code&gt;./install&lt;/code&gt;，出现报错&lt;/p&gt;
@@ -3731,7 +3731,7 @@ data-flex-basis="427px"
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;在&lt;code&gt;java.opts&lt;/code&gt;中写入&lt;code&gt;-Djogl.disable.openglarbcontext=1&lt;/code&gt;。
 解决方案来源：&lt;a class="link" href="https://wiki.archlinux.org/title/MATLAB#OpenGL_acceleration" target="_blank" rel="noopener"
-&gt;ArchWiki-MATLAB&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>DOA估计中均匀圆阵的模糊问题</title><link>https://zhiim.github.io/p/uca-doa-ambiguity/</link><pubDate>Sat, 25 Feb 2023 15:54:25 +0800</pubDate><guid>https://zhiim.github.io/p/uca-doa-ambiguity/</guid><description>&lt;h2 id="doa-估计的模糊问题"&gt;DOA 估计的模糊问题
+&gt;ArchWiki-MATLAB&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>DOA估计中均匀圆阵的模糊问题</title><link>https://xland.cc/p/uca-doa-ambiguity/</link><pubDate>Sat, 25 Feb 2023 15:54:25 +0800</pubDate><guid>https://xland.cc/p/uca-doa-ambiguity/</guid><description>&lt;h2 id="doa-估计的模糊问题"&gt;DOA 估计的模糊问题
 &lt;/h2&gt;&lt;p&gt;一些经典的 DOA 估计算法，例如 MUSIC 算法，利用了阵列流型矩阵和噪声子空间的正交关系来确定入射信号的角度。因此在使用这些算法时，必须保证流型矩阵中各个导向矢量是线性无关的，这也是为什么要保证阵列天线的个数大于入射信号的个数。&lt;br&gt;
 在讨论阵列的相位模糊时，如果某一个导向矢量可以表示成其他 K 个导向矢量的线性组合
 &lt;/p&gt;
@@ -3781,7 +3781,7 @@ $$\frac{\rho_{m+1}}{\rho_m}=sin(\frac{\theta+\hat{\theta}}{2}-m\frac{2\pi}{M})/s
 $$\phi_{m+1}=sin(\frac{\theta+\hat{\theta}}{2}-m\frac{2\pi}{M})=\phi_mcos\frac{2\pi}{M}-\sqrt{1-\phi_m^2}sin\frac{2\pi}{M}$$&lt;p&gt;
 于是可以得到&lt;strong&gt;均匀圆阵出现一阶模糊的条件&lt;/strong&gt;（&lt;em&gt;必要条件&lt;/em&gt;）：当$M\ge 5$且为奇数或者$M\ge 8$且为偶数时，$cos\frac{2\pi}{M}$和$\sin\frac{2\pi}{M}$为无理数，此时均匀圆阵不会出现一阶模糊。&lt;/p&gt;
 &lt;p&gt;[1] 跃郭, 王宏远, 陬周, Yue G. U. O., Hong-yuan Wang 和 Zou Zhou. 《阵元间距对 MUSIC 算法的影响》. 电子学报 35, 期 9 (2007 年 9 月 25 日): 1675.&lt;br&gt;
-[2] Xiao, Wei, Xian-Ci Xiao 和 Heng-Ming Tai. 《Rank-1 ambiguity DOA estimation of circular array with fewer sensors》. 收入 The 2002 45th Midwest Symposium on Circuits and Systems, 2002. MWSCAS-2002., 3:III–III, 2002.&lt;/p&gt;</description></item><item><title>Windows下制作ChromeOS Live USB</title><link>https://zhiim.github.io/p/windows-install-chromeos/</link><pubDate>Sun, 05 Feb 2023 11:02:40 +0800</pubDate><guid>https://zhiim.github.io/p/windows-install-chromeos/</guid><description>&lt;p&gt;ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目&lt;a class="link" href="https://github.com/sebanc/brunch" target="_blank" rel="noopener"
+[2] Xiao, Wei, Xian-Ci Xiao 和 Heng-Ming Tai. 《Rank-1 ambiguity DOA estimation of circular array with fewer sensors》. 收入 The 2002 45th Midwest Symposium on Circuits and Systems, 2002. MWSCAS-2002., 3:III–III, 2002.&lt;/p&gt;</description></item><item><title>Windows下制作ChromeOS Live USB</title><link>https://xland.cc/p/windows-install-chromeos/</link><pubDate>Sun, 05 Feb 2023 11:02:40 +0800</pubDate><guid>https://xland.cc/p/windows-install-chromeos/</guid><description>&lt;p&gt;ChromeOS是Google推出的桌面操作系统，主打基于云应用的轻量操作系统，如今的ChromeOS已经支持Linux模式和直接运行Android应用。由于Google没有开放系统给Chromebook以外的设备，一般电脑安装ChromeOS可以借助开源项目&lt;a class="link" href="https://github.com/sebanc/brunch" target="_blank" rel="noopener"
 &gt;brunch&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件，从而在非Chromebook上安装原生ChromeOS。&lt;/p&gt;
 &lt;h2 id="硬件要求"&gt;硬件要求
@@ -3798,7 +3798,7 @@ $$\phi_{m+1}=sin(\frac{\theta+\hat{\theta}}{2}-m\frac{2\pi}{M})=\phi_mcos\frac{2
 &lt;p&gt;下载ChromeOS recovery文件。&lt;/p&gt;
 &lt;p&gt;参考自己的CPU型号，选择一个和自己电脑配置接近的chrome设备，在&lt;a class="link" href="https://chromiumdash.appspot.com/serving-builds?deviceCategory=Chrome%20OS" target="_blank" rel="noopener"
 &gt;Chromium Dash&lt;/a&gt;下载该设备的recovery文件，一般选择最新的发行版本即可。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/recovery.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/windows-install-chromeos/recovery.webp"
 width="1311"
 height="292"
 loading="lazy"
@@ -3824,7 +3824,7 @@ data-flex-basis="1077px"
 &lt;p&gt;下载brunch的release文件&lt;/p&gt;
 &lt;p&gt;在brunch的&lt;a class="link" href="https://github.com/sebanc/brunch/releases" target="_blank" rel="noopener"
 &gt;release&lt;/a&gt;页面下载和recovery版本号对应的文件，例如下载的recovery为109，则下载Brunch r109。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/release.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/windows-install-chromeos/release.webp"
 width="1138"
 height="558"
 loading="lazy"
@@ -3866,7 +3866,7 @@ data-flex-basis="489px"
 &lt;p&gt;进入ChromeOS&lt;/p&gt;
 &lt;p&gt;重启电脑，进入BIOS设置界面，关闭secure boot，设置优先从USB启动。&lt;/p&gt;
 &lt;p&gt;保存并退出BIOS设置，电脑会自动重启并从U盘启动系统，第一次进入系统时需要等待较长时间。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/windows-install-chromeos/chromeos.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/windows-install-chromeos/chromeos.webp"
 width="1920"
 height="1080"
 loading="lazy"
@@ -3893,13 +3893,13 @@ data-flex-basis="426px"
 &lt;p&gt;下一步可以安装&lt;a class="link" href="https://sourceforge.net/projects/grub2win/" target="_blank" rel="noopener"
 &gt;Grub2Win&lt;/a&gt;，实现在开机时选择想要进入的系统。本人未作尝试，具体步骤可以参考&lt;a class="link" href="https://github.com/sebanc/brunch/blob/main/install-with-windows.md" target="_blank" rel="noopener"
 &gt;brunch的官方安装教程&lt;/a&gt;。&lt;br&gt;
-安装Grub2Win后，依次点击&lt;code&gt;Manage Boot Menu-Add A New Entry-Type&lt;/code&gt;，选择“Create user section”。此时为自动用记事本新建一个文本文件，在之前设置的&lt;code&gt;/mnt/d/brunch&lt;/code&gt;文件夹中打开“chromeos.grub.txt”，将该文件中的内容复制到新建的空文本中。保存Grub2Win的更改，重启电脑，选择ChromeOS进入系统。&lt;/p&gt;</description></item><item><title>Telegram Bot（一）Python库pyTelegramBotAPI的使用</title><link>https://zhiim.github.io/p/telegram-bot/</link><pubDate>Tue, 10 Jan 2023 19:39:43 +0800</pubDate><guid>https://zhiim.github.io/p/telegram-bot/</guid><description>&lt;p&gt;基于Python的Telegram Bot，使用&lt;a class="link" href="https://github.com/eternnoir/pyTelegramBotAPI" target="_blank" rel="noopener"
+安装Grub2Win后，依次点击&lt;code&gt;Manage Boot Menu-Add A New Entry-Type&lt;/code&gt;，选择“Create user section”。此时为自动用记事本新建一个文本文件，在之前设置的&lt;code&gt;/mnt/d/brunch&lt;/code&gt;文件夹中打开“chromeos.grub.txt”，将该文件中的内容复制到新建的空文本中。保存Grub2Win的更改，重启电脑，选择ChromeOS进入系统。&lt;/p&gt;</description></item><item><title>Telegram Bot（一）Python库pyTelegramBotAPI的使用</title><link>https://xland.cc/p/telegram-bot/</link><pubDate>Tue, 10 Jan 2023 19:39:43 +0800</pubDate><guid>https://xland.cc/p/telegram-bot/</guid><description>&lt;p&gt;基于Python的Telegram Bot，使用&lt;a class="link" href="https://github.com/eternnoir/pyTelegramBotAPI" target="_blank" rel="noopener"
 &gt;pyTelegramBotAPI&lt;/a&gt;库。&lt;/p&gt;
 &lt;h2 id="准备"&gt;准备
 &lt;/h2&gt;&lt;h3 id="创建bot"&gt;创建Bot
 &lt;/h3&gt;&lt;p&gt;点击START私聊&lt;a class="link" href="https://t.me/botfather" target="_blank" rel="noopener"
 &gt;@BotFather&lt;/a&gt;，输入/newbot开始创建Bot。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/telegram-bot/newBot.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/telegram-bot/newBot.webp"
 width="835"
 height="635"
 loading="lazy"
@@ -4090,9 +4090,9 @@ data-flex-basis="315px"
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;pass&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>PyTorch基础 （三）网络模型</title><link>https://zhiim.github.io/p/pytorch-model/</link><pubDate>Mon, 09 Jan 2023 15:14:55 +0800</pubDate><guid>https://zhiim.github.io/p/pytorch-model/</guid><description>&lt;img src="https://zhiim.github.io/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （三）网络模型" /&gt;&lt;h2 id="神经网络-neural-network"&gt;神经网络 neural network
+&lt;/div&gt;</description></item><item><title>PyTorch基础 （三）网络模型</title><link>https://xland.cc/p/pytorch-model/</link><pubDate>Mon, 09 Jan 2023 15:14:55 +0800</pubDate><guid>https://xland.cc/p/pytorch-model/</guid><description>&lt;img src="https://xland.cc/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （三）网络模型" /&gt;&lt;h2 id="神经网络-neural-network"&gt;神经网络 neural network
 &lt;/h2&gt;&lt;p&gt;神经网络由多个神经元互相连接组成，每个神经元是一个计算单元，位于同一层级的多个神经元组成一个网络层。一般的神经网络一般由三种网络层组成：输入层，隐藏层和输出层。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/pytorch-model/neutral-network.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/pytorch-model/neutral-network.webp"
 width="820"
 height="415"
 loading="lazy"
@@ -4128,7 +4128,7 @@ $$&lt;/li&gt;
 由前一神经元输出到下一神经元输入的加权&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;偏置 Bias&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/pytorch-model/neuron.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/pytorch-model/neuron.webp"
 width="1240"
 height="677"
 loading="lazy"
@@ -4270,7 +4270,7 @@ $$&lt;h2 id="在pytorch中建立神经网络"&gt;在PyTorch中建立神经网络
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;Layer: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; | Size: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;param&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; | Values : &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;param&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>PyTorch基础 （二）Dataset和DataLoader</title><link>https://zhiim.github.io/p/pytorch-dataset/</link><pubDate>Sat, 07 Jan 2023 11:13:45 +0800</pubDate><guid>https://zhiim.github.io/p/pytorch-dataset/</guid><description>&lt;img src="https://zhiim.github.io/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （二）Dataset和DataLoader" /&gt;&lt;p&gt;PyTorch provides two data primitives: &lt;code&gt;torch.utils.data.DataLoader&lt;/code&gt;and &lt;code&gt;torch.utils.data.Dataset&lt;/code&gt; that allow you to use pre-loaded datasets as well as your own data.
+&lt;/div&gt;</description></item><item><title>PyTorch基础 （二）Dataset和DataLoader</title><link>https://xland.cc/p/pytorch-dataset/</link><pubDate>Sat, 07 Jan 2023 11:13:45 +0800</pubDate><guid>https://xland.cc/p/pytorch-dataset/</guid><description>&lt;img src="https://xland.cc/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （二）Dataset和DataLoader" /&gt;&lt;p&gt;PyTorch provides two data primitives: &lt;code&gt;torch.utils.data.DataLoader&lt;/code&gt;and &lt;code&gt;torch.utils.data.Dataset&lt;/code&gt; that allow you to use pre-loaded datasets as well as your own data.
 &lt;code&gt;Dataset&lt;/code&gt;stores the samples and their corresponding labels, and &lt;code&gt;DataLoader&lt;/code&gt; wraps an iterable around the &lt;code&gt;Dataset&lt;/code&gt; to enable easy access to the samples.&lt;/p&gt;
 &lt;h2 id="loading-a-dataset"&gt;loading a dataset
 &lt;/h2&gt;&lt;p&gt;load the &lt;strong&gt;Fashion-MNIST&lt;/strong&gt; dataset from TorchVision.
@@ -4434,8 +4434,8 @@ To use &lt;code&gt;DataLoader&lt;/code&gt;, we need to set the followings parame
 &lt;h3 id="transforms"&gt;Transforms
 &lt;/h3&gt;&lt;p&gt;We use &lt;strong&gt;transforms&lt;/strong&gt; to perform some manipulation of the data and make it suitable for training.
 &lt;code&gt;transform&lt;/code&gt; to modify the features and &lt;code&gt;target_transform&lt;/code&gt; to modify the labels.
-&lt;code&gt;ToTensor&lt;/code&gt; converts a PIL image or NumPy &lt;code&gt;ndarray&lt;/code&gt; into a &lt;code&gt;FloatTensor&lt;/code&gt; and scales the image&amp;rsquo;s pixel intensity values in the range [0., 1.]&lt;/p&gt;</description></item><item><title>PyTorch基础 （一）Tensors</title><link>https://zhiim.github.io/p/pytorch-tensor/</link><pubDate>Fri, 06 Jan 2023 17:12:03 +0800</pubDate><guid>https://zhiim.github.io/p/pytorch-tensor/</guid><description>&lt;img src="https://zhiim.github.io/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （一）Tensors" /&gt;&lt;p&gt;张量（tensor）是一种类似于数组和矩阵的特殊数据结构。tensor类似于NumPy中的ndarray，两者也可以使用相同的内存地址。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/pytorch-tensor/tensor.webp"
+&lt;code&gt;ToTensor&lt;/code&gt; converts a PIL image or NumPy &lt;code&gt;ndarray&lt;/code&gt; into a &lt;code&gt;FloatTensor&lt;/code&gt; and scales the image&amp;rsquo;s pixel intensity values in the range [0., 1.]&lt;/p&gt;</description></item><item><title>PyTorch基础 （一）Tensors</title><link>https://xland.cc/p/pytorch-tensor/</link><pubDate>Fri, 06 Jan 2023 17:12:03 +0800</pubDate><guid>https://xland.cc/p/pytorch-tensor/</guid><description>&lt;img src="https://xland.cc/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （一）Tensors" /&gt;&lt;p&gt;张量（tensor）是一种类似于数组和矩阵的特殊数据结构。tensor类似于NumPy中的ndarray，两者也可以使用相同的内存地址。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://xland.cc/p/pytorch-tensor/tensor.webp"
 width="636"
 height="276"
 loading="lazy"
@@ -4689,7 +4689,7 @@ tensor创建时默认处于CPU中，如果要使用GPU进行tensor计算需要�
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;from_numpy&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>完全卸载VMware Workstation</title><link>https://zhiim.github.io/p/uninstall-vmware/</link><pubDate>Sat, 19 Mar 2022 12:05:03 +0800</pubDate><guid>https://zhiim.github.io/p/uninstall-vmware/</guid><description>&lt;p&gt;之前没有通过引导卸载VMware Workstation，直接把整个文件夹删了，导致卸载不彻底。VMware在安装时会先检测是否已经安装，使得我的电脑无法再次安装VMware Workstation。后来按照官方的卸载教程试了几次都没成功，偶然发现系统环境变量中还有VMware的路径，才解决了这个问题。关键在于卸载后没有删除环境变量，所以被认为没有完全卸载VMware Workstation。&lt;/p&gt;
+&lt;/div&gt;</description></item><item><title>完全卸载VMware Workstation</title><link>https://xland.cc/p/uninstall-vmware/</link><pubDate>Sat, 19 Mar 2022 12:05:03 +0800</pubDate><guid>https://xland.cc/p/uninstall-vmware/</guid><description>&lt;p&gt;之前没有通过引导卸载VMware Workstation，直接把整个文件夹删了，导致卸载不彻底。VMware在安装时会先检测是否已经安装，使得我的电脑无法再次安装VMware Workstation。后来按照官方的卸载教程试了几次都没成功，偶然发现系统环境变量中还有VMware的路径，才解决了这个问题。关键在于卸载后没有删除环境变量，所以被认为没有完全卸载VMware Workstation。&lt;/p&gt;
 &lt;h3 id="通过workstation安装程序自动清理"&gt;通过Workstation安装程序自动清理
 &lt;/h3&gt;&lt;p&gt;下载对应版本的安装程序，在当前文件夹打开终端，在终端中输入&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -4771,7 +4771,7 @@ tensor创建时默认处于CPU中，如果要使用GPU进行tensor计算需要�
 &lt;/h3&gt;&lt;p&gt;打开系统环境变量设置，删除VMware Workstation的执行路径&lt;br&gt;
 重启电脑，就完成了VMware Workstation的完全卸载。&lt;br&gt;
 各版本路径存在一些不同，具体参考&lt;a class="link" href="https://kb.vmware.com/s/article/1308" target="_blank" rel="noopener"
-&gt;官方文档&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>将Hugo博客部署到Github Pages</title><link>https://zhiim.github.io/p/hugo_blog/</link><pubDate>Sat, 12 Feb 2022 19:34:01 +0800</pubDate><guid>https://zhiim.github.io/p/hugo_blog/</guid><description>&lt;h2 id="关于hugo"&gt;关于Hugo
+&gt;官方文档&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>将Hugo博客部署到Github Pages</title><link>https://xland.cc/p/hugo_blog/</link><pubDate>Sat, 12 Feb 2022 19:34:01 +0800</pubDate><guid>https://xland.cc/p/hugo_blog/</guid><description>&lt;h2 id="关于hugo"&gt;关于Hugo
 &lt;/h2&gt;&lt;p&gt;Hugo的便利之处在于，用户只需编辑markdown文档，Hugo会自动将markdown文档转换为网页。Hugo根据存放于content文件夹中的用户markdown文件，生成网页源文件，并存放于public文件夹中。&lt;/p&gt;
 &lt;p&gt;将博客部署到GitHub Pages，只需将Hugo生成的public文件夹推送到GitHub仓库。&lt;/p&gt;
 &lt;h2 id="关于github-pages"&gt;关于Github Pages
@@ -4834,13 +4834,13 @@ alt="仓库地址"
 loading="lazy"
 alt="设置页面分支"
 &gt;&lt;/p&gt;
-&lt;p&gt;之后即可通过&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;访问博客页面&lt;/p&gt;</description></item><item><title>Archives</title><link>https://zhiim.github.io/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://zhiim.github.io/archives/</guid><description/></item><item><title>About</title><link>https://zhiim.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhiim.github.io/about/</guid><description>&lt;p&gt;&lt;strong&gt;“迷途的羔羊”&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;之后即可通过&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;访问博客页面&lt;/p&gt;</description></item><item><title>Archives</title><link>https://xland.cc/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://xland.cc/archives/</guid><description/></item><item><title>About</title><link>https://xland.cc/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://xland.cc/about/</guid><description>&lt;p&gt;&lt;strong&gt;“迷途的羔羊”&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;在夏目漱石的《三四郎》里&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;与次郎把三四郎的笔记拉到面前俯视一番，只见本子里乱七八糟地写满了“迷途的羔羊”。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;关于本博客&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;一个记录所学所想的地方，包含一些学习笔记和杂乱的随记。&lt;/p&gt;</description></item><item><title>Links</title><link>https://zhiim.github.io/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhiim.github.io/links/</guid><description>&lt;p&gt;如果想交换友链的话请在下方留言，友链的格式可以参考本站信息：&lt;/p&gt;
+&lt;p&gt;一个记录所学所想的地方，包含一些学习笔记和杂乱的随记。&lt;/p&gt;</description></item><item><title>Links</title><link>https://xland.cc/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://xland.cc/links/</guid><description>&lt;p&gt;如果想交换友链的话请在下方留言，友链的格式可以参考本站信息：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -4851,8 +4851,8 @@ alt="设置页面分支"
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;名称: Zhiim&amp;#39;s Blog
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;简介: 总有想不明白的事
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;博客地址: https://zhiim.github.io
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;头像: https://zhiim.github.io/img/avatar.jpg
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;博客地址: https://xland.cc
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;头像: https://xland.cc/img/avatar.jpg
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>Search</title><link>https://zhiim.github.io/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhiim.github.io/search/</guid><description/></item></channel></rss>
+&lt;/div&gt;</description></item><item><title>Search</title><link>https://xland.cc/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://xland.cc/search/</guid><description/></item></channel></rss>

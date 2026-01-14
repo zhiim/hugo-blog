@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>深度学习 on Zhiim's Blog</title><link>https://zhiim.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link><description>Recent content in 深度学习 on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 26 Sep 2023 12:08:08 +0800</lastBuildDate><atom:link href="https://zhiim.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>在Atlas 200 DK中部署深度学习模型</title><link>https://zhiim.github.io/p/deploy-deep-learning-model-on-atlas/</link><pubDate>Tue, 26 Sep 2023 12:08:08 +0800</pubDate><guid>https://zhiim.github.io/p/deploy-deep-learning-model-on-atlas/</guid><description>&lt;h2 id="环境准备"&gt;环境准备
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>深度学习 on Zhiim's Blog</title><link>https://xland.cc/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link><description>Recent content in 深度学习 on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 26 Sep 2023 12:08:08 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>在Atlas 200 DK中部署深度学习模型</title><link>https://xland.cc/p/deploy-deep-learning-model-on-atlas/</link><pubDate>Tue, 26 Sep 2023 12:08:08 +0800</pubDate><guid>https://xland.cc/p/deploy-deep-learning-model-on-atlas/</guid><description>&lt;h2 id="环境准备"&gt;环境准备
 &lt;/h2&gt;&lt;p&gt;本文部署的模型是使用TensorFlow2训练的ResNet网络，用于干扰信号识别，原本的模型文件将权重保存在&lt;code&gt;ResNet.h5&lt;/code&gt;中。&lt;/p&gt;
 &lt;p&gt;从模型文件中读取权重，并使用测试数据进行推理&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -417,9 +417,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pred&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>PyTorch基础 （三）网络模型</title><link>https://zhiim.github.io/p/pytorch-model/</link><pubDate>Mon, 09 Jan 2023 15:14:55 +0800</pubDate><guid>https://zhiim.github.io/p/pytorch-model/</guid><description>&lt;img src="https://zhiim.github.io/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （三）网络模型" /&gt;&lt;h2 id="神经网络-neural-network"&gt;神经网络 neural network
+&lt;/div&gt;</description></item><item><title>PyTorch基础 （三）网络模型</title><link>https://xland.cc/p/pytorch-model/</link><pubDate>Mon, 09 Jan 2023 15:14:55 +0800</pubDate><guid>https://xland.cc/p/pytorch-model/</guid><description>&lt;img src="https://xland.cc/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （三）网络模型" /&gt;&lt;h2 id="神经网络-neural-network"&gt;神经网络 neural network
 &lt;/h2&gt;&lt;p&gt;神经网络由多个神经元互相连接组成，每个神经元是一个计算单元，位于同一层级的多个神经元组成一个网络层。一般的神经网络一般由三种网络层组成：输入层，隐藏层和输出层。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/pytorch-model/neutral-network.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/pytorch-model/neutral-network.webp"
 width="820"
 height="415"
 loading="lazy"
@@ -455,7 +455,7 @@ $$&lt;/li&gt;
 由前一神经元输出到下一神经元输入的加权&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;偏置 Bias&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/pytorch-model/neuron.webp"
+&lt;p&gt;&lt;img src="https://xland.cc/p/pytorch-model/neuron.webp"
 width="1240"
 height="677"
 loading="lazy"
@@ -597,7 +597,7 @@ $$&lt;h2 id="在pytorch中建立神经网络"&gt;在PyTorch中建立神经网络
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;Layer: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; | Size: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;param&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; | Values : &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;param&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>PyTorch基础 （二）Dataset和DataLoader</title><link>https://zhiim.github.io/p/pytorch-dataset/</link><pubDate>Sat, 07 Jan 2023 11:13:45 +0800</pubDate><guid>https://zhiim.github.io/p/pytorch-dataset/</guid><description>&lt;img src="https://zhiim.github.io/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （二）Dataset和DataLoader" /&gt;&lt;p&gt;PyTorch provides two data primitives: &lt;code&gt;torch.utils.data.DataLoader&lt;/code&gt;and &lt;code&gt;torch.utils.data.Dataset&lt;/code&gt; that allow you to use pre-loaded datasets as well as your own data.
+&lt;/div&gt;</description></item><item><title>PyTorch基础 （二）Dataset和DataLoader</title><link>https://xland.cc/p/pytorch-dataset/</link><pubDate>Sat, 07 Jan 2023 11:13:45 +0800</pubDate><guid>https://xland.cc/p/pytorch-dataset/</guid><description>&lt;img src="https://xland.cc/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （二）Dataset和DataLoader" /&gt;&lt;p&gt;PyTorch provides two data primitives: &lt;code&gt;torch.utils.data.DataLoader&lt;/code&gt;and &lt;code&gt;torch.utils.data.Dataset&lt;/code&gt; that allow you to use pre-loaded datasets as well as your own data.
 &lt;code&gt;Dataset&lt;/code&gt;stores the samples and their corresponding labels, and &lt;code&gt;DataLoader&lt;/code&gt; wraps an iterable around the &lt;code&gt;Dataset&lt;/code&gt; to enable easy access to the samples.&lt;/p&gt;
 &lt;h2 id="loading-a-dataset"&gt;loading a dataset
 &lt;/h2&gt;&lt;p&gt;load the &lt;strong&gt;Fashion-MNIST&lt;/strong&gt; dataset from TorchVision.
@@ -761,8 +761,8 @@ To use &lt;code&gt;DataLoader&lt;/code&gt;, we need to set the followings parame
 &lt;h3 id="transforms"&gt;Transforms
 &lt;/h3&gt;&lt;p&gt;We use &lt;strong&gt;transforms&lt;/strong&gt; to perform some manipulation of the data and make it suitable for training.
 &lt;code&gt;transform&lt;/code&gt; to modify the features and &lt;code&gt;target_transform&lt;/code&gt; to modify the labels.
-&lt;code&gt;ToTensor&lt;/code&gt; converts a PIL image or NumPy &lt;code&gt;ndarray&lt;/code&gt; into a &lt;code&gt;FloatTensor&lt;/code&gt; and scales the image&amp;rsquo;s pixel intensity values in the range [0., 1.]&lt;/p&gt;</description></item><item><title>PyTorch基础 （一）Tensors</title><link>https://zhiim.github.io/p/pytorch-tensor/</link><pubDate>Fri, 06 Jan 2023 17:12:03 +0800</pubDate><guid>https://zhiim.github.io/p/pytorch-tensor/</guid><description>&lt;img src="https://zhiim.github.io/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （一）Tensors" /&gt;&lt;p&gt;张量（tensor）是一种类似于数组和矩阵的特殊数据结构。tensor类似于NumPy中的ndarray，两者也可以使用相同的内存地址。&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://zhiim.github.io/p/pytorch-tensor/tensor.webp"
+&lt;code&gt;ToTensor&lt;/code&gt; converts a PIL image or NumPy &lt;code&gt;ndarray&lt;/code&gt; into a &lt;code&gt;FloatTensor&lt;/code&gt; and scales the image&amp;rsquo;s pixel intensity values in the range [0., 1.]&lt;/p&gt;</description></item><item><title>PyTorch基础 （一）Tensors</title><link>https://xland.cc/p/pytorch-tensor/</link><pubDate>Fri, 06 Jan 2023 17:12:03 +0800</pubDate><guid>https://xland.cc/p/pytorch-tensor/</guid><description>&lt;img src="https://xland.cc/p/pytorch-tensor/pytorch.webp" alt="Featured image of post PyTorch基础 （一）Tensors" /&gt;&lt;p&gt;张量（tensor）是一种类似于数组和矩阵的特殊数据结构。tensor类似于NumPy中的ndarray，两者也可以使用相同的内存地址。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://xland.cc/p/pytorch-tensor/tensor.webp"
 width="636"
 height="276"
 loading="lazy"
