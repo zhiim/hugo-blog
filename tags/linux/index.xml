@@ -1152,7 +1152,7 @@ data-flex-basis="427px"
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这时MATLAB安装界面可以正常运行，正常安装即可。&lt;/p&gt;
-&lt;p&gt;如果在MATLAB运行时碰到问题，可以参考我之前写的&lt;a class="link" href="https://zhiim.github.io/p/manjaro-linux-matlab/" target="_blank" rel="noopener"
+&lt;p&gt;如果在MATLAB运行时碰到问题，可以参考我之前写的&lt;a class="link" href="https://xland.cc/p/manjaro-linux-matlab/" target="_blank" rel="noopener"
 &gt;Manjaro Linux 安装 MATLAB&lt;/a&gt;，里面记录了诸如设置无法保存、无法开启OpenGL加速等各种问题。&lt;/p&gt;</description></item><item><title>Manjaro Linux 安装 MATLAB</title><link>https://xland.cc/p/manjaro-linux-matlab/</link><pubDate>Sun, 19 Mar 2023 18:40:57 +0800</pubDate><guid>https://xland.cc/p/manjaro-linux-matlab/</guid><description>&lt;p&gt;最近从 Windows 换到了 Manjaro，日常离不开 MATLAB，虽然 MATLAB 官方提供了 Linux 版本，但是没有对 Manjaro 做适配，所以在安装 MATLAB 的过程中遇到了各种问题，以此记录。任何其他问题建议查阅&lt;a class="link" href="wiki.archlinux.org" &gt;ArchWiki&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id="matlab-安装报错"&gt;MATLAB 安装报错
 &lt;/h2&gt;&lt;p&gt;最初安装的时候，我下载的是 MATLAB 2020b 的 iso 镜像，即使按照 ArchWiki 的指导，移除了&lt;code&gt;libfreetype.so*&lt;/code&gt;还是会继续报错。后来换成 MATLAB 2022a 的镜像才成功安装。&lt;br&gt;
