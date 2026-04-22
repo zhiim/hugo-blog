@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Note on Zhiim's Blog</title><link>https://xland.cc/categories/note/</link><description>Recent content in Note on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 22 Apr 2026 09:54:55 +0800</lastBuildDate><atom:link href="https://xland.cc/categories/note/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 透明代理（TProxy）配置</title><link>https://xland.cc/p/linux-tproxy/</link><pubDate>Wed, 22 Apr 2026 09:54:55 +0800</pubDate><guid>https://xland.cc/p/linux-tproxy/</guid><description>&lt;p&gt;现代代理客户端（例如 sing-box 和 mihomo）已经支持非常精细而成熟的分流规则，我们完全可以使用全局透明代理实现最优的代理体验，而不用担心直连域名误走代理出站。&lt;/p&gt;
+&lt;p&gt;在 Linux 平台全局透明代理主要有基于内核防火墙的 iptables 模式和基于虚拟网卡的 TUN 模式。TUN 模式将原始到 IP 数据包拦截到虚拟网卡，代理软件需要运行一套完整的 TCP/IP 协议栈（如 gVisor）模拟 TCP 握手和状态机，开销极大。基于 iptables 的透明代理只需要通过内核态的 iptables 规则拦截内核处理好的 TCP 数据流并转交给代理软件，更加干净高效，此外 iptables 可以实现非常精细的拦截，例如放行 Tailscales 和 libvirt 虚拟机的流量。&lt;/p&gt;
+&lt;p&gt;鉴于此，本文将介绍基于 iptables 实现的透明代理，涵盖针对 sing-box 和 mihomo 的 DNS 处理机制不同处理，以及放行 Tailscales 和 libvirt 流量的精细化规则。&lt;/p&gt;
+&lt;p&gt;正因如此，本文将介绍基于 iptables 的透明代理，针对 sing-box 与 mihomo 不同的 DNS 处理设置了对应的规则，并添加了放行 Tailscale 与 libvirt 虚拟机流量的配置。&lt;/p&gt;
+&lt;h2 id="iptables-简介"&gt;iptables 简介
+&lt;/h2&gt;&lt;p&gt;iptables 是 Linux 内核 Netfilter 防火墙的用户态配置工具，可以通过一套规则化的表达配置 Linux 内核防火墙的工作链路。iptables 规则由 &lt;strong&gt;Tables-Chains-Rules-Target&lt;/strong&gt; 构成&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tables（表）&lt;/strong&gt;：将规则按照功能放在不同的表中，默认包含 Filter（决定哪些数据包可以出入）、NAT（修改数据包的目标和源 IP 以及端口号）、Mangle（修改数据表的 IP 报头信息）、Raw（让特定流量不被内核追踪）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Chains（链）&lt;/strong&gt;：数据包在系统中会依次经过不同的链，默认有 PREROUTING、INPUT、FORWARD、OUTPUT 和 POSTROUTING&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rules（规则）&lt;/strong&gt;：匹配数据包的条件，例如源 IP 地址为 127.0.0.0 的 udp 数据包可以被匹配&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Targets（动作）&lt;/strong&gt;：数据包被匹配后执行的动作，例如 ACCEPT、DROP、REDIRECT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/linux-tproxy/iptables.webp"&gt;&lt;figcaption&gt;
+&lt;h4&gt;Netfilter 数据处理流程图&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;图中画出了数据包从入站到出站在 Netfilter 中依次经过的链和表，我们可以由三种场景窥探数据流向：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;路由器中来自局域网设备访问互联网的流量：&lt;code&gt;POSTROUTINGRE -&amp;gt; FORWARD -&amp;gt; POSTROUTING&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;来自其他设备的入站流量：``&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>
