@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Zhiim's Blog</title><link>https://xland.cc/tags/linux/</link><description>Recent content in Linux on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 22 Apr 2026 09:54:55 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 透明代理（TProxy）配置</title><link>https://xland.cc/p/linux-tproxy/</link><pubDate>Wed, 22 Apr 2026 09:54:55 +0800</pubDate><guid>https://xland.cc/p/linux-tproxy/</guid><description>&lt;p&gt;现代代理客户端（例如 sing-box 和 mihomo）已经支持非常精细而成熟的分流规则，我们完全可以使用全局透明代理实现最优的代理体验，而不用担心直连域名误走代理出站。&lt;/p&gt;
-&lt;p&gt;在 Linux 平台全局透明代理主要有基于内核防火墙的 iptables 模式和基于虚拟网卡的 TUN 模式。TUN 模式将原始到 IP 数据包拦截到虚拟网卡，代理软件需要运行一套完整的 TCP/IP 协议栈（如 gVisor）模拟 TCP 握手和状态机，开销极大。基于 iptables 的透明代理只需要通过内核态的 iptables 规则拦截内核处理好的 TCP 数据流并转交给代理软件，更加干净高效，此外 iptables 可以实现非常精细的拦截，例如放行 Tailscales 和 libvirt 虚拟机的流量。&lt;/p&gt;
-&lt;p&gt;鉴于此，本文将介绍基于 iptables 实现的透明代理，涵盖针对 sing-box 和 mihomo 的 DNS 处理机制不同处理，以及放行 Tailscales 和 libvirt 流量的精细化规则。&lt;/p&gt;
-&lt;p&gt;正因如此，本文将介绍基于 iptables 的透明代理，针对 sing-box 与 mihomo 不同的 DNS 处理设置了对应的规则，并添加了放行 Tailscale 与 libvirt 虚拟机流量的配置。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Zhiim's Blog</title><link>https://xland.cc/tags/linux/</link><description>Recent content in Linux on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 22 Apr 2026 09:54:55 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 透明代理（TPROXY）配置</title><link>https://xland.cc/p/linux-tproxy/</link><pubDate>Wed, 22 Apr 2026 09:54:55 +0800</pubDate><guid>https://xland.cc/p/linux-tproxy/</guid><description>&lt;p&gt;现代代理客户端（例如 sing-box 和 mihomo）已经支持非常精细而成熟的分流规则，我们完全可以使用全局透明代理实现最优的代理体验，而不用担心直连域名误走代理出站。&lt;/p&gt;
+&lt;p&gt;在 Linux 平台全局透明代理主要有基于内核防火墙的 iptables 模式和基于虚拟网卡的 TUN 模式。TUN 模式将原始的 IP 数据包拦截到虚拟网卡，代理软件需要运行一套完整的 TCP/IP 协议栈（如 gVisor）模拟 TCP 握手和状态机，开销极大。基于 iptables 的透明代理只需要通过内核态的 iptables 规则拦截内核处理好的 TCP 数据流并转交给代理软件，更加干净高效，此外 iptables 可以实现非常精细的拦截，例如放行 Tailscale 的流量。&lt;/p&gt;
+&lt;p&gt;正因如此，本文将介绍基于 iptables 的透明代理，针对 sing-box 与 mihomo 不同的 DNS 处理设置了对应的规则，并添加了放行 Tailscale 流量的配置。&lt;/p&gt;
 &lt;h2 id="iptables-简介"&gt;iptables 简介
 &lt;/h2&gt;&lt;p&gt;iptables 是 Linux 内核 Netfilter 防火墙的用户态配置工具，可以通过一套规则化的表达配置 Linux 内核防火墙的工作链路。iptables 规则由 &lt;strong&gt;Tables-Chains-Rules-Target&lt;/strong&gt; 构成&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Tables（表）&lt;/strong&gt;：将规则按照功能放在不同的表中，默认包含 Filter（决定哪些数据包可以出入）、NAT（修改数据包的目标和源 IP 以及端口号）、Mangle（修改数据表的 IP 报头信息）、Raw（让特定流量不被内核追踪）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tables（表）&lt;/strong&gt;：将规则按照功能放在不同的表中，默认包含 Filter（决定哪些数据包可以出入）、NAT（修改数据包的目标和源 IP 以及端口号）、Mangle（修改数据包的 IP 报头信息）、Raw（让特定流量不被内核追踪）&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Chains（链）&lt;/strong&gt;：数据包在系统中会依次经过不同的链，默认有 PREROUTING、INPUT、FORWARD、OUTPUT 和 POSTROUTING&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Rules（规则）&lt;/strong&gt;：匹配数据包的条件，例如源 IP 地址为 127.0.0.0 的 udp 数据包可以被匹配&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Targets（动作）&lt;/strong&gt;：数据包被匹配后执行的动作，例如 ACCEPT、DROP、REDIRECT&lt;/li&gt;
@@ -16,9 +15,659 @@
 &lt;/figure&gt;
 &lt;p&gt;图中画出了数据包从入站到出站在 Netfilter 中依次经过的链和表，我们可以由三种场景窥探数据流向：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;路由器中来自局域网设备访问互联网的流量：&lt;code&gt;POSTROUTINGRE -&amp;gt; FORWARD -&amp;gt; POSTROUTING&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;来自其他设备的入站流量：``&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Linux 桌面在非 TUN 模式下给 Antigravity 设置代理</title><link>https://xland.cc/p/proxy_antigravity/</link><pubDate>Thu, 08 Jan 2026 10:04:27 +0800</pubDate><guid>https://xland.cc/p/proxy_antigravity/</guid><description>&lt;p&gt;&lt;a class="link" href="https://antigravity.google" target="_blank" rel="noopener"
+&lt;li&gt;路由器中来自局域网设备访问互联网的流量，它们的目的 IP 是局域网外，所以会被路由器转发，流向：&lt;code&gt;PREROUTING -&amp;gt; FORWARD -&amp;gt; POSTROUTING&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;来自其他设备的入站流量，由 INPUT 链中的 filter 表规则决定是否可以入站（例如 SSH 登录），流向：&lt;code&gt;PREROUTING -&amp;gt; INPUT -&amp;gt; 本机&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;本机产生的发往外站的流量，由 OUTPUT 链中的 filter 表规则决定是否放行，流向：&lt;code&gt;本机 -&amp;gt; OUTPUT -&amp;gt; POSTROUTING&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;标准的 iptables 命令通常包含了要操作的链、匹配条件以及执行的动作。例如，最基础的服务放行配置：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 允许本地回环接口 (loopback) 的所有流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -i lo -j ACCEPT
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 允许目标端口为 80 (HTTP) 和 22 (SSH) 的 TCP 流量入站&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -p tcp --dport &lt;span class="m"&gt;80&lt;/span&gt; -j ACCEPT
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -p tcp --dport &lt;span class="m"&gt;22&lt;/span&gt; -j ACCEPT
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将特定 IP 来源的流量直接丢弃且不产生回应&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -s 192.168.1.100 -j DROP
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="基于-iptables-实现透明代理"&gt;基于 iptables 实现透明代理
+&lt;/h2&gt;&lt;p&gt;本节我们基于 iptables 实现透明代理：通过 iptables 规则将系统中的网络流量劫持并转发到代理客户端，然后经过代理客户端打包后发出。假设代理客户端（可以是 sing-box 或 mihomo）的 tproxy 入站端口设置为 9898。&lt;/p&gt;
+&lt;h3 id="劫持流量到代理客户端"&gt;劫持流量到代理客户端
+&lt;/h3&gt;&lt;p&gt;Linux 透明代理可以使用 TPROXY 模块，它能完美处理 TCP 与 UDP 流量并保留真实源 IP，但是 TPROXY 模块只能挂载在 mangle 表的 PREROUTING 链。&lt;/p&gt;
+&lt;p&gt;局域网设备访问互联网的流量链路为 &lt;code&gt;PREROUTING -&amp;gt; FORWARD -&amp;gt; POSTROUTING&lt;/code&gt;，只需要将 PREROUTING 链上的流量劫持到代理客户端的 tproxy 入站端口，就能实现流量被代理客户端转发。&lt;/p&gt;
+&lt;p&gt;设备自身产生的访问互联网的流量链路为 &lt;code&gt;本机 -&amp;gt; OUTPUT -&amp;gt; POSTROUTING&lt;/code&gt;，并不会经过 PREROUTING 链。为了实现本机流量也走代理，可以将 OUTPUT 链的流量由回环设备 lo 发出，这样会自动被 lo 再次接受，流量就像外来包一样重新入站走 &lt;code&gt;PREROUTING -&amp;gt; INPUT -&amp;gt; 本机&lt;/code&gt;，下一站就是 PREROUTING 链，之后被劫持到代理客户端的 tproxy 端口。&lt;/p&gt;
+&lt;p&gt;所以我们的透明代理分为两个步骤实现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将 OUTPUT 链的流量由本地回环设备 lo 发出，让流量自动出现在 PREROUTING 链；&lt;/li&gt;
+&lt;li&gt;劫持 PREROUTING 链并转发到代理客户端。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="将-output-链的流量发往-lo-设备"&gt;将 OUTPUT 链的流量发往 lo 设备
+&lt;/h4&gt;&lt;p&gt;在处理 OUTPUT 链流量时，需要放行由代理客户端发出的出站流量，否则流量会再次转发出现回环。为了解决这个问题，我们需要专门创建一个例如 &lt;code&gt;tproxy&lt;/code&gt; 用户用于运行代理客户端，并且在 iptables 规则中放行 &lt;code&gt;tproxy&lt;/code&gt; 用于发出的流量。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 创建 tproxy 用户&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo useradd -r -M -s /usr/sbin/nologin tproxy
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 调整权限，让代理客户端的配置文件属于 tproxy 用户&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo chown -R tproxy:tproxy /usr/local/share/sing-box
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;创建 systemd 服务用于运行代理客户端&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;Unit&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;Description&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;sing-box&lt;/span&gt; &lt;span class="nx"&gt;Service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;After&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;network-online&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;Service&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ExecStartPre&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="err"&gt;+/&lt;/span&gt;&lt;span class="nx"&gt;usr&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;sbin&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;setcap&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;cap_net_admin,cap_net_bind_service,cap_net_raw,cap_sys_ptrace,cap_dac_read_search+ep&amp;#39;&lt;/span&gt; &lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;usr&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;local&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;bin&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;sing-box&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;ExecStart&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;usr&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;local&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;bin&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;sing-box&lt;/span&gt; &lt;span class="nx"&gt;run&lt;/span&gt; &lt;span class="nx"&gt;-c&lt;/span&gt; &lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;usr&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;local&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;share&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;sing-box&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;json&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;WorkingDirectory&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;usr&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;local&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;share&lt;/span&gt;&lt;span class="err"&gt;/&lt;/span&gt;&lt;span class="nx"&gt;sing-box&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;RestartSec&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;User&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;tproxy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;Group&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;tproxy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;Install&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;WantedBy&lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;multi-user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;接下来，新建策略路由，将所有带有标签 1 的流量由 lo 设备发出。然后新建一个 TRANS_PROXY_MASK 链，将所有经过 TRANS_PROXY 链的流量打上标签 1，这样这些流量会自动由 lo 设备发出。最后只需要将不属于 &lt;code&gt;tproxy&lt;/code&gt; 用户的出站流量由 OUTPUT 链劫持到 TRANS_PROXY_MASK 链。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# mask 被标记为 1 的数据包查询编号为 100 的路由表&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip rule add fwmark &lt;span class="m"&gt;1&lt;/span&gt; table &lt;span class="m"&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 在 100 路由表中将来源与任何 IP 的数据包标记为本地流量，并发由 lo 设备发出&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip route add &lt;span class="nb"&gt;local&lt;/span&gt; 0.0.0.0/0 dev lo table &lt;span class="m"&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 创建 TRANS_PROXY_MASK 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -N TRANS_PROXY_MASK
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 为 TRANS_PROXY_MASK 链中的流量打上 mask 1 实现劫持到 lo 设备&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -p tcp -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -p udp -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 劫持非 tproxy 用户的 OUTPUT 流量到 TRANS_PROXY_MASK 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A OUTPUT -m owner ! --uid-owner tproxy -j TRANS_PROXY_MASK
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id="劫持-prerouting-链流量到代理客户端"&gt;劫持 PREROUTING 链流量到代理客户端
+&lt;/h4&gt;&lt;p&gt;新建一个 TRANS_PROXY 链，将经过 PREROUTING 链的流量拦截到 TRANS_PROXY 链，然后让经过 TRANS_PROXY 的所有 tcp 和 udp 流量发往透明代理的监听端口。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 创建 TRANS_PROXY 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -N TRANS_PROXY
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将 tcp 和 udp 流量转发到 TRANS_PROXY，并且打上 mask 1 作为本地流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -p udp -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -p tcp -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 劫持 PREROUTING&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A PREROUTING -j TRANS_PROXY
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这里将流量发向 TRANS_PROXY 同样打上了标签 1，这是因为 PREROUTING 的下一步是根据目的 IP 判断走 FORWARD 链发往外部，还是走 INPUT 发往本地服务。打上标签 1 后会被策略路由看作 local 流量走 INPUT 发往本地的 9898 端口被代理客户端处理。&lt;/p&gt;
+&lt;h3 id="精细化放行"&gt;精细化放行
+&lt;/h3&gt;&lt;p&gt;在上述路由转发规则的基础上，我们还需要设置放行规则，防止错误拦截。例如目的 IP 为同局域网设备的流量、Tailscale 的出入站流量不应该被拦截到代理客户端。&lt;/p&gt;
+&lt;p&gt;为了放行目的 IP 为同局域网设备的流量，可以在 TRANS_PROXY_MASK 和 TRANS_PROXY 链的最前端（规则是由前往后匹配的，所以这些规则需要最先添加）添加放行的规则。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 10.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 172.16.0.0/12 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 192.168.0.0/16 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 127.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 224.0.0.0/4 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 255.255.255.255/32 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 10.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 172.16.0.0/12 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 127.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 224.0.0.0/4 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 255.255.255.255/32 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Tailscale 组网设备的 IP 段为 &lt;code&gt;100.64.0.0/10&lt;/code&gt;，并且 Tailscale 发出的流量会被打上标签 &lt;code&gt;0x40000&lt;/code&gt;，Tailscale 入站的流量会由 &lt;code&gt;tailscale0&lt;/code&gt; 设备接收。基于这些特征，我们可以添加规则不拦截 Tailscale 出入站的流量（同样需要在对应链中优先添加）。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 本机发出的目的地址为 tailscale IP 段的流量绕过&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY_MASK &lt;span class="m"&gt;1&lt;/span&gt; -d 100.64.0.0/10 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 本机发出的由 tailscale 产生的流量绕过&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY_MASK &lt;span class="m"&gt;2&lt;/span&gt; -m mark --mark 0x40000 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 从 tailscale0 进入本机的流量绕过&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY &lt;span class="m"&gt;1&lt;/span&gt; -i tailscale0 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 目的地址为 tailscale IP 段的流量绕过&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY &lt;span class="m"&gt;2&lt;/span&gt; -d 100.64.0.0/10 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="劫持-dns-流量"&gt;劫持 DNS 流量
+&lt;/h3&gt;&lt;p&gt;如果想要按照代理客户端的 DNS 规则解析域名，需要将系统的 DNS 请求也劫持到代理客户端。&lt;/p&gt;
+&lt;h4 id="dns-请求劫持到-sing-box"&gt;DNS 请求劫持到 sing-box
+&lt;/h4&gt;&lt;p&gt;sing-box 会将 DNS 流量和 TCP/UDP 流量一起处理，只要在 sing-box 的 &lt;code&gt;route&lt;/code&gt; 字段添加&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;action&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;hijack-dns&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nt"&gt;&amp;#34;protocol&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;dns&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;我们已经拦截了所有出站的 TCP/UDP 流量，所以如果系统设置了公共 DNS 服务器，sing-box 已经可以正常劫持 DNS 请求。如果系统的 DNS 服务器设置为上游网关，由于前面添加了放行目的 IP 为局域网 IP 的规则，需要额外劫持这些 IP 发往 53 端口的 TCP/UDP 流量。在 TRANS_PROXY_MASK 和 TRANS_PROXY 链的最前端添加&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 10.0.0.0/8 -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 10.0.0.0/8 -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 172.16.0.0/12 -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 172.16.0.0/12 -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 192.168.0.0/16 -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 192.168.0.0/16 -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 10.0.0.0/8 -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 10.0.0.0/8 -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 172.16.0.0/12 -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 172.16.0.0/12 -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id="dns-请求劫持到-mihomo"&gt;DNS 请求劫持到 mihomo
+&lt;/h4&gt;&lt;p&gt;mihomo 的 DNS 服务监听在特定端口（例如 1053）&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;dns&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;enable&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;listen&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;0.0.0.0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="m"&gt;1053&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;想要使用 mihomo 的 DNS 服务，需要将发往 53 端口的 TCP/UDP 流量劫持为发往 127.0.0.1 的 1053 端口。由于 NAT 表控制了数据包的目的 IP 和端口，需要在 NAT 表上添加 iptables 规则&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 劫持 dns 流量到 mihomo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -N MIHOMO_DNS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将目标为 53 端口的流量重定向到 mihomo 的 DNS 端口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A MIHOMO_DNS -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j REDIRECT --to-ports &lt;span class="m"&gt;1053&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A MIHOMO_DNS -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j REDIRECT --to-ports &lt;span class="m"&gt;1053&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 拦截本机的 DNS 请求&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A OUTPUT -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -m owner ! --uid-owner tproxy -j MIHOMO_DNS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A OUTPUT -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -m owner ! --uid-owner tproxy -j MIHOMO_DNS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 拦截局域网设备的 DNS 请求&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A PREROUTING -p udp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MIHOMO_DNS
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A PREROUTING -p tcp --dport &lt;span class="m"&gt;53&lt;/span&gt; -j MIHOMO_DNS
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="总结"&gt;总结
+&lt;/h3&gt;&lt;p&gt;将上述所有规则放在一次，为了实现透明代理，我们需要一次执行的所有规则为&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;span class="lnt"&gt;44
+&lt;/span&gt;&lt;span class="lnt"&gt;45
+&lt;/span&gt;&lt;span class="lnt"&gt;46
+&lt;/span&gt;&lt;span class="lnt"&gt;47
+&lt;/span&gt;&lt;span class="lnt"&gt;48
+&lt;/span&gt;&lt;span class="lnt"&gt;49
+&lt;/span&gt;&lt;span class="lnt"&gt;50
+&lt;/span&gt;&lt;span class="lnt"&gt;51
+&lt;/span&gt;&lt;span class="lnt"&gt;52
+&lt;/span&gt;&lt;span class="lnt"&gt;53
+&lt;/span&gt;&lt;span class="lnt"&gt;54
+&lt;/span&gt;&lt;span class="lnt"&gt;55
+&lt;/span&gt;&lt;span class="lnt"&gt;56
+&lt;/span&gt;&lt;span class="lnt"&gt;57
+&lt;/span&gt;&lt;span class="lnt"&gt;58
+&lt;/span&gt;&lt;span class="lnt"&gt;59
+&lt;/span&gt;&lt;span class="lnt"&gt;60
+&lt;/span&gt;&lt;span class="lnt"&gt;61
+&lt;/span&gt;&lt;span class="lnt"&gt;62
+&lt;/span&gt;&lt;span class="lnt"&gt;63
+&lt;/span&gt;&lt;span class="lnt"&gt;64
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sysctl -w net.ipv4.ip_forward&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 添加策略路由将标签为 1 的流量看作本地流量并由 lo 本地回环设备发出&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip rule add fwmark &lt;span class="m"&gt;1&lt;/span&gt; table &lt;span class="m"&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip route add &lt;span class="nb"&gt;local&lt;/span&gt; 0.0.0.0/0 dev lo table &lt;span class="m"&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 添加 TRANS_PROXY_MASK 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -N TRANS_PROXY_MASK
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 放行 Tailscale 入站&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY_MASK &lt;span class="m"&gt;1&lt;/span&gt; -d 100.64.0.0/10 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY_MASK &lt;span class="m"&gt;2&lt;/span&gt; -m mark --mark 0x40000 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 如果劫持 DNS 请求到 sing-box&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY_MASK -d 10.0.0.0/8 -p udp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY_MASK -d 10.0.0.0/8 -p tcp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY_MASK -d 172.16.0.0/12 -p udp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY_MASK -d 172.16.0.0/12 -p tcp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY_MASK -d 192.168.0.0/16 -p udp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY_MASK -d 192.168.0.0/16 -p tcp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 放行目的 IP 为局域网 IP 的流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 10.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 172.16.0.0/12 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 192.168.0.0/16 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 127.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 224.0.0.0/4 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -d 255.255.255.255/32 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 给所有流经 TRANS_PROXY_MASK 链的流量打上标签 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -p tcp -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY_MASK -p udp -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将所有非 tproxy 用户发出的流量劫持到 TRANS_PROXY_MASK 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A OUTPUT -m owner ! --uid-owner tproxy -j TRANS_PROXY_MASK
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 添加 TRANS_PROXY 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -N TRANS_PROXY
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 放行 Tailscale 出站&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY &lt;span class="m"&gt;1&lt;/span&gt; -i tailscale0 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -I TRANS_PROXY &lt;span class="m"&gt;2&lt;/span&gt; -d 100.64.0.0/10 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 如果劫持 DNS 请求到 sing-box&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY -d 10.0.0.0/8 -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY -d 10.0.0.0/8 -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY -d 172.16.0.0/12 -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY -d 172.16.0.0/12 -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 放行目的 IP 为局域网 IP 的流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 10.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 172.16.0.0/12 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 127.0.0.0/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 224.0.0.0/4 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -d 255.255.255.255/32 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将所有流经 TRANS_PROXY 链的流量发向代理客户端&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -p udp -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A TRANS_PROXY -p tcp -j TPROXY --on-ip 127.0.0.1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将所有流经 PREROUTING 链的流量劫持到 TRANS_PROXY 链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -A PREROUTING -j TRANS_PROXY
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 如果劫持 DNS 请求到 mihomo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -N MIHOMO_DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -A MIHOMO_DNS -p udp --dport 53 -j REDIRECT --to-ports 1053&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -A MIHOMO_DNS -p tcp --dport 53 -j REDIRECT --to-ports 1053&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -A OUTPUT -p udp --dport 53 -m owner ! --uid-owner tproxy -j MIHOMO_DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -A OUTPUT -p tcp --dport 53 -m owner ! --uid-owner tproxy -j MIHOMO_DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -A PREROUTING -p udp --dport 53 -j MIHOMO_DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -A PREROUTING -p tcp --dport 53 -j MIHOMO_DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;类似地，对于 IPV6 流量可以添加如下规则&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;span class="lnt"&gt;44
+&lt;/span&gt;&lt;span class="lnt"&gt;45
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sysctl -w net.ipv6.conf.all.forwarding&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip -6 rule add fwmark &lt;span class="m"&gt;1&lt;/span&gt; table &lt;span class="m"&gt;101&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip -6 route add &lt;span class="nb"&gt;local&lt;/span&gt; ::/0 dev lo table &lt;span class="m"&gt;101&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -N TRANS_PROXY_MASK6
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -I TRANS_PROXY_MASK6 &lt;span class="m"&gt;1&lt;/span&gt; -d fd7a:115c:a1e0::/48 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -I TRANS_PROXY_MASK6 &lt;span class="m"&gt;2&lt;/span&gt; -m mark --mark 0x40000 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 如果劫持 DNS 请求到 sing-box&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY_MASK6 -d fe80::/10 -p udp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY_MASK6 -d fe80::/10 -p tcp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY_MASK6 -d fc00::/7 -p udp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY_MASK6 -d fc00::/7 -p tcp --dport 53 -j MARK --set-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY_MASK6 -d fe80::/10 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY_MASK6 -d fc00::/7 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY_MASK6 -d ::1/128 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY_MASK6 -d ff00::/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY_MASK6 -p tcp -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY_MASK6 -p udp -j MARK --set-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A OUTPUT -m owner ! --uid-owner tproxy -j TRANS_PROXY_MASK6
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -N TRANS_PROXY6
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -I TRANS_PROXY6 &lt;span class="m"&gt;1&lt;/span&gt; -i tailscale0 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -I TRANS_PROXY6 &lt;span class="m"&gt;2&lt;/span&gt; -d fd7a:115c:a1e0::/48 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 如果劫持 DNS 请求到 sing-box&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY6 -d fe80::/10 -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY6 -d fe80::/10 -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY6 -d fc00::/7 -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t mangle -A TRANS_PROXY6 -d fc00::/7 -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port 9898 --tproxy-mark 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY6 -d fe80::/10 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY6 -d fc00::/7 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY6 -d ::1/128 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY6 -d ff00::/8 -j RETURN
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY6 -p udp -j TPROXY --on-ip ::1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A TRANS_PROXY6 -p tcp -j TPROXY --on-ip ::1 --on-port &lt;span class="m"&gt;9898&lt;/span&gt; --tproxy-mark &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -A PREROUTING -j TRANS_PROXY6
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 如果劫持 DNS 请求到 mihomo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -N MIHOMO_DNS6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -A MIHOMO_DNS6 -p udp --dport 53 -j REDIRECT --to-ports 1053&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -A MIHOMO_DNS6 -p tcp --dport 53 -j REDIRECT --to-ports 1053&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -A OUTPUT -p udp --dport 53 -m owner ! --uid-owner tproxy -j MIHOMO_DNS6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -A OUTPUT -p tcp --dport 53 -m owner ! --uid-owner tproxy -j MIHOMO_DNS6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -A PREROUTING -p udp --dport 53 -j MIHOMO_DNS6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j MIHOMO_DNS6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;清除规则&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;span class="lnt"&gt;44
+&lt;/span&gt;&lt;span class="lnt"&gt;45
+&lt;/span&gt;&lt;span class="lnt"&gt;46
+&lt;/span&gt;&lt;span class="lnt"&gt;47
+&lt;/span&gt;&lt;span class="lnt"&gt;48
+&lt;/span&gt;&lt;span class="lnt"&gt;49
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 清理 IPv4 路由&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip rule del fwmark &lt;span class="nv"&gt;$FWMARK&lt;/span&gt; table &lt;span class="nv"&gt;$TABLE_V4&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip route del &lt;span class="nb"&gt;local&lt;/span&gt; 0.0.0.0/0 dev lo table &lt;span class="nv"&gt;$TABLE_V4&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 清理 IPv4 规则和链 (忽略不存在的错误)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -D PREROUTING -p tcp -m socket -j DIVERT 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -F DIVERT 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -X DIVERT 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -D PREROUTING -j &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -F &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -X &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -D OUTPUT -m owner ! --uid-owner &lt;span class="nv"&gt;$PROXY_USER&lt;/span&gt; -j &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;_MASK 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -F &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;_MASK 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t mangle -X &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;_MASK 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 清理 mihomo DNS 规则&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -D PREROUTING -p udp --dport 53 -j MIHOMO_DNS 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -D PREROUTING -p tcp --dport 53 -j MIHOMO_DNS 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -D OUTPUT -p udp --dport 53 -m owner ! --uid-owner $PROXY_USER -j MIHOMO_DNS 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -D OUTPUT -p tcp --dport 53 -m owner ! --uid-owner $PROXY_USER -j MIHOMO_DNS 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -F MIHOMO_DNS 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# iptables -t nat -X MIHOMO_DNS 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 清理 IPv6 路由&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip -6 rule del fwmark &lt;span class="nv"&gt;$FWMARK&lt;/span&gt; table &lt;span class="nv"&gt;$TABLE_V6&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip -6 route del &lt;span class="nb"&gt;local&lt;/span&gt; ::/0 dev lo table &lt;span class="nv"&gt;$TABLE_V6&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 清理 IPv6 规则和链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -D PREROUTING -p tcp -m socket -j DIVERT6 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -F DIVERT6 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -X DIVERT6 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -D PREROUTING -j &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -F &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -X &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -D OUTPUT -m owner ! --uid-owner &lt;span class="nv"&gt;$PROXY_USER&lt;/span&gt; -j &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;_MASK6 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -F &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;_MASK6 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ip6tables -t mangle -X &lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;CHAIN_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;_MASK6 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 清理 mihomo DNS 规则&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -D PREROUTING -p udp --dport 53 -j MIHOMO_DNS6 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -D PREROUTING -p tcp --dport 53 -j MIHOMO_DNS6 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -D OUTPUT -p udp --dport 53 -m owner ! --uid-owner $PROXY_USER -j MIHOMO_DNS6 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -D OUTPUT -p tcp --dport 53 -m owner ! --uid-owner $PROXY_USER -j MIHOMO_DNS6 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -F MIHOMO_DNS6 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# ip6tables -t nat -X MIHOMO_DNS6 2&amp;gt;/dev/null || true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;更加便捷的应用和清除规则可以参考&lt;a class="link" href="https://github.com/zhiim/dotfiles/blob/master/dot_config/sing-box/tproxy.sh" target="_blank" rel="noopener"
+&gt;脚本&lt;/a&gt;。&lt;/p&gt;</description></item><item><title>Linux 桌面在非 TUN 模式下给 Antigravity 设置代理</title><link>https://xland.cc/p/proxy_antigravity/</link><pubDate>Thu, 08 Jan 2026 10:04:27 +0800</pubDate><guid>https://xland.cc/p/proxy_antigravity/</guid><description>&lt;p&gt;&lt;a class="link" href="https://antigravity.google" target="_blank" rel="noopener"
 &gt;Antigravity&lt;/a&gt; 是 Google 推出的 AI IDE，凭借慷慨的 AI 额度广受欢迎。然而在国内的网络环境下，目前使用 Antigravity 一般需要通过 Clash TUN 模式设置全局代理，这势必会对整个系统的网络造成负面影响。Windows、Mac 系统下如何不使用 TUN 模式实现 Antigravity 代理的方案，在 LINUX DO 等论坛已广为讨论。本文探究了在 Linux 桌面中，如何为 Antigravity 设置代理以在国内正常使用，而不使用 TUN 全局代理模式&lt;/p&gt;
 &lt;p&gt;Antigravity 的代理需要代理两个组件，一个是主体应用，一个是 &lt;code&gt;language_server&lt;/code&gt; 进程。主体应用基于 VS Code 开发，使用 Electron 技术栈，可以通过传入启动参数设置代理；&lt;code&gt;language_server&lt;/code&gt; 使用 Go 语言开发，不受启动参数和系统代理的影响，需要借助 &lt;code&gt;graftcp&lt;/code&gt; 实现代理&lt;/p&gt;
 &lt;h2 id="主体应用代理"&gt;主体应用代理
