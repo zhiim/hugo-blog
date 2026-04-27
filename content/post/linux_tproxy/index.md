@@ -204,7 +204,7 @@ iptables -t mangle -A TRANS_PROXY -d 192.168.0.0/16 -p tcp --dport 53 -j TPROXY 
 
 #### DNS 请求劫持到 mihomo
 
-mihomo 的 DNS 服务监听在特定端口（例如 1053）
+mihomo 同样可以在分流的时候将所有的 53 端口流量劫持到 DNS，但也提供了将 DNS 服务监听在特定端口的功能，实现代理流量和 DNS 流量的分离。本节将基于这一特性，假设 mihomo 的 DNS 服务监听在特定端口（例如 1053），通过 iptables 劫持 DNS 请求
 
 ```yaml
 dns:
