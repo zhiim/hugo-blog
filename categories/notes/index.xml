@@ -1,4 +1,317 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Notes on Zhiim's Blog</title><link>https://xland.cc/categories/notes/</link><description>Recent content in Notes on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 26 Sep 2025 20:03:09 +0800</lastBuildDate><atom:link href="https://xland.cc/categories/notes/index.xml" rel="self" type="application/rss+xml"/><item><title>机器学习 20 kNN</title><link>https://xland.cc/p/ml_20_knn/</link><pubDate>Fri, 26 Sep 2025 20:03:09 +0800</pubDate><guid>https://xland.cc/p/ml_20_knn/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 20 kNN" /&gt;&lt;h2 id="nearest-neighbor-classification"&gt;Nearest Neighbor Classification
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Notes on Zhiim's Blog</title><link>https://xland.cc/categories/notes/</link><description>Recent content in Notes on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 12 May 2026 16:42:15 +0800</lastBuildDate><atom:link href="https://xland.cc/categories/notes/index.xml" rel="self" type="application/rss+xml"/><item><title>CS336 Note 01: Overview, Tokenization</title><link>https://xland.cc/p/cs336-note-01-overview-tokenization/</link><pubDate>Tue, 12 May 2026 16:42:15 +0800</pubDate><guid>https://xland.cc/p/cs336-note-01-overview-tokenization/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 01: Overview, Tokenization" /&gt;&lt;p&gt;&lt;a class="link" href="http://cs336.stanford.edu/spring2025/" target="_blank" rel="noopener"
+&gt;CS 336&lt;/a&gt; 课程笔记，仅供参考。&lt;/p&gt;
+&lt;h2 id="1-overview"&gt;1. Overview
+&lt;/h2&gt;&lt;h3 id="11-basic"&gt;1.1 basic
+&lt;/h3&gt;&lt;p&gt;构建一个完整的语言模型由三步组成：tokenization，模型结构和训练方法&lt;/p&gt;
+&lt;h4 id="111-tokenization"&gt;1.1.1 Tokenization
+&lt;/h4&gt;&lt;p&gt;tokenizer 可以实现字符串和 int 序列（tokens）之间的转换&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/36fbaf2d02a5e921b94330964cf875c7.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;h4&gt;tokenizer&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;本课程主要讲解的是 Byte-Pair Encoding（BPE）tokenizer  &lt;a class="link" href="https://arxiv.org/abs/1508.07909" target="_blank" rel="noopener"
+&gt;Sennrich+ 2015&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;此外还有一个无需 tokenizer 的方法，但是目前并没有起到显著成效  &lt;a class="link" href="https://arxiv.org/abs/2105.13626" target="_blank" rel="noopener"
+&gt;Xue+ 2021&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/pdf/2305.07185.pdf" target="_blank" rel="noopener"
+&gt;Yu+ 2023&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2412.09871" target="_blank" rel="noopener"
+&gt;Pagnoni+ 2024&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2406.19223" target="_blank" rel="noopener"
+&gt;Deiseroth+ 2024&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id="112-结构"&gt;1.1.2 结构
+&lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/ff893a3e2c5ef8e817bc78ee964ecce4.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;transformer architecture&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;在 transformer 基础上又有一些变种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;损失函数：ReLU，SwiGLU &lt;a class="link" href="https://arxiv.org/pdf/2002.05202.pdf" target="_blank" rel="noopener"
+&gt;Shazeer 2020&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;位置编码：sinusoidal，RoPE &lt;a class="link" href="https://arxiv.org/pdf/2104.09864.pdf" target="_blank" rel="noopener"
+&gt;Su+ 2021&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;归一化：LayerNorm，RMSNorm &lt;a class="link" href="https://arxiv.org/abs/1910.07467" target="_blank" rel="noopener"
+&gt;Zhang+ 2019&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;归一化层的位置：pre-norm vs post-norm &lt;a class="link" href="https://arxiv.org/pdf/2002.04745.pdf" target="_blank" rel="noopener"
+&gt;Xiong+ 2020&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;MLP 层：混合专家模式 &lt;a class="link" href="https://arxiv.org/pdf/1701.06538.pdf" target="_blank" rel="noopener"
+&gt;Shazeer+ 2017&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;注意力：滑动窗，线性注意力 &lt;a class="link" href="https://arxiv.org/pdf/2310.06825.pdf" target="_blank" rel="noopener"
+&gt;Jiang+ 2023&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2006.16236" target="_blank" rel="noopener"
+&gt;Katharopoulos+ 2020&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;低维注意力：GQA，MLA &lt;a class="link" href="https://arxiv.org/pdf/2305.13245.pdf" target="_blank" rel="noopener"
+&gt;Ainslie+ 2023&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2405.04434" target="_blank" rel="noopener"
+&gt;DeepSeek-AI+ 2024&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;State-space models: Hyena  &lt;a class="link" href="https://arxiv.org/abs/2302.10866" target="_blank" rel="noopener"
+&gt;Poli+ 2023&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="113-训练方法"&gt;1.1.3 训练方法
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;优化器：AdamW，Muon，SOAP &lt;a class="link" href="https://arxiv.org/pdf/1412.6980.pdf" target="_blank" rel="noopener"
+&gt;Kingma+ 2014&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="noopener"
+&gt;Loshchilov+ 2017&lt;/a&gt;, &lt;a class="link" href="https://kellerjordan.github.io/posts/muon/" target="_blank" rel="noopener"
+&gt;Keller 2024&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2409.11321" target="_blank" rel="noopener"
+&gt;Vyas+ 2024&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;学习率缩放：cosine，WSD &lt;a class="link" href="https://arxiv.org/pdf/1608.03983.pdf" target="_blank" rel="noopener"
+&gt;Loshchilov+ 2016&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/pdf/2404.06395.pdf" target="_blank" rel="noopener"
+&gt;Hu+ 2024&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Batch size：critical batch size &lt;a class="link" href="https://arxiv.org/pdf/1812.06162.pdf" target="_blank" rel="noopener"
+&gt;McCandlish+ 2018&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;正则化：dropout，weight decay&lt;/li&gt;
+&lt;li&gt;超参数：head number，hidden dimension&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="12-系统"&gt;1.2 系统
+&lt;/h3&gt;&lt;h4 id="kernels"&gt;Kernels
+&lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/61e278fe366b1e97faf4b0dc2dbe9cab.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;dram and sram&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;在 GPU 内部，DRAM 和 SRAM 之间进行数据传输，需要最大化数据传输的能效&lt;/p&gt;
+&lt;h4 id="122-parallelism"&gt;1.2.2 Parallelism
+&lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/c294334d9b5eb4d4156ecf56977ff656.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;h4&gt;gpu group&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;如果有一个 GPU 集群，数据在 GPU 之间的移动将会比 GPU 内部更为低效&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;进行 collective operation：gather，reduce，all-reduce&lt;/li&gt;
+&lt;li&gt;GPU 数据分片（参数，激活状态，梯度，优化器状态）&lt;/li&gt;
+&lt;li&gt;分布计算：数据、tensor、pipeline、sequence 并行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="123-推理"&gt;1.2.3 推理
+&lt;/h4&gt;&lt;p&gt;一般来说，推理计算比训练计算需求更高&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/3cd276051a37e9545ed47bb02ae50e6b.webp"&gt;&lt;figcaption&gt;
+&lt;h4&gt;inference phase&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;推理可以分为 prefill 和 decode 两个阶段&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;prefill：给定 token，可以同时处理所有token&lt;/li&gt;
+&lt;li&gt;decode：需要递归依次生成token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;提高 decode 效率的方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用更加轻量的模型（模型剪枝、量化、蒸馏）&lt;/li&gt;
+&lt;li&gt;speculative decoding：使用轻量模型初步生成一些 token，然后再通过全量模型打分&lt;/li&gt;
+&lt;li&gt;系统优化：KV cache，batch 化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="13-scaling-laws"&gt;1.3 Scaling Laws
+&lt;/h3&gt;&lt;p&gt;进行小规模的实验，来预测大规模场景下的超参数和损失&lt;/p&gt;
+&lt;p&gt;给定一定的 FLOPs 资源，训练一个更大的模型更好，还是使用更多的 token 训练更好&lt;/p&gt;
+&lt;p&gt;Compute-optimal scaling laws:  &lt;a class="link" href="https://arxiv.org/pdf/2001.08361.pdf" target="_blank" rel="noopener"
+&gt;Kaplan+ 2020&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/pdf/2203.15556.pdf" target="_blank" rel="noopener"
+&gt;Hoffmann+ 2022&lt;/a&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/ab0a2a8d355ce9da8c2c263a514c8c19.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;h4&gt;scaling law&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="14-data"&gt;1.4 Data
+&lt;/h3&gt;&lt;p&gt;我们希望模型具有什么样的能力：多语言、编程、数学&lt;/p&gt;
+&lt;h4 id="141-模型评估"&gt;1.4.1 模型评估
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;困惑度 perplexity：大模型评估的基础方式&lt;/li&gt;
+&lt;li&gt;标准测试：M M L U，HellaSwag，GSM8K&lt;/li&gt;
+&lt;li&gt;指令跟随：ALpacaEval，IFEval，WildBench&lt;/li&gt;
+&lt;li&gt;LM-as-a-judge&lt;/li&gt;
+&lt;li&gt;全系统评估：RAG，agent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="142-数据筛选"&gt;1.4.2 数据筛选
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;数据来源：互联网上爬虫得到的网页，数据，arXiv 论文，Github 代码等&lt;/li&gt;
+&lt;li&gt;可能需要数据授权&lt;/li&gt;
+&lt;li&gt;格式：HTML，PDF，文件夹&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="143-数据处理"&gt;1.4.3 数据处理
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;格式转换：将 HTML/PDF 转换成文本&lt;/li&gt;
+&lt;li&gt;过滤：过滤掉有害内容&lt;/li&gt;
+&lt;li&gt;去重：降低计算量，防止模型 memorization&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="15-对齐"&gt;1.5 对齐
+&lt;/h3&gt;&lt;p&gt;经过预训练后，模型已经非常擅长预测下一个 token，但是需要通过对齐让模型真正可用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;让语言模型可以遵守对指令做出响应的范式&lt;/li&gt;
+&lt;li&gt;优化响应风格&lt;/li&gt;
+&lt;li&gt;防止产生有害内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对齐可以分为两个阶段：监督学习微调和反馈强化学习&lt;/p&gt;
+&lt;h4 id="151-监督学习微调-sft"&gt;1.5.1 监督学习微调 SFT
+&lt;/h4&gt;&lt;p&gt;使用&lt;em&gt;指令数据 instruction data&lt;/em&gt; &lt;code&gt;&amp;lt;prompt, response&amp;gt;&lt;/code&gt; 对进行监督学习训练&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;sft_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ChatExample&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;ChatExample&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;turns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;Turn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;role&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;system&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;You are a helpful assistant.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;Turn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;role&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;user&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;What is 1 + 1?&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;Turn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;role&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;assistant&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;The answer is 2.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id="152-preference-data"&gt;1.5.2 Preference Data
+&lt;/h4&gt;&lt;p&gt;经过指令数据的有监督训练，我们已经有了一个初步的可以跟随指令的模型，我们可以通过使用 preference data 训练让模型更加强大，而不需要更多的指令标注数据&lt;/p&gt;
+&lt;p&gt;preference data：让多个模型对同一个 prompt 给出响应，用户给出偏好&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;preference_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;PreferenceExample&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;PreferenceExample&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;Turn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;role&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;system&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;You are a helpful assistant.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;Turn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;role&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;user&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;What is the best way to train a language model?&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;response_a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;You should use a large dataset and train for a long time.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;response_b&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;You should use a small dataset and train for a short time.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;chosen&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Proximal Policy Optimization (PPO) from reinforcement learning &lt;a class="link" href="https://arxiv.org/pdf/1707.06347.pdf" target="_blank" rel="noopener"
+&gt;Schulman+ 2017&lt;/a&gt; &lt;a class="link" href="https://arxiv.org/pdf/2203.02155.pdf" target="_blank" rel="noopener"
+&gt;Ouyang+ 2022&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Direct Policy Optimization (DPO): for preference data, simpler  &lt;a class="link" href="https://arxiv.org/pdf/2305.18290.pdf" target="_blank" rel="noopener"
+&gt;Rafailov+ 2023&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Group Relative Preference Optimization (GRPO): remove value function &lt;a class="link" href="https://arxiv.org/pdf/2402.03300.pdf" target="_blank" rel="noopener"
+&gt;Shao+ 2024&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-tokenization"&gt;2. Tokenization
+&lt;/h2&gt;&lt;p&gt;一个 tokenizer 需要实现编码和解码的功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;编码：将字符串编码成 token（int 类型的索引）&lt;/li&gt;
+&lt;li&gt;解码：将 token 转换回字符串&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其中所有可能的 token 的个数称为 vocabulary size&lt;/p&gt;
+&lt;h3 id="21-character-based-tokenization"&gt;2.1 Character-based tokenization
+&lt;/h3&gt;&lt;p&gt;一个字符串由一序列字符组成，每个字符可以直接被转换成整数索引值作为 token。例如，直接使用 &lt;code&gt;ord&lt;/code&gt; 可以得到字符的 ASCII 码，可以作为一个简单的tokenizer&lt;/p&gt;
+&lt;p&gt;缺点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Unicode 字符的数量大概是 150K，导致 vocabulary size 非常大&lt;/li&gt;
+&lt;li&gt;很多字符在句子中很少使用，造成了稀疏性，vocabulary 非常低效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="22-byte-based-tokenization"&gt;2.2 Byte-based tokenization
+&lt;/h3&gt;&lt;p&gt;Unicode 字符串也可以直接用一系列的 byte 表示，这些 byte 可以使用 0 到 255 的整数索引&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="nb"&gt;bytes&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoding&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="sa"&gt;b&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="nb"&gt;bytes&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;🌍&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoding&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="sa"&gt;b&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="se"&gt;\xf0\x9f\x8c\x8d&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;只用 255 种 byte 就可以表示所有的字符窗，vocabulary size 是 255。但是一个 byte 对应了一个整数 token，压缩率为 1, tokenization 之后得到的 token 序列非常长，造成自注意力计算量非常大&lt;/p&gt;
+&lt;h3 id="23-word-based-tokenization"&gt;2.3 Word-based tokenization
+&lt;/h3&gt;&lt;p&gt;NLP 模型中常用的是基于单词的 tokenization，首先将一个句子划分成单词序列，然后将每个可以划分的单词指定一个整数索引，就可以建立一个tokenizer&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;I&amp;#39;ll say supercalifragilisticexpialidocious!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;segments&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;regex&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;findall&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;\w+|.&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;string&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 输出 [&amp;#34;i&amp;#34;, &amp;#34;ll&amp;#34;, &amp;#34;say&amp;#34;, &amp;#34;supercalifragilisticexpialidocious&amp;#34;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;缺点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;单词的总数非常大&lt;/li&gt;
+&lt;li&gt;很多单词使用率非常低，模型很难充分学习&lt;/li&gt;
+&lt;li&gt;很难确定一个固定大小的词典，存在没有见过的词&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="24-byte-pair-encoding"&gt;2.4 Byte Pair Encoding
+&lt;/h3&gt;&lt;p&gt;首先将字符串表示成 byte，然后让 tokenizer 自动选择 byte 组成单词（不一定是完整的人类单词），那么一些常见的单词将可以使用一个 token 表示，对于少见或者没有见过的单词可以使用多个 token 组合表示&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;train_bpe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;string&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;num_merges&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;BPETokenizerParams&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; Start with the list of bytes of string.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; indices = list(map(int, string.encode(&amp;#34;utf-8&amp;#34;)))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; merges: dict[tuple[int, int], int] = &lt;/span&gt;&lt;span class="si"&gt;{}&lt;/span&gt;&lt;span class="s2"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; vocab: dict[int, bytes] = {x: bytes([x]) for x in range(256)}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_merges&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; Count the number of occurrences of each pair of tokens
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# 首先计算每两个byte的两两组合，以及出现的频率&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;defaultdict&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index2&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;zip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;indices&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;indices&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:]):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="p"&gt;[(&lt;/span&gt;&lt;span class="n"&gt;index1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index2&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Find the most common pair，确定可以合并的byte&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;pair&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;index1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pair&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Merge that pair&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;new_index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;256&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;merges&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;pair&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;new_index&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;vocab&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;new_index&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vocab&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;vocab&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;indices&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;merge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;indices&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pair&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;new_index&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;BPETokenizerParams&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;vocab&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;vocab&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;merges&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;merges&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>机器学习 20 kNN</title><link>https://xland.cc/p/ml_20_knn/</link><pubDate>Fri, 26 Sep 2025 20:03:09 +0800</pubDate><guid>https://xland.cc/p/ml_20_knn/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 20 kNN" /&gt;&lt;h2 id="nearest-neighbor-classification"&gt;Nearest Neighbor Classification
 &lt;/h2&gt;&lt;p&gt;给定一个查询样本 $q$，找到 k 个离 $q$ 最近的样本点。对于回归任务，返回这 k 个点的均值；对于分类任务，返回数量最多的类别或者分布表&lt;/p&gt;
 &lt;figure&gt;&lt;img src="https://xland.cc/p/ml_20_knn/cb3a4fc2eecf909ffb846ee32153a2dc.png" width="800"&gt;
 &lt;/figure&gt;
@@ -1408,7 +1721,7 @@ $$&lt;p&gt;其中 $\hat{y}$ 是分类器的预测值。&lt;/p&gt;
 &lt;/p&gt;
 $$R(w) = \frac{1}{n} \sum_{i = 1}^n L(X_i \cdot w, y_i) = \frac{1}{n} \sum_{i = 1}^n -y_iX_i \cdot w$$&lt;p&gt;
 所以寻找超平面的问题变为一个最优化问题：寻找 $w$ ，使得 $R(w)$ 最小。&lt;/p&gt;</description></item><item><title>机器学习 01 引言</title><link>https://xland.cc/p/ml_01_introduction/</link><pubDate>Sun, 18 May 2025 15:40:22 +0800</pubDate><guid>https://xland.cc/p/ml_01_introduction/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 01 引言" /&gt;&lt;p&gt;机器学习系列是我学习 &lt;a class="link" href="https://people.eecs.berkeley.edu/~jrs/189/" target="_blank" rel="noopener"
-&gt;CS 189/289A Introduction to Machine Learning&lt;/a&gt; Spring 2025 时记录的学习笔记，也可以当作是对课程笔记的翻译，经供参考。&lt;/p&gt;
+&gt;CS 189/289A Introduction to Machine Learning&lt;/a&gt; Spring 2025 时记录的学习笔记，也可以当作是对课程笔记的翻译，仅供参考。&lt;/p&gt;
 &lt;h2 id="分类问题"&gt;分类问题
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;收集具有标签的训练样本&lt;/li&gt;

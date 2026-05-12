@@ -1408,7 +1408,7 @@ $$&lt;p&gt;其中 $\hat{y}$ 是分类器的预测值。&lt;/p&gt;
 &lt;/p&gt;
 $$R(w) = \frac{1}{n} \sum_{i = 1}^n L(X_i \cdot w, y_i) = \frac{1}{n} \sum_{i = 1}^n -y_iX_i \cdot w$$&lt;p&gt;
 所以寻找超平面的问题变为一个最优化问题：寻找 $w$ ，使得 $R(w)$ 最小。&lt;/p&gt;</description></item><item><title>机器学习 01 引言</title><link>https://xland.cc/p/ml_01_introduction/</link><pubDate>Sun, 18 May 2025 15:40:22 +0800</pubDate><guid>https://xland.cc/p/ml_01_introduction/</guid><description>&lt;img src="https://xland.cc/p/ml_01_introduction/ml_header.webp" alt="Featured image of post 机器学习 01 引言" /&gt;&lt;p&gt;机器学习系列是我学习 &lt;a class="link" href="https://people.eecs.berkeley.edu/~jrs/189/" target="_blank" rel="noopener"
-&gt;CS 189/289A Introduction to Machine Learning&lt;/a&gt; Spring 2025 时记录的学习笔记，也可以当作是对课程笔记的翻译，经供参考。&lt;/p&gt;
+&gt;CS 189/289A Introduction to Machine Learning&lt;/a&gt; Spring 2025 时记录的学习笔记，也可以当作是对课程笔记的翻译，仅供参考。&lt;/p&gt;
 &lt;h2 id="分类问题"&gt;分类问题
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;收集具有标签的训练样本&lt;/li&gt;
