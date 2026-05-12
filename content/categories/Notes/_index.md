@@ -1,10 +1,9 @@
 ---
 title: "Notes"
-description: "备忘和参考"
-slug: "technology"
+description: "学习笔记"
+slug: "notes"
 image: "notes.webp"
 style:
-  background: "#e66351"
-  color: "#fff"
-  font-weight: bold
+  background: "#ffd06f"
+  color: "#000"
 ---

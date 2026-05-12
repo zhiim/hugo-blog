@@ -5,7 +5,7 @@ date = 2023-02-05T11:02:40+08:00
 slug = "windows-install-chromeos"
 description = "ChromeOS是Google推出的桌面操作系统，只能搭载在Google认证的Chromebook上，但是我们可以借助开源项目brunch，在自己的电脑上安装ChromeOS"
 tags = ["工具"]
-categories = ["Notes"]
+categories = ["Logs"]
 image = ""
 
 +++
@@ -33,7 +33,6 @@ brunch能够利用ChromeOS的recovery文件，生成可用的系统镜像文件�
    我选择的是Lenovo Yoga C630 Chromebook，codename为pantheon，下载发行版本为109的recovery文件。
 
    如果不知道应该下载哪个recovery，brunch的项目文档里也给了[推荐的recovery](https://github.com/sebanc/brunch/blob/main/install-with-windows.md#recoveries)。
-
    - Intel
      - 1代-9代：选择codename为rammus的设备对应的recovery
      - 10代和11代：选择codename为volteer的设备对应的recovery

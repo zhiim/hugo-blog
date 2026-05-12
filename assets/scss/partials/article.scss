@@ -45,6 +45,7 @@
                 .article-category a {
                     background: nth($defaultTagBackgrounds, $i);
                     color: nth($defaultTagColors, $i);
+                    font-weight: bold;  // modified, set to bold
                 }
             }
         }

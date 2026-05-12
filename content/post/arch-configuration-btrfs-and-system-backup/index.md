@@ -5,7 +5,7 @@ date = 2023-07-11T14:54:53+08:00
 slug = "arch-linux-configuration-btrfs-and-system-backup"
 description = "Btrfs的一些高级功能，极大地方便了系统使用和维护，本文介绍了利用Btrfs写时复制、子卷和快照的特性，通过Snapper配置的系统自动备份方案"
 tags = ["Linux"]
-categories = ["Notes"]
+categories = ["Logs"]
 image = "/p/arch-linux-configuration-driver-and-software/arch.webp"
 
 +++
@@ -254,4 +254,3 @@ sudo btrfs subvolume delete /mnt/@.broken
 4. [Working with Btrfs – Snapshots](https://fedoramagazine.org/working-with-btrfs-snapshots/)
 5. [ArchWiki-Snapper](https://wiki.archlinux.org/title/snapper)
 6. [BTRFS snapshots and system rollbacks on Arch Linux](https://www.dwarmstrong.org/btrfs-snapshots-rollbacks/)
-

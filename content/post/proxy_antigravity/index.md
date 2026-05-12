@@ -5,7 +5,7 @@ date = 2026-01-08T10:04:27+08:00
 slug = "proxy_antigravity"
 description = "在 Linux 桌面无需使用 Clash 的 TUN 模式，即可为 Antigravity 设置代理"
 tags = ["Linux"]
-categories = ["Notes"]
+categories = ["Logs"]
 image = ""
 
 +++

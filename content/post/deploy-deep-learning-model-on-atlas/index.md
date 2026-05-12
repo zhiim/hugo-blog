@@ -5,7 +5,7 @@ date = 2023-09-26T12:08:08+08:00
 slug = "deploy-deep-learning-model-on-atlas"
 description = "本文记录了将Tensorflow模型部署到Atlas 200 DK的过程，首先将SavedModel转换成ONNX模型，然后将ONNX模型转换为om格式，以及模型转换中遇到的一些问题"
 tags = ["深度学习"]
-categories = ["Notes"]
+categories = ["Logs"]
 image = ""
 
 +++
