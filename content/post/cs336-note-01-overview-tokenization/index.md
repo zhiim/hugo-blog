@@ -12,13 +12,13 @@ image = "cs336_header.webp"
 
 [CS 336](http://cs336.stanford.edu/spring2025/) 课程笔记，仅供参考。
 
-## 1. Overview
+## Overview
 
-### 1.1 basic
+### basic
 
 构建一个完整的语言模型由三步组成：tokenization，模型结构和训练方法
 
-#### 1.1.1 Tokenization
+#### Tokenization
 
 tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 
@@ -28,7 +28,7 @@ tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 
 此外还有一个无需 tokenizer 的方法，但是目前并没有起到显著成效  [Xue+ 2021](https://arxiv.org/abs/2105.13626), [Yu+ 2023](https://arxiv.org/pdf/2305.07185.pdf), [Pagnoni+ 2024](https://arxiv.org/abs/2412.09871), [Deiseroth+ 2024](https://arxiv.org/abs/2406.19223)
 
-#### 1.1.2 结构
+#### 结构
 
 {{<figure src="ff893a3e2c5ef8e817bc78ee964ecce4.webp" title="transformer architecture" width=600 >}}
 
@@ -43,7 +43,7 @@ tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 - 低维注意力：GQA，MLA [Ainslie+ 2023](https://arxiv.org/pdf/2305.13245.pdf), [DeepSeek-AI+ 2024](https://arxiv.org/abs/2405.04434)
 - - State-space models: Hyena  [Poli+ 2023](https://arxiv.org/abs/2302.10866)
 
-#### 1.1.3 训练方法
+#### 训练方法
 
 - 优化器：AdamW，Muon，SOAP [Kingma+ 2014](https://arxiv.org/pdf/1412.6980.pdf), [Loshchilov+ 2017](https://arxiv.org/pdf/1711.05101.pdf), [Keller 2024](https://kellerjordan.github.io/posts/muon/), [Vyas+ 2024](https://arxiv.org/abs/2409.11321)
 - 学习率缩放：cosine，WSD [Loshchilov+ 2016](https://arxiv.org/pdf/1608.03983.pdf), [Hu+ 2024](https://arxiv.org/pdf/2404.06395.pdf)
@@ -51,7 +51,7 @@ tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 - 正则化：dropout，weight decay
 - 超参数：head number，hidden dimension
 
-### 1.2 系统
+### 系统
 
 #### Kernels
 
@@ -59,7 +59,7 @@ tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 
 在 GPU 内部，DRAM 和 SRAM 之间进行数据传输，需要最大化数据传输的能效
 
-#### 1.2.2 Parallelism
+#### Parallelism
 
 {{<figure src="c294334d9b5eb4d4156ecf56977ff656.webp" title="gpu group" width=800 >}}
 
@@ -69,7 +69,7 @@ tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 - GPU 数据分片（参数，激活状态，梯度，优化器状态）
 - 分布计算：数据、tensor、pipeline、sequence 并行
 
-#### 1.2.3 推理
+#### 推理
 
 一般来说，推理计算比训练计算需求更高
 
@@ -86,7 +86,7 @@ tokenizer 可以实现字符串和 int 序列（tokens）之间的转换
 - speculative decoding：使用轻量模型初步生成一些 token，然后再通过全量模型打分
 - 系统优化：KV cache，batch 化
 
-### 1.3 Scaling Laws
+### Scaling Laws
 
 进行小规模的实验，来预测大规模场景下的超参数和损失
 
@@ -96,11 +96,11 @@ Compute-optimal scaling laws:  [Kaplan+ 2020](https://arxiv.org/pdf/2001.08361.
 
 {{<figure src="ab0a2a8d355ce9da8c2c263a514c8c19.webp" title="scaling law" width=800 >}}
 
-### 1.4 Data
+### Data
 
 我们希望模型具有什么样的能力：多语言、编程、数学
 
-#### 1.4.1 模型评估
+#### 模型评估
 
 - 困惑度 perplexity：大模型评估的基础方式
 - 标准测试：M M L U，HellaSwag，GSM8K
@@ -108,19 +108,19 @@ Compute-optimal scaling laws:  [Kaplan+ 2020](https://arxiv.org/pdf/2001.08361.
 - LM-as-a-judge
 - 全系统评估：RAG，agent
 
-#### 1.4.2 数据筛选
+#### 数据筛选
 
 - 数据来源：互联网上爬虫得到的网页，数据，arXiv 论文，Github 代码等
 - 可能需要数据授权
 - 格式：HTML，PDF，文件夹
 
-#### 1.4.3 数据处理
+#### 数据处理
 
 - 格式转换：将 HTML/PDF 转换成文本
 - 过滤：过滤掉有害内容
 - 去重：降低计算量，防止模型 memorization
 
-### 1.5 对齐
+### 对齐
 
 经过预训练后，模型已经非常擅长预测下一个 token，但是需要通过对齐让模型真正可用
 
@@ -130,7 +130,7 @@ Compute-optimal scaling laws:  [Kaplan+ 2020](https://arxiv.org/pdf/2001.08361.
 
 对齐可以分为两个阶段：监督学习微调和反馈强化学习
 
-#### 1.5.1 监督学习微调 SFT
+#### 监督学习微调 SFT
 
 使用*指令数据 instruction data* `<prompt, response>` 对进行监督学习训练
 
@@ -146,7 +146,7 @@ sft_data: list[ChatExample] = [
 ]
 ```
 
-#### 1.5.2 Preference Data
+#### Preference Data
 
 经过指令数据的有监督训练，我们已经有了一个初步的可以跟随指令的模型，我们可以通过使用 preference data 训练让模型更加强大，而不需要更多的指令标注数据
 
@@ -170,7 +170,7 @@ preference_data: list[PreferenceExample] = [
 - Direct Policy Optimization (DPO): for preference data, simpler  [Rafailov+ 2023](https://arxiv.org/pdf/2305.18290.pdf)
 - Group Relative Preference Optimization (GRPO): remove value function [Shao+ 2024](https://arxiv.org/pdf/2402.03300.pdf)
 
-## 2. Tokenization
+## Tokenization
 
 一个 tokenizer 需要实现编码和解码的功能：
 
@@ -179,7 +179,7 @@ preference_data: list[PreferenceExample] = [
 
 其中所有可能的 token 的个数称为 vocabulary size
 
-### 2.1 Character-based tokenization
+### Character-based tokenization
 
 一个字符串由一序列字符组成，每个字符可以直接被转换成整数索引值作为 token。例如，直接使用 `ord` 可以得到字符的 ASCII 码，可以作为一个简单的tokenizer
 
@@ -188,7 +188,7 @@ preference_data: list[PreferenceExample] = [
 - Unicode 字符的数量大概是 150K，导致 vocabulary size 非常大
 - 很多字符在句子中很少使用，造成了稀疏性，vocabulary 非常低效
 
-### 2.2 Byte-based tokenization
+### Byte-based tokenization
 
 Unicode 字符串也可以直接用一系列的 byte 表示，这些 byte 可以使用 0 到 255 的整数索引
 
@@ -199,7 +199,7 @@ assert bytes("🌍", encoding="utf-8") == b"\xf0\x9f\x8c\x8d"
 
 只用 255 种 byte 就可以表示所有的字符窗，vocabulary size 是 255。但是一个 byte 对应了一个整数 token，压缩率为 1, tokenization 之后得到的 token 序列非常长，造成自注意力计算量非常大
 
-### 2.3 Word-based tokenization
+### Word-based tokenization
 
 NLP 模型中常用的是基于单词的 tokenization，首先将一个句子划分成单词序列，然后将每个可以划分的单词指定一个整数索引，就可以建立一个tokenizer
 
@@ -215,7 +215,7 @@ segments = regex.findall(r"\w+|.", string)
 - 很多单词使用率非常低，模型很难充分学习
 - 很难确定一个固定大小的词典，存在没有见过的词
 
-### 2.4 Byte Pair Encoding
+### Byte Pair Encoding
 
 首先将字符串表示成 byte，然后让 tokenizer 自动选择 byte 组成单词（不一定是完整的人类单词），那么一些常见的单词将可以使用一个 token 表示，对于少见或者没有见过的单词可以使用多个 token 组合表示
 

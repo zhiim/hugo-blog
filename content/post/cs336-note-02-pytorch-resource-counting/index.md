@@ -10,9 +10,9 @@ image = "/p/cs336-note-01-overview-tokenization/cs336_header.webp"
 
 +++
 
-## 1. Memory accounting
+## Memory accounting
 
-### 1.1 tensor basics
+### tensor basics
 
 tensor 是用来存储数据的基本单元：模型参数、梯度、优化器状态、激活状态等
 
@@ -29,11 +29,11 @@ x = torch.randn(4, 8) # 4x8 matrix of iid Normal(0, 1) samples
 x = torch.empty(4, 8)
 ```
 
-### 1.2 tensor memory
+### tensor memory
 
 几乎所有的数据都以浮点数的形式存储
 
-#### 1.2.1 float32
+#### float32
 
 {{<figure src="5568956fd3b4c9cb0298180b84b14ef3.webp" title="float32 data" width=800 >}}
 
@@ -49,7 +49,7 @@ assert x.element_size() == 4  # Float is 4 bytes
 assert get_memory_usage(x) == 4 * 8 * 4  # 128 bytes
 ```
 
-#### 1.2.2 float16
+#### float16
 
 {{<figure src="125096f121ff94489530ef46165f28f5.webp" title="float16 data" width=600 >}}
 
@@ -62,7 +62,7 @@ x = torch.tensor([1e-8], dtype=torch.float16)
 assert x == 0  # Underflow to 0
 ```
 
-#### 1.2.3 bfloat16
+#### bfloat16
 
 {{<figure src="60c0de2a687c143046a557caef4ce30d.webp" title="bfloat16 data" width=600 >}}
 
@@ -73,7 +73,7 @@ x = torch.tensor([1e-8], dtype=torch.bfloat16)
 assert x != 0  # No underflow!
 ```
 
-#### 1.2.4 fp8
+#### fp8
 
 {{<figure src="5ab0f363de68eff1717354782822c198.webp" title="fp8 data" width=800 >}}
 
@@ -83,9 +83,9 @@ fp8 是另一种为机器学习设计的数据类型
 - 使用 fp8、float16 和 bfloat16 可能导致训练存在风险，模型不稳定
 - 一般可以使用混合精度训练
 
-## 2. Compute accounting
+## Compute accounting
 
-### 2.1 tensor on gpus
+### tensor on gpus
 
 默认 tensor 是存储在 CPU 上的，我们需要手动将其移动到 GPU
 
@@ -97,9 +97,9 @@ text("Or create a tensor directly on the GPU:")
 z = torch.zeros(32, 32, device="cuda:0")
 ```
 
-### 2.2 tensor operations
+### tensor operations
 
-#### 2.2.1 tensor storage
+#### tensor storage
 
 在PyTorch 中，tensor 实际上是一个指向一块已划分内存的指针，是以 array 的形式存储，其中还包括了一些 metadata，告诉我们如何获取 tensor 的元素
 
@@ -124,7 +124,7 @@ index = r * x.stride(0) + c * x.stride(1)
 assert index == 6
 ```
 
-#### 2.2.2 tensor slicing
+#### tensor slicing
 
 很多对于 tensor 的操作只是返回了 tensor 的不同 view，并不是直接复制了一个 tensor，所以对 tensor 的修改互相影响
 
@@ -164,7 +164,7 @@ y = x.transpose(1, 0).contiguous().view(2, 3)  # @inspect y
 assert not same_storage(x, y)
 ```
 
-#### 2.2.3 tensor elementwise
+#### tensor elementwise
 
 elementwise 操作会对 tensor 的每个元素进行操作，并且返回一个形状相同的新 tensor
 
@@ -178,7 +178,7 @@ assert torch.equal(x * 2, torch.tensor([2, 8, 18]))
 assert torch.equal(x / 0.5, torch.tensor([2, 8, 18]))
 ```
 
-#### 2.2.4 tensor matmul
+#### tensor matmul
 
 tensor 间也可以进行乘法运算，在多 batch 多 sequence 的情况下，乘法运算会 broadcast 到每一个token
 
@@ -189,7 +189,7 @@ y = x @ w
 assert y.size() == torch.Size([4, 8, 16, 2])
 ```
 
-### 2.3 tensor einops
+### tensor einops
 
 einops 用来在操作 tensor 的时候，给每个维度命名
 
@@ -224,7 +224,7 @@ x: Float[torch.Tensor, "batch seq total_hidden"] = torch.ones(2, 3, 8)
 x = rearrange(x, "... (heads hidden1) -> ... heads hidden1", heads=2)
 ```
 
-### 2.4 tensor operations flops
+### tensor operations flops
 
 一个浮点运算（FLOP）是一个最基本的运算操作，例如加法和乘法
 
@@ -237,7 +237,7 @@ x = rearrange(x, "... (heads hidden1) -> ... heads hidden1", heads=2)
 
 Model FLOPs utilization（MFU）：真实的 FLOP/s 除以额定 FLOP/s
 
-### 2.5 gradients basics
+### gradients basics
 
 PyTorch 中梯度计算非常简单，假定我们有一个线性模型 $y = 0.5 (x w - 5)^2$
 
@@ -251,7 +251,7 @@ loss = 0.5 * (pred_y - 5).pow(2)
 loss.backward()
 ```
 
-### 2.6 gradients flops
+### gradients flops
 
 假设有一个两层线性模型：h1 = x @ w1, h2 = h1 @ w2, loss = h2.pow(2).mean()
 
@@ -268,9 +268,9 @@ w2 = torch.randn(D, K, device=device, requires_grad=True)
 
 所以反向传播中 FLOPs 数量为 `4 * 数据量 * 参数量`
 
-## 3. Models
+## Models
 
-### 3.1 module parameters
+### module parameters
 
 模型参数被保存在 `nn.Parameter` 对象中
 
@@ -280,7 +280,7 @@ w2 = torch.randn(D, K, device=device, requires_grad=True)
 w = nn.Parameter(torch.randn(input_dim, output_dim) / np.sqrt(input_dim))
 ```
 
-### 3.2 custom model
+### custom model
 
 ```python
 class Linear(nn.Module):
@@ -323,7 +323,7 @@ if torch.cuda.is_available():
 x = x.to(device, non_blocking=True)
 ```
 
-### 3.3 randomness
+### randomness
 
 为了实验结果可复现，一般需要设定固定的随机数种子
 
@@ -341,7 +341,7 @@ import random
 random.seed(seed)
 ```
 
-### 3.4 data loading
+### data loading
 
 在语言模型中，数据一般是一个 int 序列（字符 token 化的结果），我们可以很容易把它们作为 numpy array 序列化
 
@@ -356,7 +356,7 @@ orig_data.tofile("data.npy")
 data = np.memmap("data.npy", dtype=np.int32)
 ```
 
-### 3.5 optimizer
+### optimizer
 
 几种常见的优化器
 
@@ -382,7 +382,7 @@ optimizer.step()
 optimizer.zero_grad(set_to_none=True)
 ```
 
-### 3.6 train loop
+### train loop
 
 ```python
 def train(name: str, get_batch,
@@ -407,7 +407,7 @@ def train(name: str, get_batch,
         optimizer.zero_grad(set_to_none=True)
 ```
 
-### 3.7 checkpoint
+### checkpoint
 
 训练模型往往需要非常长的时间，而我们不希望发生中断的时候遗失训练进度，所以在训练的过程中需要周期性的保存模型参数和优化器状态
 
@@ -426,7 +426,7 @@ torch.save(checkpoint, "model_checkpoint.pt")
 loaded_checkpoint = torch.load("model_checkpoint.pt")
 ```
 
-### 3.8 mixed precision training
+### mixed precision training
 
 数据类型（float32，bfloat16，fp8）的选择存在折衷
 
@@ -437,4 +437,3 @@ loaded_checkpoint = torch.load("model_checkpoint.pt")
 
 - 在前向传播的时候使用低精度数据类型
 - 在其他部分使用高精度数据类型（参数，梯度计算）
-
