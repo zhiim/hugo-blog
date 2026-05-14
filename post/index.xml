@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Zhiim's Blog</title><link>https://xland.cc/post/</link><description>Recent content in Posts on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 14 May 2026 13:47:19 +0800</lastBuildDate><atom:link href="https://xland.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>CS336 Note 02: PyTorch, Resource Counting</title><link>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</link><pubDate>Thu, 14 May 2026 13:47:19 +0800</pubDate><guid>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 02: PyTorch, Resource Counting" /&gt;&lt;h2 id="1-memory-accounting"&gt;1. Memory accounting
-&lt;/h2&gt;&lt;h3 id="11-tensor-basics"&gt;1.1 tensor basics
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Zhiim's Blog</title><link>https://xland.cc/post/</link><description>Recent content in Posts on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 14 May 2026 13:47:19 +0800</lastBuildDate><atom:link href="https://xland.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>CS336 Note 02: PyTorch, Resource Counting</title><link>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</link><pubDate>Thu, 14 May 2026 13:47:19 +0800</pubDate><guid>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 02: PyTorch, Resource Counting" /&gt;&lt;h2 id="memory-accounting"&gt;Memory accounting
+&lt;/h2&gt;&lt;h3 id="tensor-basics"&gt;tensor basics
 &lt;/h3&gt;&lt;p&gt;tensor 是用来存储数据的基本单元：模型参数、梯度、优化器状态、激活状态等&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -24,9 +24,9 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;empty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="12-tensor-memory"&gt;1.2 tensor memory
+&lt;/div&gt;&lt;h3 id="tensor-memory"&gt;tensor memory
 &lt;/h3&gt;&lt;p&gt;几乎所有的数据都以浮点数的形式存储&lt;/p&gt;
-&lt;h4 id="121-float32"&gt;1.2.1 float32
+&lt;h4 id="float32"&gt;float32
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-02-pytorch-resource-counting/5568956fd3b4c9cb0298180b84b14ef3.webp" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;float32 data&lt;/h4&gt;
 &lt;/figcaption&gt;
@@ -49,7 +49,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;get_memory_usage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="c1"&gt;# 128 bytes&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="122-float16"&gt;1.2.2 float16
+&lt;/div&gt;&lt;h4 id="float16"&gt;float16
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-02-pytorch-resource-counting/125096f121ff94489530ef46165f28f5.webp" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;float16 data&lt;/h4&gt;
 &lt;/figcaption&gt;
@@ -69,7 +69,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="c1"&gt;# Underflow to 0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="123-bfloat16"&gt;1.2.3 bfloat16
+&lt;/div&gt;&lt;h4 id="bfloat16"&gt;bfloat16
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-02-pytorch-resource-counting/60c0de2a687c143046a557caef4ce30d.webp" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;bfloat16 data&lt;/h4&gt;
 &lt;/figcaption&gt;
@@ -85,7 +85,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="c1"&gt;# No underflow!&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="124-fp8"&gt;1.2.4 fp8
+&lt;/div&gt;&lt;h4 id="fp8"&gt;fp8
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-02-pytorch-resource-counting/5ab0f363de68eff1717354782822c198.webp" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;fp8 data&lt;/h4&gt;
 &lt;/figcaption&gt;
@@ -96,8 +96,8 @@
 &lt;li&gt;使用 fp8、float16 和 bfloat16 可能导致训练存在风险，模型不稳定&lt;/li&gt;
 &lt;li&gt;一般可以使用混合精度训练&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id="2-compute-accounting"&gt;2. Compute accounting
-&lt;/h2&gt;&lt;h3 id="21-tensor-on-gpus"&gt;2.1 tensor on gpus
+&lt;h2 id="compute-accounting"&gt;Compute accounting
+&lt;/h2&gt;&lt;h3 id="tensor-on-gpus"&gt;tensor on gpus
 &lt;/h3&gt;&lt;p&gt;默认 tensor 是存储在 CPU 上的，我们需要手动将其移动到 GPU&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -115,8 +115,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;device&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;cuda:0&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="22-tensor-operations"&gt;2.2 tensor operations
-&lt;/h3&gt;&lt;h4 id="221-tensor-storage"&gt;2.2.1 tensor storage
+&lt;/div&gt;&lt;h3 id="tensor-operations"&gt;tensor operations
+&lt;/h3&gt;&lt;h4 id="tensor-storage"&gt;tensor storage
 &lt;/h4&gt;&lt;p&gt;在PyTorch 中，tensor 实际上是一个指向一块已划分内存的指针，是以 array 的形式存储，其中还包括了一些 metadata，告诉我们如何获取 tensor 的元素&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -160,7 +160,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="222-tensor-slicing"&gt;2.2.2 tensor slicing
+&lt;/div&gt;&lt;h4 id="tensor-slicing"&gt;tensor slicing
 &lt;/h4&gt;&lt;p&gt;很多对于 tensor 的操作只是返回了 tensor 的不同 view，并不是直接复制了一个 tensor，所以对 tensor 的修改互相影响&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -231,7 +231,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;same_storage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="223-tensor-elementwise"&gt;2.2.3 tensor elementwise
+&lt;/div&gt;&lt;h4 id="tensor-elementwise"&gt;tensor elementwise
 &lt;/h4&gt;&lt;p&gt;elementwise 操作会对 tensor 的每个元素进行操作，并且返回一个形状相同的新 tensor&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -253,7 +253,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;equal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tensor&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;18&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="224-tensor-matmul"&gt;2.2.4 tensor matmul
+&lt;/div&gt;&lt;h4 id="tensor-matmul"&gt;tensor matmul
 &lt;/h4&gt;&lt;p&gt;tensor 间也可以进行乘法运算，在多 batch 多 sequence 的情况下，乘法运算会 broadcast 到每一个token&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -269,7 +269,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Size&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="23-tensor-einops"&gt;2.3 tensor einops
+&lt;/div&gt;&lt;h3 id="tensor-einops"&gt;tensor einops
 &lt;/h3&gt;&lt;p&gt;einops 用来在操作 tensor 的时候，给每个维度命名&lt;/p&gt;
 &lt;p&gt;在 tensor 运算的时候，我们往往需要知道每个维度代表的意义。直接的方法我们可以通过注释标注，或者通过静态类型检查注明&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -324,7 +324,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rearrange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;... (heads hidden1) -&amp;gt; ... heads hidden1&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;heads&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="24-tensor-operations-flops"&gt;2.4 tensor operations flops
+&lt;/div&gt;&lt;h3 id="tensor-operations-flops"&gt;tensor operations flops
 &lt;/h3&gt;&lt;p&gt;一个浮点运算（FLOP）是一个最基本的运算操作，例如加法和乘法&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;FLOPs：浮点运算的次数&lt;/li&gt;
@@ -333,7 +333,7 @@
 &lt;p&gt;对于一个线性模型来说，如果有 B 个数据点，每个数据点是 D 维的，输出是 K 维的。输入数据 x 维度为 (B, D)，权值矩阵维度为 (D, K)，那么对于每个三元 index(i, j, k)，需要进行一次乘法运算 &lt;code&gt;x[i][j] * w[j][k]&lt;/code&gt;，以及一个加法运算。总的 FLOPs 是 &lt;code&gt;2 * B * D * K&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;前向传播中的 FLOPs 近似为 &lt;code&gt;2 * 数据量 * 参数量&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Model FLOPs utilization（MFU）：真实的 FLOP/s 除以额定 FLOP/s&lt;/p&gt;
-&lt;h3 id="25-gradients-basics"&gt;2.5 gradients basics
+&lt;h3 id="gradients-basics"&gt;gradients basics
 &lt;/h3&gt;&lt;p&gt;PyTorch 中梯度计算非常简单，假定我们有一个线性模型 $y = 0.5 (x w - 5)^2$&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -355,7 +355,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;loss&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backward&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="26-gradients-flops"&gt;2.6 gradients flops
+&lt;/div&gt;&lt;h3 id="gradients-flops"&gt;gradients flops
 &lt;/h3&gt;&lt;p&gt;假设有一个两层线性模型：h1 = x @ w1, h2 = h1 @ w2, loss = h2.pow(2).mean()&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -375,8 +375,8 @@
 &lt;li&gt;&lt;code&gt;h1.grad[i, j] = sum_k w2[j, k] * h2.grad[i, k]&lt;/code&gt;，需要 FLOPs &lt;code&gt;2 * B * D * K&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;所以反向传播中 FLOPs 数量为 &lt;code&gt;4 * 数据量 * 参数量&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id="3-models"&gt;3. Models
-&lt;/h2&gt;&lt;h3 id="31-module-parameters"&gt;3.1 module parameters
+&lt;h2 id="models"&gt;Models
+&lt;/h2&gt;&lt;h3 id="module-parameters"&gt;module parameters
 &lt;/h3&gt;&lt;p&gt;模型参数被保存在 &lt;code&gt;nn.Parameter&lt;/code&gt; 对象中&lt;/p&gt;
 &lt;p&gt;对于 &lt;code&gt;output = x @ w&lt;/code&gt;，x 经过 w 乘法之后，输出 output 的方差被放大 &lt;code&gt;sqrt(input_dim)&lt;/code&gt;。导致输出的幅度变大，容易发生梯度消失。所以在初始化模型参数的时候往往会将方差缩小对应的倍数，这就是 Xavier 参数初始化&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -387,7 +387,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Parameter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;randn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;input_dim&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;output_dim&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;input_dim&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="32-custom-model"&gt;3.2 custom model
+&lt;/div&gt;&lt;h3 id="custom-model"&gt;custom model
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -467,7 +467,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;device&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;non_blocking&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="33-randomness"&gt;3.3 randomness
+&lt;/div&gt;&lt;h3 id="randomness"&gt;randomness
 &lt;/h3&gt;&lt;p&gt;为了实验结果可复现，一般需要设定固定的随机数种子&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -497,7 +497,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;seed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;seed&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="34-data-loading"&gt;3.4 data loading
+&lt;/div&gt;&lt;h3 id="data-loading"&gt;data loading
 &lt;/h3&gt;&lt;p&gt;在语言模型中，数据一般是一个 int 序列（字符 token 化的结果），我们可以很容易把它们作为 numpy array 序列化&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -518,7 +518,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;memmap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;data.npy&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;int32&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="35-optimizer"&gt;3.5 optimizer
+&lt;/div&gt;&lt;h3 id="optimizer"&gt;optimizer
 &lt;/h3&gt;&lt;p&gt;几种常见的优化器&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;momentum = SGD + 梯度的指数移动平均&lt;/li&gt;
@@ -560,7 +560,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;optimizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zero_grad&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;set_to_none&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="36-train-loop"&gt;3.6 train loop
+&lt;/div&gt;&lt;h3 id="train-loop"&gt;train loop
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -607,7 +607,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;optimizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zero_grad&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;set_to_none&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="37-checkpoint"&gt;3.7 checkpoint
+&lt;/div&gt;&lt;h3 id="checkpoint"&gt;checkpoint
 &lt;/h3&gt;&lt;p&gt;训练模型往往需要非常长的时间，而我们不希望发生中断的时候遗失训练进度，所以在训练的过程中需要周期性的保存模型参数和优化器状态&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -639,7 +639,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;loaded_checkpoint&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;torch&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;model_checkpoint.pt&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="38-mixed-precision-training"&gt;3.8 mixed precision training
+&lt;/div&gt;&lt;h3 id="mixed-precision-training"&gt;mixed precision training
 &lt;/h3&gt;&lt;p&gt;数据类型（float32，bfloat16，fp8）的选择存在折衷&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;高精度：模型训练更加精准稳定，需要更多的内存和计算资源&lt;/li&gt;
@@ -651,10 +651,10 @@
 &lt;li&gt;在其他部分使用高精度数据类型（参数，梯度计算）&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>CS336 Note 01: Overview, Tokenization</title><link>https://xland.cc/p/cs336-note-01-overview-tokenization/</link><pubDate>Tue, 12 May 2026 16:42:15 +0800</pubDate><guid>https://xland.cc/p/cs336-note-01-overview-tokenization/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 01: Overview, Tokenization" /&gt;&lt;p&gt;&lt;a class="link" href="http://cs336.stanford.edu/spring2025/" target="_blank" rel="noopener"
 &gt;CS 336&lt;/a&gt; 课程笔记，仅供参考。&lt;/p&gt;
-&lt;h2 id="1-overview"&gt;1. Overview
-&lt;/h2&gt;&lt;h3 id="11-basic"&gt;1.1 basic
+&lt;h2 id="overview"&gt;Overview
+&lt;/h2&gt;&lt;h3 id="basic"&gt;basic
 &lt;/h3&gt;&lt;p&gt;构建一个完整的语言模型由三步组成：tokenization，模型结构和训练方法&lt;/p&gt;
-&lt;h4 id="111-tokenization"&gt;1.1.1 Tokenization
+&lt;h4 id="tokenization"&gt;Tokenization
 &lt;/h4&gt;&lt;p&gt;tokenizer 可以实现字符串和 int 序列（tokens）之间的转换&lt;/p&gt;
 &lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/36fbaf2d02a5e921b94330964cf875c7.webp" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;tokenizer&lt;/h4&gt;
@@ -667,7 +667,7 @@
 &gt;Yu+ 2023&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2412.09871" target="_blank" rel="noopener"
 &gt;Pagnoni+ 2024&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/abs/2406.19223" target="_blank" rel="noopener"
 &gt;Deiseroth+ 2024&lt;/a&gt;&lt;/p&gt;
-&lt;h4 id="112-结构"&gt;1.1.2 结构
+&lt;h4 id="结构"&gt;结构
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/ff893a3e2c5ef8e817bc78ee964ecce4.webp" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;transformer architecture&lt;/h4&gt;
 &lt;/figcaption&gt;
@@ -697,7 +697,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="113-训练方法"&gt;1.1.3 训练方法
+&lt;h4 id="训练方法"&gt;训练方法
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;优化器：AdamW，Muon，SOAP &lt;a class="link" href="https://arxiv.org/pdf/1412.6980.pdf" target="_blank" rel="noopener"
 &gt;Kingma+ 2014&lt;/a&gt;, &lt;a class="link" href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="noopener"
@@ -712,14 +712,14 @@
 &lt;li&gt;正则化：dropout，weight decay&lt;/li&gt;
 &lt;li&gt;超参数：head number，hidden dimension&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="12-系统"&gt;1.2 系统
+&lt;h3 id="系统"&gt;系统
 &lt;/h3&gt;&lt;h4 id="kernels"&gt;Kernels
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/61e278fe366b1e97faf4b0dc2dbe9cab.webp" width="600"&gt;&lt;figcaption&gt;
 &lt;h4&gt;dram and sram&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;在 GPU 内部，DRAM 和 SRAM 之间进行数据传输，需要最大化数据传输的能效&lt;/p&gt;
-&lt;h4 id="122-parallelism"&gt;1.2.2 Parallelism
+&lt;h4 id="parallelism"&gt;Parallelism
 &lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/c294334d9b5eb4d4156ecf56977ff656.webp" width="800"&gt;&lt;figcaption&gt;
 &lt;h4&gt;gpu group&lt;/h4&gt;
 &lt;/figcaption&gt;
@@ -730,7 +730,7 @@
 &lt;li&gt;GPU 数据分片（参数，激活状态，梯度，优化器状态）&lt;/li&gt;
 &lt;li&gt;分布计算：数据、tensor、pipeline、sequence 并行&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="123-推理"&gt;1.2.3 推理
+&lt;h4 id="推理"&gt;推理
 &lt;/h4&gt;&lt;p&gt;一般来说，推理计算比训练计算需求更高&lt;/p&gt;
 &lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/3cd276051a37e9545ed47bb02ae50e6b.webp"&gt;&lt;figcaption&gt;
 &lt;h4&gt;inference phase&lt;/h4&gt;
@@ -747,7 +747,7 @@
 &lt;li&gt;speculative decoding：使用轻量模型初步生成一些 token，然后再通过全量模型打分&lt;/li&gt;
 &lt;li&gt;系统优化：KV cache，batch 化&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="13-scaling-laws"&gt;1.3 Scaling Laws
+&lt;h3 id="scaling-laws"&gt;Scaling Laws
 &lt;/h3&gt;&lt;p&gt;进行小规模的实验，来预测大规模场景下的超参数和损失&lt;/p&gt;
 &lt;p&gt;给定一定的 FLOPs 资源，训练一个更大的模型更好，还是使用更多的 token 训练更好&lt;/p&gt;
 &lt;p&gt;Compute-optimal scaling laws:  &lt;a class="link" href="https://arxiv.org/pdf/2001.08361.pdf" target="_blank" rel="noopener"
@@ -757,9 +757,9 @@
 &lt;h4&gt;scaling law&lt;/h4&gt;
 &lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;h3 id="14-data"&gt;1.4 Data
+&lt;h3 id="data"&gt;Data
 &lt;/h3&gt;&lt;p&gt;我们希望模型具有什么样的能力：多语言、编程、数学&lt;/p&gt;
-&lt;h4 id="141-模型评估"&gt;1.4.1 模型评估
+&lt;h4 id="模型评估"&gt;模型评估
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;困惑度 perplexity：大模型评估的基础方式&lt;/li&gt;
 &lt;li&gt;标准测试：M M L U，HellaSwag，GSM8K&lt;/li&gt;
@@ -767,19 +767,19 @@
 &lt;li&gt;LM-as-a-judge&lt;/li&gt;
 &lt;li&gt;全系统评估：RAG，agent&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="142-数据筛选"&gt;1.4.2 数据筛选
+&lt;h4 id="数据筛选"&gt;数据筛选
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;数据来源：互联网上爬虫得到的网页，数据，arXiv 论文，Github 代码等&lt;/li&gt;
 &lt;li&gt;可能需要数据授权&lt;/li&gt;
 &lt;li&gt;格式：HTML，PDF，文件夹&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="143-数据处理"&gt;1.4.3 数据处理
+&lt;h4 id="数据处理"&gt;数据处理
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;格式转换：将 HTML/PDF 转换成文本&lt;/li&gt;
 &lt;li&gt;过滤：过滤掉有害内容&lt;/li&gt;
 &lt;li&gt;去重：降低计算量，防止模型 memorization&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="15-对齐"&gt;1.5 对齐
+&lt;h3 id="对齐"&gt;对齐
 &lt;/h3&gt;&lt;p&gt;经过预训练后，模型已经非常擅长预测下一个 token，但是需要通过对齐让模型真正可用&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;让语言模型可以遵守对指令做出响应的范式&lt;/li&gt;
@@ -787,7 +787,7 @@
 &lt;li&gt;防止产生有害内容&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;对齐可以分为两个阶段：监督学习微调和反馈强化学习&lt;/p&gt;
-&lt;h4 id="151-监督学习微调-sft"&gt;1.5.1 监督学习微调 SFT
+&lt;h4 id="监督学习微调-sft"&gt;监督学习微调 SFT
 &lt;/h4&gt;&lt;p&gt;使用&lt;em&gt;指令数据 instruction data&lt;/em&gt; &lt;code&gt;&amp;lt;prompt, response&amp;gt;&lt;/code&gt; 对进行监督学习训练&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -813,7 +813,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id="152-preference-data"&gt;1.5.2 Preference Data
+&lt;/div&gt;&lt;h4 id="preference-data"&gt;Preference Data
 &lt;/h4&gt;&lt;p&gt;经过指令数据的有监督训练，我们已经有了一个初步的可以跟随指令的模型，我们可以通过使用 preference data 训练让模型更加强大，而不需要更多的指令标注数据&lt;/p&gt;
 &lt;p&gt;preference data：让多个模型对同一个 prompt 给出响应，用户给出偏好&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -853,21 +853,21 @@
 &lt;li&gt;Group Relative Preference Optimization (GRPO): remove value function &lt;a class="link" href="https://arxiv.org/pdf/2402.03300.pdf" target="_blank" rel="noopener"
 &gt;Shao+ 2024&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id="2-tokenization"&gt;2. Tokenization
+&lt;h2 id="tokenization-1"&gt;Tokenization
 &lt;/h2&gt;&lt;p&gt;一个 tokenizer 需要实现编码和解码的功能：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;编码：将字符串编码成 token（int 类型的索引）&lt;/li&gt;
 &lt;li&gt;解码：将 token 转换回字符串&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;其中所有可能的 token 的个数称为 vocabulary size&lt;/p&gt;
-&lt;h3 id="21-character-based-tokenization"&gt;2.1 Character-based tokenization
+&lt;h3 id="character-based-tokenization"&gt;Character-based tokenization
 &lt;/h3&gt;&lt;p&gt;一个字符串由一序列字符组成，每个字符可以直接被转换成整数索引值作为 token。例如，直接使用 &lt;code&gt;ord&lt;/code&gt; 可以得到字符的 ASCII 码，可以作为一个简单的tokenizer&lt;/p&gt;
 &lt;p&gt;缺点：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Unicode 字符的数量大概是 150K，导致 vocabulary size 非常大&lt;/li&gt;
 &lt;li&gt;很多字符在句子中很少使用，造成了稀疏性，vocabulary 非常低效&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="22-byte-based-tokenization"&gt;2.2 Byte-based tokenization
+&lt;h3 id="byte-based-tokenization"&gt;Byte-based tokenization
 &lt;/h3&gt;&lt;p&gt;Unicode 字符串也可以直接用一系列的 byte 表示，这些 byte 可以使用 0 到 255 的整数索引&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -880,7 +880,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;只用 255 种 byte 就可以表示所有的字符窗，vocabulary size 是 255。但是一个 byte 对应了一个整数 token，压缩率为 1, tokenization 之后得到的 token 序列非常长，造成自注意力计算量非常大&lt;/p&gt;
-&lt;h3 id="23-word-based-tokenization"&gt;2.3 Word-based tokenization
+&lt;h3 id="word-based-tokenization"&gt;Word-based tokenization
 &lt;/h3&gt;&lt;p&gt;NLP 模型中常用的是基于单词的 tokenization，首先将一个句子划分成单词序列，然后将每个可以划分的单词指定一个整数索引，就可以建立一个tokenizer&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -900,7 +900,7 @@
 &lt;li&gt;很多单词使用率非常低，模型很难充分学习&lt;/li&gt;
 &lt;li&gt;很难确定一个固定大小的词典，存在没有见过的词&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="24-byte-pair-encoding"&gt;2.4 Byte Pair Encoding
+&lt;h3 id="byte-pair-encoding"&gt;Byte Pair Encoding
 &lt;/h3&gt;&lt;p&gt;首先将字符串表示成 byte，然后让 tokenizer 自动选择 byte 组成单词（不一定是完整的人类单词），那么一些常见的单词将可以使用一个 token 表示，对于少见或者没有见过的单词可以使用多个 token 组合表示&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
