@@ -3,7 +3,7 @@
 title = "Linux 透明代理（TPROXY）配置"
 date = 2026-04-22T09:54:55+08:00
 slug = "linux-tproxy"
-description = "本文介绍了如何利用 iptables 的 TPROXY 模块，为 sing-box 和 mihomo 等代理客户端配置干净高效的 Linux 全局透明代理"
+description = "利用 iptables 的 TPROXY 模块，为 sing-box 和 mihomo 等代理客户端配置干净高效的 Linux 全局透明代理"
 tags = ["Linux", "工具"]
 categories = ["Logs"]
 image = ""
