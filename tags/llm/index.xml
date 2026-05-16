@@ -1,4 +1,315 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LLM on Zhiim's Blog</title><link>https://xland.cc/tags/llm/</link><description>Recent content in LLM on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 14 May 2026 13:47:19 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/llm/index.xml" rel="self" type="application/rss+xml"/><item><title>CS336 Note 02: PyTorch, Resource Counting</title><link>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</link><pubDate>Thu, 14 May 2026 13:47:19 +0800</pubDate><guid>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 02: PyTorch, Resource Counting" /&gt;&lt;h2 id="memory-accounting"&gt;Memory accounting
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LLM on Zhiim's Blog</title><link>https://xland.cc/tags/llm/</link><description>Recent content in LLM on Zhiim's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 16 May 2026 12:53:00 +0800</lastBuildDate><atom:link href="https://xland.cc/tags/llm/index.xml" rel="self" type="application/rss+xml"/><item><title>CS336 Note 03: Architecture and Hyperparameters</title><link>https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/</link><pubDate>Sat, 16 May 2026 12:53:00 +0800</pubDate><guid>https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 03: Architecture and Hyperparameters" /&gt;&lt;h2 id="transformer-的演变"&gt;Transformer 的演变
+&lt;/h2&gt;&lt;h3 id="starting-point-the-original-transformer"&gt;Starting point: the original transformer
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/a9b65fc78b15467a5b7f41f7cd8bb886.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;h4&gt;transformer&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Position embedding&lt;/strong&gt;: sines and cosines&lt;/li&gt;
+&lt;/ul&gt;
+$$
+\begin{gather*}
+PE_{{pos, 2i}} = \sin(pos / 10000^{2i / d_{model}}) \\
+PE_{(pos, 2i + 1)} = \cos(pos / 10000^{2i / d_{model}})
+\end{gather*}
+$$&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;FFN&lt;/strong&gt;: ReLU
+&lt;/p&gt;
+$$FFN(x) = \max(0, x W_1 + b_1) W_2 + b_2$$&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Norm&lt;/strong&gt;: post-norm, with LayerNorm&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="more-simple-and-modern-transformer-variant"&gt;More simple and modern transformer variant
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/9394f0181f13a32e5bc80911c96b3256.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;modern transformer variant&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;主要的不同：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用了 &lt;strong&gt;pre-norm&lt;/strong&gt;： LayerNorm 被放在了神经网络块和残差连接之前&lt;/li&gt;
+&lt;li&gt;使用了 &lt;strong&gt;Rotary position embedding （RoPE）&lt;/strong&gt; 作为位置编码&lt;/li&gt;
+&lt;li&gt;FFN 层被改造成 &lt;strong&gt;SwiGLU&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;线性层和 LayerNorm 不再使用偏置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="architecture"&gt;Architecture
+&lt;/h2&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/fef726566368fd3b83b1a03715a9e10b.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;architecture of LLMs&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="pre-vs-post-norm"&gt;Pre vs post norm
+&lt;/h3&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/042a9398ea6bab9507449ccb67cfcd7e.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;h4&gt;pre post norm&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;post-norm&lt;/li&gt;
+&lt;/ul&gt;
+$$
+\begin{gathered}
+x_{out} = Block(x_{in}) \\
+x_{res} = x_{out} + x_{in} \\
+x_{norm} = LayerNorm(x_{res})
+\end{gathered}
+$$&lt;ul&gt;
+&lt;li&gt;pre-norm：LayerNorm 发生在 block 和残差之前，所以 Norm 不破坏残差连接的直接通路，更容易训练&lt;/li&gt;
+&lt;/ul&gt;
+$$
+\begin{gathered}
+x_{norm} = LayerNorm(x_{in}) \\
+x_{out} = Block(x_{norm}) \\
+x_{res} = x_{in} + x_{out}
+\end{gathered}
+$$&lt;p&gt;&lt;strong&gt;几乎所有的现代 LM 都使用了 pre-norm （BERT 仍然使用 post-norm)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;pre-norm advantages vs post-norm:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;original stated: 可以不使用 warmup&lt;/li&gt;
+&lt;li&gt;today: 对于大型网络来说，训练更加稳定，可以使用更大的学习率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="admonition info"&gt;
+&lt;div class="admonition-header"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"&gt;&lt;path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/&gt;&lt;/svg&gt;
+&lt;span&gt;Info&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="admonition-content"&gt;
+&lt;p&gt;&lt;strong&gt;变种：double-norm&lt;/strong&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/e93023b4deb72a3849568dbbdd34d1ed.webp" width="300"&gt;&lt;figcaption&gt;
+&lt;h4&gt;double norm&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;不太常见，在 Grok，Gemma 2 和 Olmo 2 中，只使用了 double-norm 的第二个 norm&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="layernorm-vs-rmsnorm"&gt;LayerNorm vs RMSNorm
+&lt;/h3&gt;&lt;p&gt;原始的 transfomer 使用了 LayerNorm，在 $d_{model}$ 的维度上，使用均值和方差归一化（GPT3/2/1，OPT，GPT-J，BLOOM）
+&lt;/p&gt;
+$$y = \frac{x - \mathbb{E}[x]}{\sqrt{Var[x] + \epsilon}} \ast \gamma + \beta$$&lt;p&gt;现代语言模型一般使用 &lt;strong&gt;RMSNorm&lt;/strong&gt;，在归一化的时候不再考虑均值，并且去掉了偏置（LLaMa 系列，PaLM，Chinchilla，T5）
+&lt;/p&gt;
+$$y = \frac{x}{\sqrt{\|x\|_2^2 + \epsilon}} \ast \gamma$$&lt;p&gt;Why RMSNorm&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;比 LayerNorm 更快，但是表现也挺好
+&lt;ul&gt;
+&lt;li&gt;去掉了均值计算，&lt;strong&gt;更少的运算次数&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;去掉了偏置，&lt;strong&gt;更少的参数&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/df16d8b9b306617854384efc026d837b.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;h4&gt;norm flops runtime&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;虽然 norm 的操作在总 FLOPs 中只占据非常小的比率（设计的矩阵运算较少），但是在运行时中却又较大影响（计算均值和方差，以及归一化，需要多次读写数据，所以 Norm 操作是内存密集型而不是计算密集型）&lt;/p&gt;
+&lt;h3 id="activations"&gt;Activations
+&lt;/h3&gt;&lt;p&gt;common activations:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ReLU&lt;/strong&gt;: $ReLU(x) := max(0, x)$&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/932c906ec964ab60d0680368a5ef2d1a.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;h4&gt;relu&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;used in original transformer, Google T5, Gopher, Chinchilla and OPT&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;GeLU&lt;/strong&gt;: $GeLU(x) := x \Phi(x)$, where $\Phi(x)$ is the Cumulative Distribution Function for Gaussian Distribution&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/5a64c2405cc69cd7ea9d442b55659fd9.webp" width="400"&gt;&lt;figcaption&gt;
+&lt;h4&gt;gelu&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;used in GPT1/2/3, GPT-Neox and BLOOM&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;There are also &lt;strong&gt;Gated activations (*GLU)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;the original FF layer (without bias) is expressed as
+&lt;/p&gt;
+$$FF(x) = max(0, xW_1)W_2$$&lt;p&gt;In GLUs a FF layer is modified as
+&lt;/p&gt;
+$$FFN(x) = (max(0, xW_1) \otimes (xV))W_2$$&lt;p&gt;
+which is the &lt;mark&gt;linear + ReLU&lt;/mark&gt; being augmented with an entrywise linear term
+&lt;/p&gt;
+$$max(0, xW_1) \rightarrow max(0, xW_1) \otimes (xV)$$&lt;p&gt;&lt;strong&gt;the Gated variants of FF layers&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;GeGLU&lt;/strong&gt;: $FFN_{GeGLU}(x) = (GeLU(xW_1) \otimes xV) W_2$&lt;/p&gt;
+&lt;p&gt;and &lt;strong&gt;SwiGLU&lt;/strong&gt; (swish can be expressed as $Swish(x) = x \ast sigmoid(\beta x)$): $FFN_{SwiGLU}(x) = (Swish(xW_1) \otimes xV) W_2$&lt;/p&gt;
+&lt;p&gt;Some points about gating and activation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;There are many variations (ReLU, GeLU and all kinds of GLU) across models&lt;/li&gt;
+&lt;li&gt;GLU isn&amp;rsquo;t necessary but probably helpful&lt;/li&gt;
+&lt;li&gt;Evidence points towards somewhat consistent gains from Swi/GeGLU&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="serial-vs-parallel-layers"&gt;Serial vs Parallel layers
+&lt;/h3&gt;&lt;p&gt;Normal transformer blocks are &lt;strong&gt;serial&lt;/strong&gt;. They compute attention first, then the MLPs
+&lt;/p&gt;
+$$y = x + MLP(LayerNorm(x + Attention(LayerNorm(x)))$$&lt;p&gt;A few models (GPTJ, PaLM, GPT-NeoX) also do &lt;strong&gt;parallel layers&lt;/strong&gt;
+&lt;/p&gt;
+$$y = x + MLP(LayerNorm(x)) + Attention(LayerNorm(x))$$&lt;p&gt;It&amp;rsquo;s stated that parallel ones result in faster training speed and roughly no quality degradation at large scales&lt;/p&gt;
+&lt;h2 id="position-embedding"&gt;Position Embedding
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Many variations in position embeddings&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Sine embeddings&lt;/strong&gt;: add sines and cosines that enable localization (used in original transformer)&lt;/p&gt;
+$$
+\begin{gathered}
+Embed(x, i) = v_x + PE_{pos, i} \\
+PE_{pos, i} = \sin(pos / 10000^{2i / d_{model}}) \\
+PE_{pos, 2i + 1} = \cos(pos / 10000^{2i / d_{model}})
+\end{gathered}
+$$&lt;p&gt;&lt;strong&gt;Absolute embeddings&lt;/strong&gt;: add a position vector (learnable) to the embedding (used in GPT1/2/3 and OPT)
+&lt;/p&gt;
+$$Embed(x, i) = v_x + u_i$$&lt;p&gt;&lt;strong&gt;Relative embeddings&lt;/strong&gt;: add a relative position vector to the attention computation (used in Google T5, Gopher and Chinchilla)
+&lt;/p&gt;
+$$e_{ij} = \frac{x_i W^Q (x_j W^K + a_{ij}^K)^T}{\sqrt{d}}$$&lt;h3 id="rope-rotary-position-embeddings"&gt;RoPE: rotary position embeddings
+&lt;/h3&gt;&lt;p&gt;the one that used most widely in LLM&lt;/p&gt;
+&lt;h4 id="a-high-level-thought"&gt;A high level thought
+&lt;/h4&gt;&lt;p&gt;when we get a positional embedded vector $f(x, i)$，we want it to work like
+&lt;/p&gt;
+$$\left&lt; f(x, i), f(x, j) \right&gt; = g(x, y, i - j)$$&lt;p&gt;That is, in attention, the output of two positional embedded vectors $g(x, y, i - j)$ only gets to depend on the &lt;strong&gt;relative positon $(i - j)$&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;But most of the existing embeddings not fulfill this goal&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Sine&lt;/strong&gt;: There are various cross-terms that are not relative (Taylor expansion)&lt;/p&gt;
+$$\left&lt; Embed(x, i), Embed(y, j)\right&gt; = \left&lt; v_x, v_y \right&gt; + \left&lt; PE_i, v_y \right&gt; \cdots$$&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Absolute&lt;/strong&gt;: obviously not relative&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Relative embeddings&lt;/strong&gt;: $e_{ij} = \frac{x_i W^Q (x_j W^K + a_{ij}^K)^T}{\sqrt{d}}$ is not an inner product format&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We know that inner products are invariant to arbitrary rotation. Whatever rotation we apply, the inner product of two vectors remains unchanged&lt;/p&gt;
+&lt;p&gt;&lt;mark&gt;So we apply different rotation on two vectors based on their position. Then, the inner product of these two only depends on their relative position, but not the absolute position of each vector.&lt;/mark&gt; (As illustrated below)&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/d2a445c0593788f9719b0b557330aab2.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;h4&gt;rotation&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h4 id="how-to-apply-rotary-position-embedding"&gt;How to apply rotary position embedding
+&lt;/h4&gt;&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/1a885c40abe0535e24d84f25f3dd9d8e.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;rope draw&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;将 vector 在特征维度上两两打包成一个复数，在复平面上，施加于当前 vector 的位置和 index on dimension 有关的旋转矩阵 $\begin{pmatrix} \cos m\theta &amp; -\sin m\theta \\ \sin m\theta &amp; \cos m\theta \end{pmatrix}$，之后再将旋转后的复数拆分成两个实数值，重新组合成 vector&lt;/p&gt;
+&lt;p&gt;这个过程其实就是将 vector 乘了一个 rope 矩阵
+&lt;/p&gt;
+$$f_{\{q, k\}} (\mathbf{x}_m , m) = \mathbf{R}_{\Theta, m}^d \mathbf{W}_{\{q,k\}} \mathbf{x}_m$$&lt;p&gt;
+这个矩阵可以表示为&lt;/p&gt;
+$$
+\mathbf{R}_{\Theta, m}^d = \begin{pmatrix}
+\cos m\theta_1 &amp; -\sin m\theta_1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
+\sin m\theta_1 &amp; \cos m\theta_1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; \cos m\theta_2 &amp; -\sin m \theta_2 &amp; \cdots &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; \sin m\theta_2 &amp; \cos m \theta_2 &amp; \cdots &amp; 0 &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; \cos m\theta_{d / 2} &amp; -\sin m\theta_{d / 2} \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; \sin m\theta_{d / 2} &amp; \cos m\theta_{d / 2}
+\end{pmatrix}
+$$&lt;h2 id="hyperparameters"&gt;Hyperparameters
+&lt;/h2&gt;&lt;h3 id="ffn-model-dimension-ratio"&gt;FFN: model dimension ratio
+&lt;/h3&gt;&lt;p&gt;the relationship between the feedforward dim $d_{ff}$ and the model dim $d_{model}$&lt;/p&gt;
+&lt;p&gt;at most cases, there is a convention
+&lt;/p&gt;
+$$d_{ff} = 4 d_{model}$$&lt;p&gt;&lt;strong&gt;特例1 - GLU&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在原始的 FFN 中，主要有两个权值矩阵 $W_1, W_2$，参数量为 $2 d_{model} d_{ff}$，如果取 $d_{ff} = 4 d_{model}$，那么参数量就是 $8d_{model}^2$&lt;/p&gt;
+&lt;p&gt;在 SwiGLU 中，除了 $W_1, W_2$ 之外，还有一个值矩阵 $V$，总参数量为 $2 d_{model}d_{ff}' + d_{model} d_{ff}'$，为了让参数量仍然为 $8 d_{model}^2$，此时 $d_{ff}' = \frac{8}{3} d_{model}$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特例2 - T5&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;$d_{ff} = 65536, d_{model} = 1024$&lt;/p&gt;
+&lt;h3 id="head-dimnum-heads-to-model-dim-ratio"&gt;Head-dim*num-heads to model-dim ratio
+&lt;/h3&gt;&lt;p&gt;在大多数模型里面 head-dim = model-dim / num-heads，但是也有一些模型设置 head-dim &amp;gt; model-dim / num-heads&lt;/p&gt;
+&lt;h3 id="deeper-or-wider"&gt;Deeper or wider
+&lt;/h3&gt;&lt;p&gt;大多数模型 $d_{model} / n_{layer}$ 处于一个固定范围内&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;model&lt;/th&gt;
+&lt;th&gt;$d_{model} / n_{layer}$&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;BLOOM&lt;/td&gt;
+&lt;td&gt;205&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;T5 v1.1&lt;/td&gt;
+&lt;td&gt;171&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;PaLM(540B)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;156&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;GPT3 /OPT/Mistral/Qwen&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;128&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;LLaMa/LLaMa2/Chinchila&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;102&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;T5(11B)&lt;/td&gt;
+&lt;td&gt;43&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPT2&lt;/td&gt;
+&lt;td&gt;33&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;如果模型太深，难以并行化，推理时延更高&lt;/p&gt;
+&lt;h3 id="vocabulary-size"&gt;Vocabulary size
+&lt;/h3&gt;&lt;p&gt;单语言模型 30-50K&lt;/p&gt;
+&lt;p&gt;多语言模型 100-250K&lt;/p&gt;
+&lt;h3 id="dropout-and-regularization"&gt;Dropout and regularization
+&lt;/h3&gt;&lt;p&gt;大多数模型都会在预训练中使用 dropout，最近的一些模型倾向于只使用 weight decay 而放弃了 dropout&lt;/p&gt;
+&lt;h2 id="stability"&gt;Stability
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;softmax&lt;/strong&gt; 存在计算级数，以及除以 0 的操作，容易造成训练不稳定&lt;/p&gt;
+&lt;p&gt;在 softmax 中&lt;/p&gt;
+$$
+\begin{gathered}
+\begin{align*}
+\log (P(x)) &amp; = \log \left( \frac{e^{U_r(x)}}{Z(x)} \right) \\
+&amp; = U_r(x) - \log(Z(x))
+\end{align*} \\
+Z(x) = \sum_{r' = 1}^{|V|} e^{U_{r'}(x)}
+\end{gathered}
+$$&lt;p&gt;由于存在 $\exp(\cdot)$ 操作，如果某些输出的 logit $U_{R}(x)$ 过大， $Z(x)$ 就会过大，可能存在数值溢出&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;z-loss&lt;/strong&gt;，在原本的损失的基础上，添加一个关于 $Z$ 的惩罚项，让它不要过大。虽然 logit 的数值大小受到了惩罚约束，但是只要 logit 之间的相对大小不变，softmax 的结果保持不变&lt;/p&gt;
+$$
+\begin{align*}
+L &amp; = -\sum_i [\log(P(x_i)) \textcolor{red}{- \alpha (\log (Z(x_i)) - 0)^2}] \\
+&amp; = \sum_i [-\log (P(x_i)) \textcolor{red}{+ \alpha \log^2 (Z(x_i))}]
+\end{align*}
+$$&lt;p&gt;在上式中 $\alpha \log^2 (Z(x_i))$ 需要尽可能小，所以 $Z(x_i)$ 尽可能接近 1，被限制在合理的范围内&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;soft-capping&lt;/strong&gt;，限定 logit 的值在 -soft_cap 和 +soft_cap 之间，可以通过 tanh 激活函数实现
+&lt;/p&gt;
+$$logits \leftarrow soft\_cap \ast tanh(logits / soft\_cap)$$&lt;p&gt;
+这种方法似乎会导致性能下降&lt;/p&gt;
+&lt;h2 id="attention-heads"&gt;Attention heads
+&lt;/h2&gt;&lt;p&gt;多头注意力主要有两种变体&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;GQA/MQA&lt;/strong&gt;：通过减少头数提高推理效率&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sparse or slideing window attention&lt;/strong&gt;：限制注意力的模式来降低计算开销&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="gqa-and-mqa"&gt;GQA and MQA
+&lt;/h3&gt;&lt;p&gt;在训练和 Prefill 阶段，所有的 token 是同时并行计算的，此时是&lt;strong&gt;计算密集型&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;总计算量为 $O(bnd^2)$，内存访问量为 $O(\underbrace{bnd}_{x} + \underbrace{bhn^2}_{softmax} + \underbrace{d^2}_{projection})$&lt;/p&gt;
+&lt;p&gt;此时 Arithmetic intensity （计算量/内存访问量）为 $O\left( \left( \frac{1}{k} + \frac{1}{bn}\right)^{-1} \right)$，GPU 的利用率较高&lt;/p&gt;
+&lt;p&gt;在生成阶段，无法使用并行计算，往往会采用 KV Cache 的方法，把之前计算过的 Key 和 Value 保存下来。这时每次新生成 token 时，我们会去读取过去所有 token 的 KV Cache，每次的计算量比较小，但是内存访问量非常大，变成了&lt;strong&gt;访问密集型&lt;/strong&gt;，GPU 利用率不高&lt;/p&gt;
+&lt;p&gt;所以我们需要&lt;strong&gt;降低 KV Cache 的内存访问量&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;通过 GQA 和 MQA 可以减少需要存储的 KV Cache&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/2490f3660e45b2a16409900359fb4187.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;mqa&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;在 MQA 中，每个 query 共享同一个 key 和 value&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/mqa_and_gqa.webp" width="800"&gt;&lt;figcaption&gt;
+&lt;h4&gt;mqa and gqa&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;在 GQA 中则是一组内的 query 共享同一个 key 和 value&lt;/p&gt;
+&lt;h3 id="sparsesliding-window-attention"&gt;Sparse/sliding window attention
+&lt;/h3&gt;&lt;p&gt;对整个上下文使用注意力计算开销较大，所以演变出了 sparse 和 sliding attention&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/712a1eeeb997e148a32780f0f24b8063.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;spare attention&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;&lt;img src="https://xland.cc/p/cs336-note-03-architecture-and-hyperparameters/3de1ce0f6ef464dcc5b0c6ee807572d4.webp" width="600"&gt;&lt;figcaption&gt;
+&lt;h4&gt;sliding attention&lt;/h4&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;</description></item><item><title>CS336 Note 02: PyTorch, Resource Counting</title><link>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</link><pubDate>Thu, 14 May 2026 13:47:19 +0800</pubDate><guid>https://xland.cc/p/cs336-note-02-pytorch-resource-counting/</guid><description>&lt;img src="https://xland.cc/p/cs336-note-01-overview-tokenization/cs336_header.webp" alt="Featured image of post CS336 Note 02: PyTorch, Resource Counting" /&gt;&lt;h2 id="memory-accounting"&gt;Memory accounting
 &lt;/h2&gt;&lt;h3 id="tensor-basics"&gt;tensor basics
 &lt;/h3&gt;&lt;p&gt;tensor 是用来存储数据的基本单元：模型参数、梯度、优化器状态、激活状态等&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
