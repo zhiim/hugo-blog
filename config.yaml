@@ -1,6 +1,6 @@
 baseurl: https://xland.cc
-languageCode: zh-cn
-theme: hugo-theme-stack
+locale: zh-cn
+theme: ["hugo-theme-stack", "hugo-admonitions"]
 pagination:
   pagerSize: 5
 title: Zhiim's Blog
