@@ -23,11 +23,11 @@ links:
     image: https://yvling-picbed.oss-cn-hangzhou.aliyuncs.com/notes/1787731248128.jpg
 ---
 
-如果想交换友链的话请在下方留言，友链的格式可以参考本站信息：
+如果想交换友链的话请在下方留言吧，友链的格式可以参考本站信息：
 
 ```
-名称: Zhiim's Blog
-简介: 总有想不明白的事
-博客地址: https://xland.cc
-头像: https://xland.cc/img/avatar.jpg
+title: Zhiim's Blog
+description: 总有想不明白的事
+website: https://xland.cc
+image: https://xland.cc/img/avatar.jpg
 ```
