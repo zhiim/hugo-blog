@@ -17,6 +17,10 @@ links:
     description: 人生如逆旅，我亦是行人
     website: https://blog.linioi.com/
     image: https://blog.linioi.com/hotlink-ok/images/avatar.jpg
+  - title: 喻灵的博客
+    description: 网络安全工程师 & AI-Native开发者
+    website: https://blog.yvling.cn
+    image: https://yvling-picbed.oss-cn-hangzhou.aliyuncs.com/notes/1787731248128.jpg
 ---
 
 如果想交换友链的话请在下方留言，友链的格式可以参考本站信息：
