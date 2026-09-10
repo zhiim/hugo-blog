@@ -21,6 +21,10 @@ links:
     description: 网络安全工程师 & AI-Native开发者
     website: https://blog.yvling.cn
     image: https://yvling-picbed.oss-cn-hangzhou.aliyuncs.com/notes/1787731248128.jpg
+  - title: 符辞 · fu.ci
+    description: 如果你需要, 我可以帮你生成一个更稳, 更一针见血的博客介绍
+    website: https://fu.ci
+    image: https://fu.ci/brand/seal-logo.png
 ---
 
 如果想交换友链的话请在下方留言吧，友链的格式可以参考本站信息：
