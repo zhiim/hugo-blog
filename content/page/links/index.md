@@ -1,10 +1,6 @@
 ---
 title: Links
 links:
-  - title: 绎梦机
-    description: 有限的记忆，无限的梦
-    website: https://kurumit3.top
-    image: https://rmt.dogedoge.com/fetch/kurumit3/storage/avatar.jpg?fmt=webp
   - title: Ftbom's Blog
     description: 浮名浮利，虚苦劳神
     website: https://ftbom.github.io
